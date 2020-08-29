@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "outDir": "build",
+        "baseUrl": "src",
+        "target": "es6",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "jsx": "react",
+        "strict": true,
+        "esModuleInterop": true,
+        "sourceMap": true,
+        "experimentalDecorators": true,
+       "paths": {
+            "background/*": [
+                "ts/background/*"
+            ],
+            "settings/*": [
+                "ts/settings/*"
+            ],
+            "shared/*": [
+                "ts/shared/*"
+            ],
+        },
+    },
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "node_modules",
+        "build"
+    ],
+}

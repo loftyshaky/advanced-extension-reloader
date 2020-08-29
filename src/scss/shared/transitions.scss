@@ -1,0 +1,35 @@
+@import "../loftyshaky/shared/vars";
+@import "../loftyshaky/shared/css_vars";
+
+.test_fade {
+    transition: var(--transition);
+    transition-property: opacity;
+    background-color: orange;
+}
+
+.color_change {
+    transition: var(--transition);
+    transition-property: background-color;
+}
+
+.color_a {
+    background-color: red;
+}
+
+.color_b {
+    background-color: blue;
+}
+
+.margin_change {
+    transition: var(--transition);
+    transition-property: margin;
+    background-color: orange;
+}
+
+.margin_a {
+   margin-top: 0px;
+}
+
+.margin_b {
+    margin-top: 500px;
+}
