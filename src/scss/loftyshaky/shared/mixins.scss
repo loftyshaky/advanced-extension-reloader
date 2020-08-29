@@ -25,6 +25,11 @@ $border-width: 1px;
     align-items: center;
 }
 
+@mixin border {
+    border-width: $border-width;
+    border-style: solid;
+}
+
 @mixin white_border {
     border: $border-width solid white;
 }
