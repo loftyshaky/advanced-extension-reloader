@@ -21,7 +21,7 @@ export class InitAll {
 
         const error_root: ShadowRoot = this.create_root({ prefix: 'error' }) as ShadowRoot;
         const settings_root: HTMLDivElement = this.create_root({
-            prefix: 'settings_root',
+            prefix: 'settings',
             shadow_root: false,
         }) as HTMLDivElement;
 
@@ -32,6 +32,11 @@ export class InitAll {
                 <CrashHandler><Body /></CrashHandler>,
                 settings_root,
                 (): void => {
+                    x.css(
+                        'normalize',
+                        document.head,
+                    );
+
                     x.css(
                         'settings',
                         document.head,
