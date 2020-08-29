@@ -1,11 +1,7 @@
-@import "../loftyshaky/shared/all";
 @import "../loftyshaky/shared/vars";
 @import "../loftyshaky/shared/mixins";
 @import "../loftyshaky/shared/mods";
 @import "../loftyshaky/shared/text";
 @import "../loftyshaky/shared/crash_handler";
-@import "../shared/transitions";
-
-body {
-    background-color: darkgrey;
-}
+@import "vars";
+@import "main";
