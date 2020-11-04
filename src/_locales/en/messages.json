@@ -4,5 +4,11 @@
     },
     "settings_title_text": {
         "message": "Settings"
+    },
+    "click_action_label_text": {
+        "message": "Extension's icon click action"
+    },
+    "reload_actions_label_text": {
+        "message": "Extension's icon menu actions"
     }
 }
