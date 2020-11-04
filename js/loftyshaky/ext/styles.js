@@ -7,6 +7,7 @@ export class Styles {
     constructor({ scss_file_names }) {
         this.scss_file_names = [
             ...scss_file_names,
+            ...this.css_for_build_dir_names,
             ...this.theme_names,
         ];
         this.scss_files = [
@@ -16,6 +17,10 @@ export class Styles {
                 scss_file_name,
                 'index.scss',
             )),
+            ...this.css_for_build_dir_names.map((css_for_build_dir_name) => path.join(
+                this.shared_dir,
+                `${css_for_build_dir_name}.scss`,
+            )),
             ...this.theme_names.map((theme_name) => path.join(
                 this.themes_dir,
                 `${theme_name}.scss`,
@@ -23,17 +28,26 @@ export class Styles {
         ];
     }
 
+    css_for_build_dir_names = [
+        'font_face',
+        'error',
+    ]
+
     theme_names = [
         'light_theme',
         'dark_theme',
         'very_dark_theme',
     ]
 
-    themes_dir = path.join(
+    shared_dir = path.join(
         'src',
         'scss',
         'loftyshaky',
         'shared',
+    )
+
+    themes_dir = path.join(
+        this.shared_dir,
         'themes',
         'general',
     )
@@ -48,27 +62,13 @@ export class Styles {
         'css',
     );
 
-    css_file_names = [
-        'error',
-        'font_face',
-        'normalize',
-    ];
+    css_file_names = ['normalize'];
 
-    css_files = [
-        path.join(
-            this.css_dir,
-            `${this.css_file_names[0]}.css`,
-        ),
-        path.join(
-            this.css_dir,
-            `${this.css_file_names[1]}.css`,
-        ),
-        path.join(
-            'node_modules',
-            `${this.css_file_names[2]}.css`,
-            `${this.css_file_names[2]}.css`,
-        ),
-    ];
+    css_files = [path.join(
+        'node_modules',
+        `${this.css_file_names[0]}.css`,
+        `${this.css_file_names[0]}.css`,
+    )];
 
     async compile_and_copy() {
         this.scss_files.forEach((scss_file, i) => {

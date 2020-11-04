@@ -1,0 +1,89 @@
+@import "all";
+@import "vars";
+@import "mods";
+@import "mixins";
+@import "text"; 
+
+body,
+button {
+    color: white;
+}
+
+.main {
+    @include max_z_index;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    border: none;
+    overflow: hidden;
+    background-color: #da4747;
+    color: white;
+}
+
+.error .msg {
+    white-space: pre-wrap;
+    text-align: center;
+    padding: 10px;
+    padding-top: 35px;
+}
+
+.error .close_btn {
+    @include btn();
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    outline-offset: 2px;
+}
+
+.error .close_btn svg {
+    fill: white;
+    height: 20px;
+    width: 20px;
+}
+
+.error .close_btn:focus {
+    outline: none;
+}
+
+.using_keyboard .error .close_btn:focus {
+    outline: 1px solid white;
+}
+
+.error .more_info_btn {
+    @include white_border();
+    background-color: transparent;
+    display: table;
+    margin: auto;
+    margin-top: 6px;
+    outline: none;
+    padding: 3px 6px 3px 6px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.error .more_info_btn:hover {
+    color: $black;
+    background-color: white;
+}
+
+.error .more_info_btn:active {
+    color: $black;
+    background-color: $yellow;
+    border-color: $yellow;
+}
+
+.using_keyboard .error .more_info_btn:focus {
+    background-color: $blue;
+    border-color: $blue;
+}
+
+.using_keyboard .error .more_info_btn:hover:focus {
+    color: white;
+}
+
+.error.is_highlighted {
+    background-color: #e28036;
+}
+
