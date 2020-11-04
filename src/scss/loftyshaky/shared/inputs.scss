@@ -1,0 +1,48 @@
+input[type="file"] {
+    display: none;
+}
+
+.input_item {
+    margin-left: unset;
+    justify-content: unset;
+    align-items: center;
+    flex-direction: column;
+    display: table;
+    width: auto;
+}
+
+.input_item:not(:first-child) {
+    margin-top: $gap;
+}
+
+.input_item .label {
+    display: flex;
+    align-items: center;
+    height: unset;
+    margin-right: 0;
+    white-space: normal;
+}
+
+.main.window .input_item .label {
+    height: unset;
+}
+
+.input_item .input {
+    @include input_basic;
+    height: $input_height;
+    padding: 0 9px 0 9px;
+    flex-grow: 1;
+    border-radius: 0;
+    box-sizing: border-box;
+}
+
+.input_item .input.gesture {
+    padding-bottom: 3px;
+    box-sizing: border-box;
+}
+
+.input_w {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+}

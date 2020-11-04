@@ -1,0 +1,163 @@
+@import "../../mixins";
+
+::selection {
+    background-color: $color_6 !important;
+    color: white !important;
+}
+
+.main ::-webkit-scrollbar-thumb {
+    background-color: $color_7;
+}
+
+.main ::-webkit-scrollbar-track {
+    background-color: $color_1;
+}
+
+.main ::-webkit-scrollbar-corner,
+.main ::-webkit-resizer {
+    background-color: $color_4;
+}
+
+body {
+    background-color: $color_1;
+}
+
+.main,
+button,
+select,
+input,
+textarea {
+    color: $color_4;
+}
+
+.main {
+    border-color: $color_4;
+}
+
+.section_btns {
+    background-color: $color_2;
+}
+
+.section_btn {
+    border-color: $color_4;
+    background-color: $color_2;
+}
+
+.section_btn.selected {
+    background-color: $color_3;
+}
+
+.section_btns .filler:after,
+.section_btn:after {
+    background-color: $color_4;
+}
+
+.section_btn:not(.selected):hover {
+    background-color: $color_8;
+}
+
+.sections {
+    background-color: $color_3;
+}
+
+.input_item .input,
+.btn.text_input,
+.btn.text {
+    background-color: $color_1;
+}
+
+.input_item .input:focus {
+    background-color: $color_2;
+}
+
+.input_w.inset_border:before {
+    border-color: $color_4;
+}
+
+.palette {
+    background-color: $color_3;
+}
+
+.top_palette_visualization_btns .palette_visualization {
+    background-color: $color_1;
+}
+
+.input_w .visualization {
+    border-color: $color_4;
+    background-color: $color_1;
+}
+
+.help_btn svg,
+.checkbox .box svg {
+    fill: $color_4;
+}
+
+.btn.text_input svg {
+    fill: $color_4;
+}
+
+select {
+    background-image: linear-gradient(45deg, transparent 50%, $color_4 50%),
+        linear-gradient(135deg, $color_4 50%, transparent 50%), linear-gradient(to right, $color_4, $color_4);
+}
+
+.checkbox .box {
+    background-color: $color_1;
+}
+
+.pcr-app {
+    border-color: $color_4 !important;
+    background-color: $color_3 !important;
+}
+
+.color_picker_w *:not(.pcr-last-color):not(.pcr-current-color) {
+    color: $color_4 !important;
+}
+
+.pcr-color-preview,
+.pcr-palette,
+.pcr-slider,
+.pcr-picker,
+.pcr-result,
+.color_picker_w input {
+    border-color: $color_4 !important;
+}
+
+.color_picker_w input {
+    background-color: $color_1 !important;
+}
+
+.input_item .input:focus,
+.input_item .input:focus + .btn.text_input,
+.btn.text:hover {
+    background-color: $color_5;
+}
+
+.pcr-result:focus,
+.color_picker_w input:hover:not(.pcr-result):not(.active) {
+    background-color: $color_5 !important;
+}
+
+.color_picker_w .pcr-type.active {
+    background-color: $color_2 !important;
+}
+
+.link {
+    color: $color_9;
+}
+
+.link:visited {
+    color: $color_10;
+}
+
+.link:hover {
+    color: $color_11;
+}
+
+.link:active {
+    color: $color_12;
+}
+
+.input_w .input.is_in_warn_state {
+    background-color: $color_6;
+}

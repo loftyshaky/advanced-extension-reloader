@@ -1,0 +1,11 @@
+$padding: 8px;
+
+.input_item textarea.input {
+    padding-top: $padding;
+    padding-bottom: $padding;
+    min-height: 95px;
+}
+
+.input_item.textarea .label {
+    margin-bottom: $label_margin_bottom;
+}

@@ -1,0 +1,39 @@
+.section_btns {
+    flex-shrink: 0;
+    display: flex;
+    flex-flow: column;
+    overflow: auto;
+}
+
+.section_btn {
+    @include input_basic;
+    @include border_bottom;
+    position: relative;
+    text-align: left;
+    padding: 10px;
+    padding-right: 11px;
+    cursor: pointer;
+}
+
+.section_btn.selected {
+    cursor: default;
+}
+
+.section_btns .filler {
+    position: relative;
+    height: 100%;
+}
+
+.section_btns .filler:after,
+.section_btn:after {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 1px;
+    top: 0;
+    right: 0;
+}
+
+.section_btn.selected:after {
+    width: 0;
+}

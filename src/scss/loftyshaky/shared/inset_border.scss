@@ -1,0 +1,17 @@
+@import "mixins";
+
+.inset_border {
+    position: relative;
+}
+
+.inset_border:before {
+    @include border;
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}

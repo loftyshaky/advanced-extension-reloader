@@ -5,14 +5,38 @@ import sass from 'node-sass';
 
 export class Styles {
     constructor({ scss_file_names }) {
-        this.scss_file_names = scss_file_names;
-        this.scss_files = scss_file_names.map((scss_file_name) => path.join(
-            'src',
-            'scss',
-            scss_file_name,
-            'index.scss',
-        ));
+        this.scss_file_names = [
+            ...scss_file_names,
+            ...this.theme_names,
+        ];
+        this.scss_files = [
+            ...scss_file_names.map((scss_file_name) => path.join(
+                'src',
+                'scss',
+                scss_file_name,
+                'index.scss',
+            )),
+            ...this.theme_names.map((theme_name) => path.join(
+                this.themes_dir,
+                `${theme_name}.scss`,
+            )),
+        ];
     }
+
+    theme_names = [
+        'light_theme',
+        'dark_theme',
+        'very_dark_theme',
+    ]
+
+    themes_dir = path.join(
+        'src',
+        'scss',
+        'loftyshaky',
+        'shared',
+        'themes',
+        'general',
+    )
 
     build_dir = path.join(
         __dirname,
