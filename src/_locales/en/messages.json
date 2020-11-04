@@ -5,6 +5,12 @@
     "settings_title_text": {
         "message": "Settings"
     },
+    "settings_section_text": {
+        "message": "Settings"
+    },
+    "links_section_text": {
+        "message": "Links"
+    },
     "click_action_label_text": {
         "message": "Extension's icon click action"
     },
