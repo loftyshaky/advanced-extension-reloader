@@ -16,5 +16,32 @@
     },
     "reload_actions_label_text": {
         "message": "Extension's icon menu actions"
+    },
+    "privacy_policy_link_text": {
+        "message": "📜 Privacy policy"
+    },
+    "rate_link_text": {
+        "message": "⭐️ Rate this extension if you like it"
+    },
+    "help_translating_link_text": {
+        "message": "🈯 Help translating Extension Reloader into the language you know"
+    },
+    "facebook_page_link_text": {
+        "message": "🖼️ Follow my Facebook page"
+    },
+    "support_page_link_text": {
+        "message": "📢 Support page"
+    },
+    "rate_chrome_link_href": {
+        "message": "https://chrome"
+    },
+    "rate_edge_link_href": {
+        "message": "https://edge"
+    },
+    "rate_opera_link_href": {
+        "message": "https://opera"
+    },
+    "rate_firefox_link_href": {
+        "message": "https://firefox"
     }
 }

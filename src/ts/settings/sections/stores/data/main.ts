@@ -42,10 +42,29 @@ export class Main {
         }),
         new o_inputs.Section({
             name: 'links',
-            inputs: [new o_inputs.Textarea({
-                name: 'click_action',
-                event_callback: () => null,
-            })],
+            inputs: [
+                new o_inputs.Link({
+                    name: 'privacy_policy',
+                    href: 'http://bit.ly/cws-privacy-policy',
+                }),
+                new o_inputs.Link({
+                    name: 'rate',
+                    browser: env.browser,
+                    force_resolve: true,
+                }),
+                new o_inputs.Link({
+                    name: 'help_translating',
+                    href: 'https://bit.ly/help-translating',
+                }),
+                new o_inputs.Link({
+                    name: 'facebook_page',
+                    href: 'http://bit.ly/browservery',
+                }),
+                new o_inputs.Link({
+                    name: 'support_page',
+                    href: 'http://bit.ly/browservery-support',
+                }),
+            ],
         }),
     ]
 }
