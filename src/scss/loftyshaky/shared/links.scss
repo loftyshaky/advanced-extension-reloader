@@ -1,0 +1,11 @@
+.link {    
+    display: table;
+    text-decoration: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.link:not(:first-child) {
+    margin-top: $gap;
+}
