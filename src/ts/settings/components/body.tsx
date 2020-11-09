@@ -11,7 +11,11 @@ import { d_sections } from 'settings/internal';
 export class Body extends React.Component {
     public render(): JSX.Element {
         return (
-            <Settings sections={d_sections.Main.i.sections} />
+            <Settings
+                sections={d_sections.Main.i.sections}
+                initial_section='settings'
+                change_section_callback={() => undefined}
+            />
         );
     }
 }
