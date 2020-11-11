@@ -5,7 +5,10 @@ import {
     CrashHandler,
     Error,
 } from '@loftyshaky/shared';
-import { Suffix } from 'shared/internal';
+import {
+    Suffix,
+    CssVars,
+} from 'shared/internal';
 import {
     u_settings,
 } from '@loftyshaky/shared/settings';
@@ -21,6 +24,7 @@ export class InitAll {
 
     public init = (): void => err(() => {
         this.set_page_title();
+        CssVars.i.set_transition_vars();
 
         const error_root: ShadowRoot = this.create_root({ prefix: 'error' }) as ShadowRoot;
         const settings_root: HTMLDivElement = this.create_root({
@@ -46,7 +50,8 @@ export class InitAll {
                     );
 
                     if (settings_css) {
-                        settings_css.addEventListener('load',
+                        settings_css.addEventListener(
+                            'load',
                             async (): Promise<void> => {
                                 const { d_sections } = await import('settings/internal');
 
@@ -54,7 +59,8 @@ export class InitAll {
                                     { sections: d_sections.Main.i.sections },
                                 );
                                 u_settings.InputsWidth.i.set_max_width();
-                            });
+                            },
+                        );
                     }
                 },
             );
