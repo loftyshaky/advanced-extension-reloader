@@ -53,6 +53,7 @@ export class InitAll {
                                 u_settings.InputsWidth.i.calculate_for_all_sections(
                                     { sections: d_sections.Main.i.sections },
                                 );
+                                u_settings.InputsWidth.i.set_max_width();
                             });
                     }
                 },
