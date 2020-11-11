@@ -6,6 +6,9 @@ import {
     Error,
 } from '@loftyshaky/shared';
 import { Suffix } from 'shared/internal';
+import {
+    u_settings,
+} from '@loftyshaky/shared/settings';
 
 export class InitAll {
     private static i0: InitAll;
@@ -37,10 +40,21 @@ export class InitAll {
                         document.head,
                     );
 
-                    x.css(
+                    const settings_css = x.css(
                         'settings',
                         document.head,
                     );
+
+                    if (settings_css) {
+                        settings_css.addEventListener('load',
+                            async (): Promise<void> => {
+                                const { d_sections } = await import('settings/internal');
+
+                                u_settings.InputsWidth.i.calculate_for_all_sections(
+                                    { sections: d_sections.Main.i.sections },
+                                );
+                            });
+                    }
                 },
             );
         },
