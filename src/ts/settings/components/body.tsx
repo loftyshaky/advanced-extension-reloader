@@ -9,6 +9,10 @@ import { d_sections } from 'settings/internal';
 
 @observer
 export class Body extends React.Component {
+    public componentDidMount() {
+        d_sections.Val.i.set_on_page_load();
+    }
+
     public render(): JSX.Element {
         return (
             <Settings

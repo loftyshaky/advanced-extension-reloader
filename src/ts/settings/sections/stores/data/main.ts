@@ -4,6 +4,7 @@ import {
 import {
     o_inputs,
 } from '@loftyshaky/shared/inputs';
+import { d_sections } from 'settings/internal';
 
 export class Main {
     private static i0: Main;
@@ -32,11 +33,11 @@ export class Main {
             inputs: [
                 new o_inputs.Textarea({
                     name: 'click_action',
-                    event_callback: () => null,
+                    event_callback: d_sections.Val.i.change,
                 }),
                 new o_inputs.Textarea({
                     name: 'reload_actions',
-                    event_callback: () => null,
+                    event_callback: d_sections.Val.i.change,
                 }),
             ],
         }),

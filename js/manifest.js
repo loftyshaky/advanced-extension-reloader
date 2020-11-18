@@ -17,7 +17,10 @@ export class Manifest {
                 chrome_style: false,
                 open_in_tab: true,
             },
-            permissions: ['management'],
+            permissions: [
+                'storage',
+                'management',
+            ],
         };
 
         if (process.env.build === 'dev') {
