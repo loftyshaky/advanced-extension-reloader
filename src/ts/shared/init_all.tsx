@@ -38,6 +38,18 @@ export class InitAll {
         const render_settings = (): Promise<void> => err_async(async () => {
             const { Body } = await import('settings/components/Body');
 
+            const on_render = (): Promise<void> => err_async(async () => {
+                const { d_sections } = await import('settings/internal');
+
+                u_settings.InputsWidth.i.calculate_for_all_sections(
+                    { sections: d_sections.Main.i.sections },
+                );
+                u_settings.InputsWidth.i.set_max_width();
+
+                LoadingScreenVisibility.i.hide();
+            },
+            1013);
+
             render(
                 <CrashHandler><Body /></CrashHandler>,
                 settings_root,
@@ -55,16 +67,7 @@ export class InitAll {
                     if (n(settings_css)) {
                         settings_css.addEventListener(
                             'load',
-                            async (): Promise<void> => {
-                                const { d_sections } = await import('settings/internal');
-
-                                u_settings.InputsWidth.i.calculate_for_all_sections(
-                                    { sections: d_sections.Main.i.sections },
-                                );
-                                u_settings.InputsWidth.i.set_max_width();
-
-                                LoadingScreenVisibility.i.hide();
-                            },
+                            on_render,
                         );
                     }
                 },
@@ -98,7 +101,7 @@ export class InitAll {
                             if (n(loading_screen_css)) {
                                 loading_screen_css.addEventListener(
                                     'load',
-                                    async (): Promise<void> => {
+                                    (): void => err(() => {
                                         if (
                                             n(loading_screen_root_el)
                                             && n(loading_screen_root_el.shadowRoot)
@@ -113,6 +116,7 @@ export class InitAll {
 
                                         render_settings();
                                     },
+                                    1012),
                                 );
                             }
                         }
