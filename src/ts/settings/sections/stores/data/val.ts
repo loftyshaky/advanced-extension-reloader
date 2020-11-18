@@ -26,7 +26,12 @@ export class Val {
             input: i_inputs.Input;
         },
     ): void => err(() => {
-        ext.storage_set({ [input.name]: input.val });
+        ext.send_msg(
+            {
+                msg: 'update_setting',
+                val_obj: { [input.name]: input.val },
+            },
+        );
     },
     1014);
 
