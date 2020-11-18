@@ -4,6 +4,8 @@ import { render } from 'react-dom';
 import {
     CrashHandler,
     Error,
+    LoadingScreenVisibility,
+    LoadingScreenBody,
 } from '@loftyshaky/shared';
 import {
     Suffix,
@@ -27,6 +29,7 @@ export class InitAll {
         CssVars.i.set_transition_vars();
 
         const error_root: ShadowRoot = this.create_root({ prefix: 'error' }) as ShadowRoot;
+        const loading_screen_root: ShadowRoot = this.create_root({ prefix: 'loading_screen' }) as ShadowRoot;
         const settings_root: HTMLDivElement = this.create_root({
             prefix: 'settings',
             shadow_root: false,
@@ -49,7 +52,7 @@ export class InitAll {
                         document.head,
                     );
 
-                    if (settings_css) {
+                    if (n(settings_css)) {
                         settings_css.addEventListener(
                             'load',
                             async (): Promise<void> => {
@@ -59,20 +62,62 @@ export class InitAll {
                                     { sections: d_sections.Main.i.sections },
                                 );
                                 u_settings.InputsWidth.i.set_max_width();
+
+                                LoadingScreenVisibility.i.hide();
                             },
                         );
                     }
                 },
             );
         },
-
         1004);
 
         render(
             <Error app_id={new Suffix('').suffix} />,
             error_root,
             (): void => {
-                render_settings();
+                render(
+                    <CrashHandler><LoadingScreenBody /></CrashHandler>,
+                    loading_screen_root,
+                    (): void => {
+                        const loading_screen_root_el = s<HTMLDivElement>(`.${new Suffix('loading_screen').result}`);
+
+                        if (
+                            n(loading_screen_root_el)
+                            && n(loading_screen_root_el.shadowRoot)
+                        ) {
+                            x.css(
+                                'normalize',
+                                loading_screen_root_el.shadowRoot,
+                            );
+                            const loading_screen_css = x.css(
+                                'loading_screen',
+                                loading_screen_root_el.shadowRoot,
+                            );
+
+                            if (n(loading_screen_css)) {
+                                loading_screen_css.addEventListener(
+                                    'load',
+                                    async (): Promise<void> => {
+                                        if (
+                                            n(loading_screen_root_el)
+                                            && n(loading_screen_root_el.shadowRoot)
+                                        ) {
+                                            x.css(
+                                                'light_theme',
+                                                loading_screen_root_el.shadowRoot!,
+                                            );
+                                        }
+
+                                        LoadingScreenVisibility.i.show();
+
+                                        render_settings();
+                                    },
+                                );
+                            }
+                        }
+                    },
+                );
             },
         );
     },
@@ -111,7 +156,7 @@ export class InitAll {
     private set_page_title = (): void => err(() => {
         const title_el = s<HTMLTitleElement>('title');
 
-        if (title_el) {
+        if (n(title_el)) {
             title_el.textContent = ext.msg(`${page}_title_text`);
         }
     },
