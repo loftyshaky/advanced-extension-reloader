@@ -31,6 +31,7 @@ export class Styles {
     css_for_build_dir_names = [
         'font_face',
         'error',
+        'loading_screen',
     ]
 
     theme_names = [

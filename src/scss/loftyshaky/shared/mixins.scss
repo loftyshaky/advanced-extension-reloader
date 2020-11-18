@@ -25,6 +25,13 @@ $border-width: 1px;
     align-items: center;
 }
 
+@mixin center_translate {
+    margin: auto;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
 @mixin border {
     border-width: $border-width;
     border-style: solid;

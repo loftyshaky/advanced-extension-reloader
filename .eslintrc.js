@@ -2,7 +2,7 @@ const _ = require('lodash');
 
 const min_items = 2;
 const naming_convention_exceptions = {
-    regex: '^(marginBottom|minWidth|maxWidth|scrollTop|backgroundColor|componentDidMount|componentWillUnmount|componentDidUpdate|componentDidCatch|getDerivedStateFromError|enforceActions|recurseEverything|currentWindow|windowTypes)$',
+    regex: '^(marginBottom|minWidth|maxWidth|scrollTop|backgroundColor|componentDidMount|componentWillUnmount|componentDidUpdate|componentDidCatch|getDerivedStateFromError|enforceActions|recurseEverything|currentWindow|windowTypes|defaultProps)$',
     match: false,
 };
 
@@ -213,6 +213,7 @@ const rules = {
         //> react
         'react/prefer-stateless-function': 'off',
         'react/jsx-filename-extension': 'off',
+        'react/static-property-placement': 'off',
         'react/jsx-indent': [
             'error',
             4,

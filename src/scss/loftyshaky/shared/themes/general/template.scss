@@ -18,6 +18,14 @@
     background-color: $color_4;
 }
 
+.loading_screen.main {
+    background-color: $color_13;
+}
+
+.loading_screen svg {
+    stroke: $color_4;
+}
+
 body {
     background-color: $color_1;
 }
