@@ -27,12 +27,22 @@ export class Val {
         },
     ): void => err(() => {
         if (n(input.val)) {
-            ext.send_msg(
-                {
-                    msg: 'update_setting',
-                    val_obj: { [input.name]: JSON.parse(input.val) },
-                },
-            );
+            try {
+                const val = JSON.parse(input.val);
+
+                ext.send_msg(
+                    {
+                        msg: 'update_setting',
+                        val_obj: { [input.name]: val },
+                    },
+                );
+            } catch (error_obj) {
+                show_err_ribbon(
+                    error_obj,
+                    1016,
+                    { silent: true },
+                );
+            }
         }
     },
     1014);
