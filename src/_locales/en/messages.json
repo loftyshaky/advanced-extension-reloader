@@ -2,6 +2,18 @@
     "description": {
         "message": "App description."
     },
+    "soft_context_menu_item": {
+        "message": "soft"
+    },
+    "hard_context_menu_item": {
+        "message": "hard"
+    },
+    "one_tab_context_menu_item": {
+        "message": "one tab"
+    },
+    "all_tabs_context_menu_item": {
+        "message": "all tabs"
+    },
     "settings_title_text": {
         "message": "Settings"
     },
