@@ -26,12 +26,14 @@ export class Val {
             input: i_inputs.Input;
         },
     ): void => err(() => {
-        ext.send_msg(
-            {
-                msg: 'update_setting',
-                val_obj: { [input.name]: input.val },
-            },
-        );
+        if (n(input.val)) {
+            ext.send_msg(
+                {
+                    msg: 'update_setting',
+                    val_obj: { [input.name]: JSON.parse(input.val) },
+                },
+            );
+        }
     },
     1014);
 
@@ -42,7 +44,11 @@ export class Val {
             key,
             val,
         ]) => {
-            d_sections.Main.i.sections.settings.inputs[key].val = val;
+            d_sections.Main.i.sections.settings.inputs[key].val = JSON.stringify(
+                val,
+                undefined,
+                4,
+            );
         }));
     },
     1015);
