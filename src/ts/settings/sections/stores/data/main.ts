@@ -34,10 +34,12 @@ export class Main {
                 new o_inputs.Textarea({
                     name: 'click_action',
                     event_callback: d_sections.Val.i.change,
+                    warn_state_checker: d_sections.Val.i.validate_input,
                 }),
                 new o_inputs.Textarea({
                     name: 'reload_actions',
                     event_callback: d_sections.Val.i.change,
+                    warn_state_checker: d_sections.Val.i.validate_input,
                 }),
             ],
         }),

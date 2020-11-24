@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
     configure,
     action,
@@ -30,12 +31,15 @@ export class Val {
             try {
                 const val = JSON.parse(input.val);
 
-                ext.send_msg(
-                    {
-                        msg: 'update_setting',
-                        val_obj: { [input.name]: val },
-                    },
-                );
+                l(this.validate_input({ input }));
+                if (!this.validate_input({ input })) {
+                    ext.send_msg(
+                        {
+                            msg: 'update_setting',
+                            val_obj: { [input.name]: val },
+                        },
+                    );
+                }
             } catch (error_obj) {
                 show_err_ribbon(
                     error_obj,
@@ -62,4 +66,47 @@ export class Val {
         }));
     },
     1015);
+
+    public validate_input = ({ input }: {input: i_inputs.Input; }): boolean => err(() => {
+        if (n(input.val)) {
+            try {
+                const val = JSON.parse(input.val);
+
+                const validate_inner = (
+                    { obj }:
+                    { obj: any },
+                ): boolean => err(() => !(
+                    _.isObject(obj)
+                    && _.size(obj) === 2
+                    && n((obj as any).hard)
+                    && n((obj as any).all_tabs)
+                    && typeof (obj as any).hard === 'boolean'
+                    && typeof (obj as any).all_tabs === 'boolean'
+                ),
+                1018);
+
+                if (input.name === 'click_action') {
+                    return validate_inner({ obj: val });
+                } if (input.name === 'reload_actions') {
+                    if (_.isArray(val)) {
+                        return val.some((item: any): boolean => err(() => (
+                            validate_inner({ obj: item })
+                        ),
+                        1019));
+                    }
+
+                    return true;
+                }
+            } catch (error_obj) {
+                show_err_ribbon(
+                    error_obj,
+                    1016,
+                    { silent: true },
+                );
+            }
+        }
+
+        return true;
+    },
+    1017);
 }
