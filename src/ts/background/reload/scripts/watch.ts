@@ -25,34 +25,37 @@ export class Watch {
     ): Promise<void> => err_async(
         async () => {
             const apps_info: Management.ExtensionInfo[] = await browser.management.getAll();
+            const { last_active_tab } = s_reload;
 
-            apps_info.forEach((app_info: Management.ExtensionInfo): Promise<void> => err_async(
-                async () => {
-                    if (
-                        app_info.name !== 'Extension Reloader'
+            await Promise.all(apps_info.map(
+                (app_info: Management.ExtensionInfo): Promise<void> => err_async(
+                    async () => {
+                        if (
+                            app_info.name !== 'Extension Reloader'
                     && app_info.installType === 'development'
                     && n(app_info.enabled)
-                    ) {
-                        if (hard) {
-                            await browser.management.setEnabled(
-                                app_info.id,
-                                false,
-                            );
-                            await browser.management.setEnabled(
-                                app_info.id,
-                                true,
-                            );
+                        ) {
+                            if (hard) {
+                                await browser.management.setEnabled(
+                                    app_info.id,
+                                    false,
+                                );
+                                await browser.management.setEnabled(
+                                    app_info.id,
+                                    true,
+                                );
+                            }
                         }
-
-                        if (all_tabs) {
-                            this.all_tabs();
-                        } else {
-                            browser.tabs.reload(s_reload.last_active_tab);
-                        }
-                    }
-                },
-                1006,
+                    },
+                    1006,
+                ),
             ));
+
+            if (all_tabs) {
+                this.all_tabs();
+            } else {
+                browser.tabs.reload(last_active_tab);
+            }
         },
         1005,
     );
