@@ -4,6 +4,8 @@ import {
     action,
 } from 'mobx';
 
+import { i_shared } from 'shared/internal';
+
 import {
     i_inputs,
 } from '@loftyshaky/shared/inputs';
@@ -72,24 +74,24 @@ export class Val {
                 const val = JSON.parse(input.val);
 
                 const validate_inner = (
-                    { obj }:
-                    { obj: any },
+                    { reload_obj }:
+                    { reload_obj: i_shared.Reload },
                 ): boolean => err(() => !(
-                    _.isObject(obj)
-                    && _.size(obj) === 2
-                    && n((obj as any).hard)
-                    && n((obj as any).all_tabs)
-                    && typeof (obj as any).hard === 'boolean'
-                    && typeof (obj as any).all_tabs === 'boolean'
+                    _.isObject(reload_obj)
+                    && _.size(reload_obj) === 2
+                    && n(reload_obj.hard)
+                    && n(reload_obj.all_tabs)
+                    && typeof reload_obj.hard === 'boolean'
+                    && typeof reload_obj.all_tabs === 'boolean'
                 ),
                 1018);
 
                 if (input.name === 'click_action') {
-                    return validate_inner({ obj: val });
+                    return validate_inner({ reload_obj: val });
                 } if (input.name === 'reload_actions') {
                     if (_.isArray(val)) {
-                        return val.some((item: any): boolean => err(() => (
-                            validate_inner({ obj: item })
+                        return val.some((reload_obj: i_shared.Reload): boolean => err(() => (
+                            validate_inner({ reload_obj })
                         ),
                         1019));
                     }

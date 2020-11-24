@@ -6,3 +6,5 @@ export * from 'shared/tr';
 export * from 'shared/init_all';
 
 export * from 'shared/svg';
+
+export * as i_shared from 'shared/interfaces';
