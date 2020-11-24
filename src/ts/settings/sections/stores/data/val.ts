@@ -31,7 +31,6 @@ export class Val {
             try {
                 const val = JSON.parse(input.val);
 
-                l(this.validate_input({ input }));
                 if (!this.validate_input({ input })) {
                     ext.send_msg(
                         {
