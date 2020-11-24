@@ -19,20 +19,22 @@ export class ContextMenu {
 
         await browser.contextMenus.removeAll();
 
-        settings.reload_actions.forEach((reload_action: i_shared.Reload): void => err(() => {
-            browser.contextMenus.create({
-                title: _.capitalize(
-                    `${reload_action.hard
-                        ? ext.msg('hard_context_menu_item')
-                        : ext.msg('soft_context_menu_item')} + ${reload_action.all_tabs
-                        ? ext.msg('all_tabs_context_menu_item')
-                        : ext.msg('one_tab_context_menu_item')}`,
-                ),
-                contexts: ['browser_action'],
-                onclick: (): void => { s_reload.Watch.i.reload(reload_action); },
-            });
-        },
-        1021));
+        if (n(settings.reload_actions)) {
+            settings.reload_actions.forEach((reload_action: i_shared.Reload): void => err(() => {
+                browser.contextMenus.create({
+                    title: _.capitalize(
+                        `${reload_action.hard
+                            ? ext.msg('hard_context_menu_item')
+                            : ext.msg('soft_context_menu_item')} + ${reload_action.all_tabs
+                            ? ext.msg('all_tabs_context_menu_item')
+                            : ext.msg('one_tab_context_menu_item')}`,
+                    ),
+                    contexts: ['browser_action'],
+                    onclick: (): void => { s_reload.Watch.i.reload(reload_action); },
+                });
+            },
+            1021));
+        }
     },
     1020);
 }

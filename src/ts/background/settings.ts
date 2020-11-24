@@ -11,6 +11,32 @@ export class Settings {
         return this.i0;
     }
 
+    public default_settings: any = {
+        click_action: {
+            hard: false,
+            all_tabs: false,
+        },
+        reload_actions: [
+            {
+                all_tabs: false,
+                hard: false,
+            },
+            {
+                all_tabs: true,
+                hard: false,
+            },
+            {
+                all_tabs: false,
+                hard: true,
+            },
+            {
+                all_tabs: true,
+                hard: true,
+            },
+        ],
+
+    }
+
     public update = _.debounce((
         { settings }:
         { settings: any },
