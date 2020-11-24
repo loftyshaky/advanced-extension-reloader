@@ -32,8 +32,8 @@ export class Watch {
                     async () => {
                         if (
                             app_info.name !== 'Extension Reloader'
-                    && app_info.installType === 'development'
-                    && n(app_info.enabled)
+                            && app_info.installType === 'development'
+                            && n(app_info.enabled)
                         ) {
                             if (hard) {
                                 await browser.management.setEnabled(
