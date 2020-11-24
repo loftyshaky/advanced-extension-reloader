@@ -71,8 +71,10 @@ export class Watch {
     1007);
 }
 
-browser.browserAction.onClicked.addListener((): void => err(() => {
-    Watch.i.reload({ hard: true });
+browser.browserAction.onClicked.addListener((): Promise<void> => err_async(async () => {
+    const click_action = await ext.storage_get('click_action');
+
+    Watch.i.reload(click_action.click_action);
 },
 1008));
 
