@@ -7,7 +7,7 @@ browser.runtime.onMessage.addListener((msg: t.Msg): Promise<void> => err_async(a
     const msg_str: string = msg.msg;
 
     if (msg_str === 'update_setting') {
-        s_settings.Settings.i.update({ settings: msg.val_obj });
+        s_settings.Settings.i.update({ settings: msg.settings });
     }
 },
 1009));

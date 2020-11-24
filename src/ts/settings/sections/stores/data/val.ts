@@ -36,7 +36,7 @@ export class Val {
                     ext.send_msg(
                         {
                             msg: 'update_setting',
-                            val_obj: { [input.name]: val },
+                            settings: { [input.name]: val },
                         },
                     );
                 }
