@@ -37,6 +37,26 @@ $border-width: 1px;
     border-style: solid;
 }
 
+@mixin border_top {
+    border-top-width: $border-width;
+    border-top-style: solid;
+}
+
+@mixin border_bottom {
+    border-bottom-width: $border-width;
+    border-bottom-style: solid;
+}
+
+@mixin border_left {
+    border-left-width: $border-width;
+    border-left-style: solid;
+}
+
+@mixin border_right {
+    border-right-width: $border-width;
+    border-right-style: solid;
+}
+
 @mixin white_border {
     border: $border-width solid white;
 }

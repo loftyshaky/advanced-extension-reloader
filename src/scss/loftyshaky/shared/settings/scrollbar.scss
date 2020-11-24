@@ -1,0 +1,4 @@
+.section_btns::-webkit-scrollbar-track:vertical {
+    @include border_right;
+    border-left: none;
+}
