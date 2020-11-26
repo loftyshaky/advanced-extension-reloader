@@ -79,10 +79,10 @@ export class Val {
                 ): boolean => err(() => !(
                     _.isObject(reload_obj)
                     && _.size(reload_obj) === 2
-                    && n(reload_obj.hard)
                     && n(reload_obj.all_tabs)
-                    && typeof reload_obj.hard === 'boolean'
+                    && n(reload_obj.hard)
                     && typeof reload_obj.all_tabs === 'boolean'
+                    && typeof reload_obj.hard === 'boolean'
                 ),
                 1018);
 

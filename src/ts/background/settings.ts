@@ -13,8 +13,8 @@ export class Settings {
 
     public default_settings: any = {
         click_action: {
-            hard: false,
             all_tabs: false,
+            hard: false,
         },
         reload_actions: [
             {

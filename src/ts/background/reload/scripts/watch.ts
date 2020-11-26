@@ -16,11 +16,11 @@ export class Watch {
 
     public reload = (
         {
-            hard = false,
             all_tabs = false,
+            hard = false,
         }: {
-            hard?: boolean;
             all_tabs?: boolean;
+            hard?: boolean;
         },
     ): Promise<void> => err_async(
         async () => {
