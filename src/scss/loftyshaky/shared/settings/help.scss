@@ -1,0 +1,46 @@
+$help_btn_size: 20px;
+
+.section_help + .subsection {
+    margin-top: $gap;
+}
+
+.section_help {
+    display: flex;
+}
+
+.help {
+    max-width: 700px;
+    font-size: 13px;
+    margin: 0;
+    margin-top: 4px;
+    white-space: pre-wrap;
+}
+
+.section_help .help {
+    max-width: unset;
+    margin-top: 0;
+    margin-right: 15px;
+}
+
+
+.help_btn {
+    @include btn;
+    margin-left: $margin;
+    display: flex;
+    order: 1;
+}
+
+.section_help .help_btn {
+    margin-left: auto;
+    align-self: flex-start;
+}
+
+.input_item:not(.textarea) .help_btn {
+    align-self: center;
+}
+
+.help_btn svg {
+    display: block;
+    width: $help_btn_size;
+    height: $help_btn_size;
+}
