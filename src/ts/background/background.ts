@@ -5,3 +5,4 @@ import 'background/on_installed';
 import { s_reload } from 'background/internal';
 
 s_reload.ContextMenu.i.create();
+s_reload.Watch.i.connect();

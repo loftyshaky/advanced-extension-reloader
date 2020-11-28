@@ -12,7 +12,28 @@ export class Watch {
         return this.i0;
     }
 
-    public client = io.connect('http://localhost:7220');
+    private clients: any[] = [];
+
+    public connect = (): Promise<void> => err_async(async () => {
+        const settings = await ext.storage_get('ports');
+
+        this.clients.forEach((client: any): void => {
+            client.close();
+        });
+
+        this.clients = [];
+
+        settings.ports.forEach((ports: number): void => {
+            const client = io.connect(`http://localhost:${ports}`);
+            this.clients.push(client);
+
+            client.on(
+                'reload_app',
+                Watch.i.reload,
+            );
+        });
+    },
+    1026);
 
     public reload = (
         {
@@ -80,8 +101,3 @@ browser.browserAction.onClicked.addListener((): Promise<void> => err_async(async
     Watch.i.reload(click_action.click_action);
 },
 1008));
-
-Watch.i.client.on(
-    'reload_app',
-    Watch.i.reload,
-);

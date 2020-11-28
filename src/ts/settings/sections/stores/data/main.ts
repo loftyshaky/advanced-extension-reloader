@@ -32,6 +32,12 @@ export class Main {
             name: 'settings',
             inputs: [
                 new o_inputs.Textarea({
+                    name: 'ports',
+                    include_help: true,
+                    event_callback: d_sections.Val.i.change_ports,
+                    warn_state_checker: d_sections.Val.i.validate_ports_input,
+                }),
+                new o_inputs.Textarea({
                     name: 'click_action',
                     include_help: true,
                     event_callback: d_sections.Val.i.change,

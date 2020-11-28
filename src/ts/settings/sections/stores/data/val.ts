@@ -52,6 +52,32 @@ export class Val {
     },
     1014);
 
+    public change_ports = (
+        {
+            input,
+        }: {
+            input: i_inputs.Input;
+        },
+    ): void => err(() => {
+        if (
+            n(input.val)
+            && !this.validate_ports_input({ input })
+        ) {
+            ext.send_msg(
+                {
+                    msg: 'update_setting',
+                    settings: {
+                        [input.name]: _.map(
+                            input.val.split(','),
+                            _.trim,
+                        ),
+                    },
+                },
+            );
+        }
+    },
+    1024);
+
     public set_on_page_load = (): Promise<void> => err_async(async () => {
         const settings = await ext.storage_get();
 
@@ -59,10 +85,14 @@ export class Val {
             key,
             val,
         ]) => {
-            d_sections.Main.i.sections.settings.inputs[key].val = JSON.stringify(
-                val,
-                undefined,
-                4,
+            d_sections.Main.i.sections.settings.inputs[key].val = (
+                d_sections.Main.i.sections.settings.inputs[key].name === 'ports'
+                    ? (val as string[]).join(',')
+                    : JSON.stringify(
+                        val,
+                        undefined,
+                        4,
+                    )
             );
         }));
     },
@@ -110,4 +140,15 @@ export class Val {
         return true;
     },
     1017);
+
+    public validate_ports_input = (
+        { input }: {input: i_inputs.Input; },
+    ): boolean => err(() => {
+        if (n(input.val)) {
+            return !/^\d+( *?, *?\d+)*$/.test(input.val);
+        }
+
+        return true;
+    },
+    1025);
 }

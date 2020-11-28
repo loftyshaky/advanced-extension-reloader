@@ -12,6 +12,7 @@ export class Settings {
     }
 
     public default_settings: any = {
+        ports: ['7220'],
         click_action: {
             all_tabs: false,
             hard: false,
@@ -44,6 +45,10 @@ export class Settings {
         await ext.storage_set(settings);
 
         s_reload.ContextMenu.i.create();
+
+        if (n(settings.ports)) {
+            s_reload.Watch.i.connect();
+        }
     },
     1022),
     1000);

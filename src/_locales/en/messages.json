@@ -23,11 +23,17 @@
     "links_section_text": {
         "message": "Links"
     },
+    "ports_help_text": {
+        "message": "Ports to which the message that initiate reload of extensions will be sent. You will need multiple ports if you develop multiple extensions."
+    },
     "click_action_help_text": {
         "message": "An object that defines what happens when you click on the browser action icon.\n\nAccepted properties:\n\nall tabs: boolean\nWhether to reload all tabs as opposed to just reloading the current tab.\n\nhard: boolean\nWhether to reload the extension as opposed to just reloading its page. Can be combined with \"all tabs\"\n\nExample:\n\n{\n    all tabs: false,\n    hard: true,\n}"
     },
     "reload_actions_help_text": {
         "message": "An array of objects that define additional reload actions that appear in the browser action context menu. Keep in mind that there are limit on how many items can appear there.\n\nAccepted properties:\n\nall tabs: boolean\nWhether to reload all tabs as opposed to just reloading the current tab.\n\nhard: boolean\nWhether to reload the extension as opposed to just reloading its page. Can be combined with \"all tabs\"\n\nExample:\n\n[\n   {\n        all tabs: false,\n        hard: false,\n    },\n   {\n        all tabs: true,\n        hard: false,\n    }\n]"
+    },
+    "ports_label_text": {
+        "message": "Ports"
     },
     "click_action_label_text": {
         "message": "Extension's icon click action"
