@@ -69,8 +69,7 @@ textarea {
 }
 
 .input_item .input,
-.btn.text_input,
-.btn.text {
+.input_item .btn.text {
     background-color: $color_1;
 }
 
@@ -100,7 +99,7 @@ textarea {
     fill: $color_4;
 }
 
-.btn.text_input svg {
+.btn.text svg {
     fill: $color_4;
 }
 
@@ -136,8 +135,7 @@ select {
 }
 
 .input_item .input:focus,
-.input_item .input:focus + .btn.text_input,
-.btn.text:hover {
+.input_item .input:focus + .btn.text:not(.is_in_warn_state) {
     background-color: $color_5;
 }
 
@@ -166,6 +164,7 @@ select {
     color: $color_12;
 }
 
+.btn.text.is_in_warn_state,
 .input_w .input.is_in_warn_state {
     background-color: $color_14;
 }

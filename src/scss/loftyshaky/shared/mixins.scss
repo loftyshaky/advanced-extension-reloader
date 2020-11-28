@@ -82,6 +82,12 @@ $border-width: 1px;
     padding: 0;
 }
 
+@mixin text_btn_svg {
+    height: 16px;
+    width: 16px;
+    display: block;
+}
+
 @mixin input_basic {
     border: none;
     outline: none;

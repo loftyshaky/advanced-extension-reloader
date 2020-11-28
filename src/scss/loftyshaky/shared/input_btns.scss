@@ -1,0 +1,8 @@
+.btn.text {
+    @include btn;
+    padding: $input_content_gap $input_content_gap $input_content_gap 0;
+}
+
+.btn.text svg {
+    @include text_btn_svg;
+}
