@@ -31,7 +31,7 @@ export class Main {
         new o_inputs.Section({
             name: 'settings',
             inputs: [
-                new o_inputs.Textarea({
+                new o_inputs.Text({
                     name: 'ports',
                     include_help: true,
                     event_callback: d_sections.Val.i.change_ports,
