@@ -1,6 +1,6 @@
 interface Window {
     page: 'background' | 'settings';
-    show_dependencicies_from_other_page_loaded_into_this_page_alert: import('shared/internal').t.CallbackVariadicVoid;
+    show_dependencicies_from_other_page_loaded_into_this_page_alert: import('@loftyshaky/shared').t.CallbackVariadicVoid;
 }
 
 declare module '*.svg' {
@@ -8,5 +8,6 @@ declare module '*.svg' {
     export default content;
 }
 
+declare module 'js/app_id';
 declare module 'socket.io-client';
 declare module 'chrome';

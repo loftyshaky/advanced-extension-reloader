@@ -10,7 +10,7 @@
         "esModuleInterop": true,
         "sourceMap": true,
         "experimentalDecorators": true,
-       "paths": {
+        "paths": {
             "background/*": [
                 "ts/background/*"
             ],

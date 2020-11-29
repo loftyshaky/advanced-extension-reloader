@@ -1,8 +1,8 @@
 import { Manifest } from './js/manifest';
-import { Env } from './js/loftyshaky/ext/env';
-import { Locales } from './js/loftyshaky/ext/locales';
-import { Styles } from './js/loftyshaky/ext/styles';
-import { shared_config } from './js/loftyshaky/ext/rollup.config';
+import { Env } from './node_modules/@loftyshaky/shared/js/ext/env';
+import { Locales } from './node_modules/@loftyshaky/shared/js/ext/locales';
+import { Styles } from './node_modules/@loftyshaky/shared/js/ext/styles';
+import { shared_config } from './node_modules/@loftyshaky/shared/js/ext/rollup.config';
 
 const manifest = new Manifest();
 const env = new Env();

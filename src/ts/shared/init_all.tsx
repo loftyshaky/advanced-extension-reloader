@@ -8,12 +8,12 @@ import {
     LoadingScreenBody,
 } from '@loftyshaky/shared';
 import {
+    u_settings,
+} from '@loftyshaky/shared/settings';
+import {
     Suffix,
     CssVars,
 } from 'shared/internal';
-import {
-    u_settings,
-} from '@loftyshaky/shared/settings';
 
 export class InitAll {
     private static i0: InitAll;
@@ -26,7 +26,7 @@ export class InitAll {
 
     public init = (): void => err(() => {
         this.set_page_title();
-        CssVars.i.set_transition_vars();
+        CssVars.i.set();
 
         const error_root: ShadowRoot = this.create_root({ prefix: 'error' }) as ShadowRoot;
         const loading_screen_root: ShadowRoot = this.create_root({ prefix: 'loading_screen' }) as ShadowRoot;

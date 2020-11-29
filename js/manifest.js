@@ -1,4 +1,4 @@
-import { Manifest as ManifestShared } from './loftyshaky/ext/manifest';
+import { Manifest as ManifestShared } from '../node_modules/@loftyshaky/shared/js/ext/manifest';
 
 const manifest_shared = new ManifestShared();
 

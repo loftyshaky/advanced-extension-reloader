@@ -9,10 +9,18 @@ export class CssVars {
         return this.i0;
     }
 
-    public set_transition_vars = (): void => err(() => {
+    public set = (): void => err(() => {
         const roots = page === 'settings'
             ? [document.documentElement]
             : [];
+
+        CssVarsShared.i.set_var(
+            {
+                roots,
+                name: 'app_id',
+                val: 'u6Pgzb39sN0',
+            },
+        );
 
         CssVarsShared.i.set_transition_vars(
             {
