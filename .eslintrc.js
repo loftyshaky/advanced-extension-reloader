@@ -2,7 +2,7 @@ const _ = require('lodash');
 
 const min_items = 2;
 const naming_convention_exceptions = {
-    regex: '^(marginBottom|minWidth|maxWidth|scrollTop|backgroundColor|componentDidMount|componentWillUnmount|componentDidUpdate|componentDidCatch|getDerivedStateFromError|enforceActions|recurseEverything|currentWindow|windowTypes|defaultProps)$',
+    regex: '^(marginBottom|minWidth|maxWidth|scrollTop|backgroundColor|componentDidMount|componentWillUnmount|componentDidUpdate|componentDidCatch|getDerivedStateFromError|enforceActions|recurseEverything|currentWindow|windowTypes|defaultProps|windowId)$',
     match: false,
 };
 
