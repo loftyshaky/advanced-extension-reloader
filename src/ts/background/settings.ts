@@ -35,7 +35,6 @@ export class Settings {
                 hard: true,
             },
         ],
-
     }
 
     public update = _.debounce((
