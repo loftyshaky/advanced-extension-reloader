@@ -1,4 +1,9 @@
-import { browser, Management, Tabs, Windows } from 'webextension-polyfill-ts';
+import {
+    browser,
+    Management,
+    Windows,
+    Tabs,
+} from 'webextension-polyfill-ts';
 import io from 'socket.io-client';
 
 import { s_reload } from 'background/internal';
@@ -13,6 +18,7 @@ export class Watch {
     }
 
     private clients: any[] = [];
+    public reloading: boolean = false;
 
     public connect = (): Promise<void> => err_async(async () => {
         const settings = await ext.storage_get('ports');
@@ -45,8 +51,10 @@ export class Watch {
         },
     ): Promise<void> => err_async(
         async () => {
+            this.reloading = true;
+
             const apps_info: Management.ExtensionInfo[] = await browser.management.getAll();
-            const { last_active_tab } = s_reload;
+            const { last_active_tab_id } = s_reload.Tabs.i;
 
             await Promise.all(apps_info.map(
                 (app_info: Management.ExtensionInfo): Promise<void> => err_async(
@@ -72,27 +80,38 @@ export class Watch {
                 ),
             ));
 
-            if (all_tabs) {
-                this.all_tabs();
-            } else {
-                browser.tabs.reload(last_active_tab);
+            if (hard) {
+                const current_window: Windows.Window = await browser.windows.getCurrent();
+
+                await Promise.all(s_reload.Tabs.i.opened_tabs.map(
+                    (tab: Tabs.Tab): Promise<void> => err_async(
+                        async () => {
+                            await s_reload.Tabs.i.recreate_tab({ tab });
+                        },
+                        1031,
+                    ),
+                ));
+
+                if (n(current_window.id)) {
+                    await browser.windows.update(
+                        current_window.id,
+                        { focused: true },
+                    );
+                }
             }
+
+            if (all_tabs) {
+                await s_reload.Tabs.i.reload_all_tabs();
+            } else {
+                await browser.tabs.reload(last_active_tab_id);
+            }
+
+            this.reloading = false;
+
+            s_reload.Tabs.i.get_opened_ext_tabs();
         },
         1005,
     );
-
-    private all_tabs = (): Promise<void> => err_async(async () => {
-        const wins: Windows.Window[] = await browser.windows.getAll({ populate: true });
-
-        wins.forEach((win: Windows.Window): void => {
-            if (n(win.tabs)) {
-                win.tabs.forEach((tab: Tabs.Tab): void => {
-                    browser.tabs.reload(tab.id);
-                });
-            }
-        });
-    },
-    1007);
 }
 
 browser.browserAction.onClicked.addListener((): Promise<void> => err_async(async () => {

@@ -19,6 +19,7 @@ export class Manifest {
             },
             permissions: [
                 'storage',
+                'tabs',
                 'management',
                 'contextMenus',
             ],
