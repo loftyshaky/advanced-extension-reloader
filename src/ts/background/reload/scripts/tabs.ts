@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import {
     browser,
+    Management,
     Windows,
     Tabs as TabsExt,
 } from 'webextension-polyfill-ts';
@@ -32,11 +33,15 @@ export class Tabs {
 
     public get_opened_ext_tabs = (): Promise<void> => err_async(async () => {
         if (!s_reload.Watch.i.reloading) {
+            const this_ext: Management.ExtensionInfo = await browser.management.getSelf();
             const all_window_tabs: TabsExt.Tab[] = await browser.tabs.query({});
 
             this.opened_tabs = all_window_tabs.filter((tab: TabsExt.Tab): boolean => {
                 if (n(tab.url)) {
-                    return tab.url.includes('chrome-extension://');
+                    return (
+                        tab.url.includes('chrome-extension://')
+                        && !tab.url.includes(this_ext.id)
+                    );
                 }
 
                 return false;
