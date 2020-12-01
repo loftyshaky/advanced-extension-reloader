@@ -15,24 +15,24 @@ export class Settings {
         ports: ['7220'],
         click_action: {
             all_tabs: false,
-            hard: false,
+            hard: true,
         },
         reload_actions: [
             {
                 all_tabs: false,
-                hard: false,
+                hard: true,
             },
             {
                 all_tabs: true,
-                hard: false,
+                hard: true,
             },
             {
                 all_tabs: false,
-                hard: true,
+                hard: false,
             },
             {
                 all_tabs: true,
-                hard: true,
+                hard: false,
             },
         ],
     }
