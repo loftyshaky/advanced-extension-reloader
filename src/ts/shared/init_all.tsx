@@ -6,6 +6,7 @@ import {
     Error,
     LoadingScreenVisibility,
     LoadingScreenBody,
+    Theme,
 } from '@loftyshaky/shared';
 import {
     u_settings,
@@ -89,6 +90,8 @@ export class InitAll {
                             n(loading_screen_root_el)
                             && n(loading_screen_root_el.shadowRoot)
                         ) {
+                            Theme.i.set({ name: 'light' });
+
                             x.css(
                                 'normalize',
                                 loading_screen_root_el.shadowRoot,
@@ -102,16 +105,6 @@ export class InitAll {
                                 loading_screen_css.addEventListener(
                                     'load',
                                     (): void => err(() => {
-                                        if (
-                                            n(loading_screen_root_el)
-                                            && n(loading_screen_root_el.shadowRoot)
-                                        ) {
-                                            x.css(
-                                                'light_theme',
-                                                loading_screen_root_el.shadowRoot!,
-                                            );
-                                        }
-
                                         LoadingScreenVisibility.i.show();
 
                                         render_settings();
