@@ -37,8 +37,7 @@ export class InitAll {
         }) as HTMLDivElement;
 
         const render_settings = (): Promise<void> => err_async(async () => {
-            const { Body } = await import('settings/components/Body');
-
+            const { Body } = await import('settings/components/body');
             const on_render = (): Promise<void> => err_async(async () => {
                 const { d_sections } = await import('settings/internal');
 
@@ -61,7 +60,7 @@ export class InitAll {
                     );
 
                     const settings_css = x.css(
-                        'settings',
+                        'settings_css',
                         document.head,
                     );
 

@@ -1,9 +1,14 @@
-import { Manifest as ManifestShared } from '../node_modules/@loftyshaky/shared/js/ext/manifest';
+const appRoot = require('app-root-path').path;
 
-const manifest_shared = new ManifestShared();
+const { Manifest: ManifestShared } = require('@loftyshaky/shared/js/ext/manifest');
 
-export class Manifest {
-    generate = () => {
+const manifest_shared = new ManifestShared({ app_root: appRoot });
+
+class Manifest {
+    generate = ({
+        mode,
+        browser,
+    }) => {
         const manifest = {
             name: 'Extension Reloader',
             description: '__MSG_description__',
@@ -25,10 +30,12 @@ export class Manifest {
             ],
         };
 
-        if (process.env.build === 'dev') {
-            manifest.permissions.push('tabs');
-        }
-
-        manifest_shared.generate({ manifest });
+        manifest_shared.generate({
+            manifest,
+            mode,
+            browser,
+        });
     }
 }
+
+module.exports = { Manifest };

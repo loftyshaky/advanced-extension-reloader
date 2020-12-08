@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "outDir": "build",
+        "outDir": "dist",
         "baseUrl": "src",
         "target": "es6",
         "module": "esnext",
@@ -11,22 +11,22 @@
         "sourceMap": true,
         "experimentalDecorators": true,
         "paths": {
+            "shared/*": [
+                "./ts/shared/*"
+            ],
             "background/*": [
-                "ts/background/*"
+                "./ts/background/*"
             ],
             "settings/*": [
-                "ts/settings/*"
+                "./ts/settings/*"
             ],
-            "shared/*": [
-                "ts/shared/*"
-            ],
-        },
+        }
     },
     "include": [
         "src"
     ],
     "exclude": [
         "node_modules",
-        "build"
+        "dist"
     ],
 }
