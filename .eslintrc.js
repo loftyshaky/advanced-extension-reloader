@@ -115,9 +115,10 @@ const rules = {
             'error',
             {
                 devDependencies: [
-                    'plugins/**',
-                    'js/**',
+                    'js/*',
+                    'js/*/**',
                     'rollup.config.js',
+                    'webpack.config.js',
                 ],
             },
         ],
