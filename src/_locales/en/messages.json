@@ -24,7 +24,7 @@
         "message": "Links"
     },
     "ports_help_text": {
-        "message": "Ports to which the message that initiate reload of extensions will be sent. You will need multiple ports if you develop multiple extensions."
+        "message": "Ports that should expect a message to reload an extension. You will need multiple ports if you develop multiple extensions."
     },
     "click_action_help_text": {
         "message": "An object that defines what happens when you click on the browser action icon.\n\nAccepted properties:\n\nall tabs: boolean\nWhether to reload all tabs as opposed to just reloading the current tab.\n\nhard: boolean\nWhether to reload the extension as opposed to just reloading its page. Can be combined with \"all tabs\"\n\nExample:\n\n{\n    all tabs: false,\n    hard: true,\n}"
