@@ -14,14 +14,6 @@ export class CssVars {
             ? [document.documentElement]
             : [];
 
-        CssVarsShared.i.set_var(
-            {
-                roots,
-                name: 'app_id',
-                val: 'u6Pgzb39sN0',
-            },
-        );
-
         CssVarsShared.i.set_transition_vars(
             {
                 roots,

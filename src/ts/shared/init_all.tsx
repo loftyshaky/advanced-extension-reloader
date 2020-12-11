@@ -7,11 +7,13 @@ import {
     LoadingScreenVisibility,
     LoadingScreenBody,
     Theme,
+    CssVars as CssVarsg,
 } from '@loftyshaky/shared';
 import {
     u_settings,
 } from '@loftyshaky/shared/settings';
 import {
+    app_id,
     Suffix,
     CssVars,
 } from 'shared/internal';
@@ -76,7 +78,7 @@ export class InitAll {
         1004);
 
         render(
-            <Error app_id={new Suffix('').suffix} />,
+            <Error app_id={app_id} />,
             error_root,
             (): void => {
                 render(
