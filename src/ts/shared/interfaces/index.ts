@@ -1,1 +1,1 @@
-export * from 'shared/interfaces/reload';
+export * from 'shared/interfaces/options';

@@ -1,9 +1,10 @@
 import _ from 'lodash';
 import { browser } from 'webextension-polyfill-ts';
 
-import { i_shared } from 'shared/internal';
-
-import { s_reload } from 'background/internal';
+import {
+    s_reload,
+    i_reload,
+} from 'background/internal';
 
 export class ContextMenu {
     private static i0: ContextMenu;
@@ -20,7 +21,7 @@ export class ContextMenu {
         await browser.contextMenus.removeAll();
 
         if (n(settings.reload_actions)) {
-            settings.reload_actions.forEach((reload_action: i_shared.Reload): void => err(() => {
+            settings.reload_actions.forEach((reload_action: i_reload.Options): void => err(() => {
                 browser.contextMenus.create({
                     title: _.capitalize(
                         `${reload_action.hard

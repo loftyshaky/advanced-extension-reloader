@@ -22,6 +22,7 @@ export class Tabs {
 
     public set_last_active_tab_id = (): Promise<void> => err_async(async () => {
         const tab: TabsExt.Tab | undefined = await ext.get_active_tab();
+
         if (
             n(tab)
             && n(tab.id)

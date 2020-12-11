@@ -105,7 +105,7 @@ export class Val {
 
                 const validate_inner = (
                     { reload_obj }:
-                    { reload_obj: i_shared.Reload },
+                    { reload_obj: i_shared.Options },
                 ): boolean => err(() => !(
                     _.isObject(reload_obj)
                     && _.size(reload_obj) === 2
@@ -120,7 +120,7 @@ export class Val {
                     return validate_inner({ reload_obj: val });
                 } if (input.name === 'reload_actions') {
                     if (_.isArray(val)) {
-                        return val.some((reload_obj: i_shared.Reload): boolean => err(() => (
+                        return val.some((reload_obj: i_shared.Options): boolean => err(() => (
                             validate_inner({ reload_obj })
                         ),
                         1019));

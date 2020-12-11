@@ -1,12 +1,14 @@
 import {
     browser,
     Management,
-    Windows,
     Tabs,
 } from 'webextension-polyfill-ts';
 import io from 'socket.io-client';
 
-import { s_reload } from 'background/internal';
+import {
+    s_reload,
+    i_reload,
+} from 'background/internal';
 
 export class Watch {
     private static i0: Watch;
@@ -42,29 +44,32 @@ export class Watch {
     1026);
 
     public reload = (
-        {
-            all_tabs = false,
-            hard = false,
-        }: {
-            all_tabs?: boolean;
-            hard?: boolean;
-        },
+        options: i_reload.Options,
     ): Promise<void> => err_async(
         async () => {
             this.reloading = true;
 
             const apps_info: Management.ExtensionInfo[] = await browser.management.getAll();
             const { last_active_tab_id } = s_reload.Tabs.i;
+            const app_id_exists = n(options.ext_id);
 
             await Promise.all(apps_info.map(
                 (app_info: Management.ExtensionInfo): Promise<void> => err_async(
                     async () => {
+                        const matched_app_id_from_options = (
+                            app_info.id === options.ext_id
+                        );
+
                         if (
                             app_info.id !== browser.runtime.id
-                            && app_info.installType === 'development'
-                            && n(app_info.enabled)
+                                && app_info.installType === 'development'
+                                && n(app_info.enabled)
+                                && (
+                                    !app_id_exists
+                                    || matched_app_id_from_options
+                                )
                         ) {
-                            if (hard) {
+                            if (options.hard) {
                                 await browser.management.setEnabled(
                                     app_info.id,
                                     false,
@@ -80,29 +85,31 @@ export class Watch {
                 ),
             ));
 
-            if (hard) {
-                const current_window: Windows.Window = await browser.windows.getCurrent();
-
+            if (options.hard) {
                 await Promise.all(s_reload.Tabs.i.opened_tabs.map(
                     (tab: Tabs.Tab): Promise<void> => err_async(
                         async () => {
-                            await s_reload.Tabs.i.recreate_tab({ tab });
+                            const matched_app_id_from_options = (
+                                n(tab.url)
+                                && options.ext_id
+                                && new URL(tab.url).hostname === options.ext_id
+                            );
+
+                            if (
+                                !app_id_exists
+                                || matched_app_id_from_options
+                            ) {
+                                await s_reload.Tabs.i.recreate_tab({ tab });
+                            }
                         },
                         1031,
                     ),
                 ));
-
-                if (n(current_window.id)) {
-                    await browser.windows.update(
-                        current_window.id,
-                        { focused: true },
-                    );
-                }
             }
 
-            if (all_tabs) {
+            if (options.all_tabs) {
                 await s_reload.Tabs.i.reload_all_tabs();
-            } else {
+            } else if (!options.hard) {
                 await browser.tabs.reload(last_active_tab_id);
             }
 
