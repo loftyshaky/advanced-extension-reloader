@@ -10,7 +10,7 @@ class Manifest {
         browser,
     }) => {
         const manifest = {
-            name: 'Extension Reloader',
+            name: 'Advanced Extension Reloader',
             description: '__MSG_description__',
             offline_enabled: true,
             background: {

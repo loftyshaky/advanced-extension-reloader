@@ -29,8 +29,8 @@ export class Watch {
 
         this.clients = [];
 
-        settings.ports.forEach((ports: number): void => {
-            const client = io.connect(`http://localhost:${ports}`);
+        settings.ports.forEach((port: number): void => {
+            const client = io(`http://localhost:${port}`);
             this.clients.push(client);
 
             client.on(
@@ -60,7 +60,7 @@ export class Watch {
                 (app_info: Management.ExtensionInfo): Promise<void> => err_async(
                     async () => {
                         if (
-                            app_info.name !== 'Extension Reloader'
+                            app_info.id !== browser.runtime.id
                             && app_info.installType === 'development'
                             && n(app_info.enabled)
                         ) {
