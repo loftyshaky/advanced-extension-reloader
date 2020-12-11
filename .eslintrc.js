@@ -255,7 +255,7 @@ module.exports = {
             },
         },
         rules: _.merge(
-            {},
+            { 'no-use-before-define': 'off' },
             rules.js,
             rules.ts,
         ),
