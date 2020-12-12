@@ -6,6 +6,7 @@ import {
 import io from 'socket.io-client';
 
 import {
+    s_badge,
     s_reload,
     i_reload,
 } from 'background/internal';
@@ -112,6 +113,8 @@ export class Watch {
             } else if (!options.hard) {
                 await browser.tabs.reload(last_active_tab_id);
             }
+
+            s_badge.Badge.i.show();
 
             this.reloading = false;
 
