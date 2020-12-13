@@ -14,15 +14,6 @@
     "all_tabs_context_menu_item": {
         "message": "all tabs"
     },
-    "settings_title_text": {
-        "message": "Settings"
-    },
-    "settings_section_text": {
-        "message": "Settings"
-    },
-    "links_section_text": {
-        "message": "Links"
-    },
     "ports_help_text": {
         "message": "Ports that should expect a message to reload an extension. You will need multiple ports if you develop multiple extensions."
     },
@@ -40,21 +31,6 @@
     },
     "reload_actions_label_text": {
         "message": "Extension's icon menu actions"
-    },
-    "privacy_policy_link_text": {
-        "message": "📜 Privacy policy"
-    },
-    "rate_link_text": {
-        "message": "⭐️ Rate this extension if you like it"
-    },
-    "help_translating_link_text": {
-        "message": "🈯 Help translating Advanced Extension Reloader into the language you know"
-    },
-    "facebook_page_link_text": {
-        "message": "🖼️ Follow my Facebook page"
-    },
-    "support_page_link_text": {
-        "message": "📢 Support page"
     },
     "rate_chrome_link_href": {
         "message": "https://chrome"
