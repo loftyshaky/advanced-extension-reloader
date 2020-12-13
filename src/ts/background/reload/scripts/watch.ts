@@ -65,6 +65,7 @@ export class Watch {
                             app_info.id !== browser.runtime.id
                                 && app_info.installType === 'development'
                                 && n(app_info.enabled)
+                                && app_info.enabled
                                 && (
                                     !app_id_exists
                                     || matched_app_id_from_options
