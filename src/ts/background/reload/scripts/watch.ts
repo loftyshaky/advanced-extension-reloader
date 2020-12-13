@@ -64,7 +64,7 @@ export class Watch {
                         if (
                             app_info.id !== browser.runtime.id
                                 && app_info.installType === 'development'
-                                && n(app_info.enabled)
+                                && (apps_info as any).type !== 'theme'
                                 && app_info.enabled
                                 && (
                                     !app_id_exists
