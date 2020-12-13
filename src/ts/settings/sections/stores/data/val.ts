@@ -1,17 +1,15 @@
 import _ from 'lodash';
 import {
-    configure,
-    action,
+    runInAction,
+    observable,
 } from 'mobx';
 
 import { i_shared } from 'shared/internal';
 
 import {
+    d_inputs,
     i_inputs,
 } from '@loftyshaky/shared/inputs';
-import { d_sections } from 'settings/internal';
-
-configure({ enforceActions: 'observed' });
 
 export class Val {
     private static i0: Val;
@@ -29,25 +27,23 @@ export class Val {
             input: i_inputs.Input;
         },
     ): void => err(() => {
-        if (n(input.val)) {
-            try {
-                const val = JSON.parse(input.val);
+        try {
+            const val = JSON.parse(d_inputs.Val.i.access({ input }));
 
-                if (!this.validate_input({ input })) {
-                    ext.send_msg(
-                        {
-                            msg: 'update_setting',
-                            settings: { [input.name]: val },
-                        },
-                    );
-                }
-            } catch (error_obj) {
-                show_err_ribbon(
-                    error_obj,
-                    1016,
-                    { silent: true },
+            if (!this.validate_input({ input })) {
+                ext.send_msg(
+                    {
+                        msg: 'update_setting',
+                        settings: { [input.name]: val },
+                    },
                 );
             }
+        } catch (error_obj) {
+            show_err_ribbon(
+                error_obj,
+                1016,
+                { silent: true },
+            );
         }
     },
     1014);
@@ -59,16 +55,14 @@ export class Val {
             input: i_inputs.Input;
         },
     ): void => err(() => {
-        if (
-            n(input.val)
-            && !this.validate_ports_input({ input })
+        if (!this.validate_ports_input({ input })
         ) {
             ext.send_msg(
                 {
                     msg: 'update_setting',
                     settings: {
                         [input.name]: _.map(
-                            input.val.split(','),
+                            d_inputs.Val.i.access({ input }).split(','),
                             _.trim,
                         ),
                     },
@@ -81,60 +75,60 @@ export class Val {
     public set_on_page_load = (): Promise<void> => err_async(async () => {
         const settings = await ext.storage_get();
 
-        Object.entries(settings).forEach(action(([
+        Object.entries(settings).forEach(([
             key,
             val,
         ]) => {
-            d_sections.Main.i.sections.settings.inputs[key].val = (
-                d_sections.Main.i.sections.settings.inputs[key].name === 'ports'
-                    ? (val as string[]).join(',')
-                    : JSON.stringify(
-                        val,
-                        undefined,
-                        4,
-                    )
-            );
-        }));
+            settings[key] = key === 'ports'
+                ? (val as string[]).join(',')
+                : JSON.stringify(
+                    val,
+                    undefined,
+                    4,
+                );
+        });
+
+        runInAction(() => {
+            data = observable(settings);
+        });
     },
     1015);
 
     public validate_input = ({ input }: {input: i_inputs.Input; }): boolean => err(() => {
-        if (n(input.val)) {
-            try {
-                const val = JSON.parse(input.val);
+        try {
+            const val = JSON.parse(d_inputs.Val.i.access({ input }));
 
-                const validate_inner = (
-                    { reload_obj }:
-                    { reload_obj: i_shared.Options },
-                ): boolean => err(() => !(
-                    _.isObject(reload_obj)
+            const validate_inner = (
+                { reload_obj }:
+                { reload_obj: i_shared.Options },
+            ): boolean => err(() => !(
+                _.isObject(reload_obj)
                     && _.size(reload_obj) === 2
                     && n(reload_obj.all_tabs)
                     && n(reload_obj.hard)
                     && typeof reload_obj.all_tabs === 'boolean'
                     && typeof reload_obj.hard === 'boolean'
-                ),
-                1018);
+            ),
+            1018);
 
-                if (input.name === 'click_action') {
-                    return validate_inner({ reload_obj: val });
-                } if (input.name === 'reload_actions') {
-                    if (_.isArray(val)) {
-                        return val.some((reload_obj: i_shared.Options): boolean => err(() => (
-                            validate_inner({ reload_obj })
-                        ),
-                        1019));
-                    }
-
-                    return true;
+            if (input.name === 'click_action') {
+                return validate_inner({ reload_obj: val });
+            } if (input.name === 'reload_actions') {
+                if (_.isArray(val)) {
+                    return val.some((reload_obj: i_shared.Options): boolean => err(() => (
+                        validate_inner({ reload_obj })
+                    ),
+                    1019));
                 }
-            } catch (error_obj) {
-                show_err_ribbon(
-                    error_obj,
-                    1016,
-                    { silent: true },
-                );
+
+                return true;
             }
+        } catch (error_obj) {
+            show_err_ribbon(
+                error_obj,
+                1016,
+                { silent: true },
+            );
         }
 
         return true;
@@ -143,12 +137,8 @@ export class Val {
 
     public validate_ports_input = (
         { input }: {input: i_inputs.Input; },
-    ): boolean => err(() => {
-        if (n(input.val)) {
-            return !/^\d+( *?, *?\d+)*$/.test(input.val);
-        }
-
-        return true;
-    },
-    1025);
+    ): boolean => err(
+        () => !/^\d+( *?, *?\d+)*$/.test(d_inputs.Val.i.access({ input })),
+        1025,
+    );
 }
