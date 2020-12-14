@@ -9,7 +9,7 @@ import { d_sections } from 'settings/internal';
 
 export const Body = observer(() => {
     useEffect(() => {
-        d_sections.Val.i.set_on_page_load();
+        d_sections.Settings.i.set_transformed_from_storage();
     },
     []);
 

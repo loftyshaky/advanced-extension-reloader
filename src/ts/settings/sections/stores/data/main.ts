@@ -4,6 +4,7 @@ import {
 import {
     o_inputs,
 } from '@loftyshaky/shared/inputs';
+import { d_settings as d_sections_shared } from '@loftyshaky/shared/settings';
 import { d_sections } from 'settings/internal';
 
 export class Main {
@@ -28,7 +29,7 @@ export class Main {
     }
 
     public sections: any = [
-        new o_inputs.Section({
+        ...[new o_inputs.Section({
             name: 'settings',
             inputs: [
                 new o_inputs.Text({
@@ -50,8 +51,15 @@ export class Main {
                     warn_state_checker: d_sections.Val.i.validate_input,
                 }),
             ],
-        }),
-        new o_inputs.Section({
+        })],
+        ...d_sections_shared.Sections.i.make_shared_sections(
+            {
+                download_back_up_callback: ext.storage_get,
+                upload_back_up_callback: d_sections.Settings.i.restore_back_up,
+                restore_defaults_callback: () => d_sections.Settings.i.restore_confirm(),
+            },
+        ),
+        ...[new o_inputs.Section({
             name: 'links',
             inputs: [
                 new o_inputs.Link({
@@ -76,6 +84,6 @@ export class Main {
                     href: 'http://bit.ly/browservery-support',
                 }),
             ],
-        }),
+        })],
     ]
 }

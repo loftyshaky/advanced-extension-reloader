@@ -88,11 +88,6 @@ export class Tabs {
     1032);
 }
 
-(async (): Promise<void> => {
-    Tabs.i.set_last_active_tab_id();
-    Tabs.i.get_opened_ext_tabs();
-})();
-
 browser.windows.onFocusChanged.addListener((): Promise<void> => err_async(async () => {
     Tabs.i.set_last_active_tab_id();
     Tabs.i.get_opened_ext_tabs();

@@ -1,8 +1,6 @@
 import '@loftyshaky/shared';
 import 'shared/internal';
 import 'background/msgs';
-import 'background/on_installed';
-import { s_reload } from 'background/internal';
+import { s_settings } from 'background/internal';
 
-s_reload.ContextMenu.i.create();
-s_reload.Watch.i.connect();
+s_settings.Settings.i.set_from_storage();

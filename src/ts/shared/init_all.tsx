@@ -7,7 +7,6 @@ import {
     LoadingScreenVisibility,
     LoadingScreenBody,
     Theme,
-    CssVars as CssVarsg,
 } from '@loftyshaky/shared';
 import {
     u_settings,

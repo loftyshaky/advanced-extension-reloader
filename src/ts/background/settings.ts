@@ -37,18 +37,40 @@ export class Settings {
         ],
     }
 
-    public update = _.debounce((
+    public update = (
+        { settings }:
+        { settings?: any } = {},
+    ): Promise<void> => err_async(async () => {
+        const settings_final: any = n(settings)
+            ? settings
+            : this.default_settings;
+
+        await ext.storage_set(settings_final);
+
+        this.react_to_settings_change_or_load();
+    },
+    1036);
+
+    public update_debounced = _.debounce((
         { settings }:
         { settings: any },
-    ): Promise<void> => err_async(async () => {
-        await ext.storage_set(settings);
+    ): void => { this.update({ settings }); },
+    1000);
 
+    public react_to_settings_change_or_load =() => err(() => {
         s_reload.ContextMenu.i.create();
+        s_reload.Watch.i.connect();
+    },
+    1039);
 
-        if (n(settings.ports)) {
-            s_reload.Watch.i.connect();
+    public set_from_storage = (): Promise<void> => err_async(async () => {
+        const settings = await ext.storage_get();
+
+        if (_.isEmpty(settings)) {
+            this.update();
+        } else {
+            this.react_to_settings_change_or_load();
         }
     },
-    1022),
-    1000);
+    1038);
 }

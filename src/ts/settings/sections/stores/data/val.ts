@@ -1,8 +1,4 @@
 import _ from 'lodash';
-import {
-    runInAction,
-    observable,
-} from 'mobx';
 
 import { i_shared } from 'shared/internal';
 
@@ -72,28 +68,6 @@ export class Val {
     },
     1024);
 
-    public set_on_page_load = (): Promise<void> => err_async(async () => {
-        const settings = await ext.storage_get();
-
-        Object.entries(settings).forEach(([
-            key,
-            val,
-        ]) => {
-            settings[key] = key === 'ports'
-                ? (val as string[]).join(',')
-                : JSON.stringify(
-                    val,
-                    undefined,
-                    4,
-                );
-        });
-
-        runInAction(() => {
-            data = observable(settings);
-        });
-    },
-    1015);
-
     public validate_input = ({ input }: {input: i_inputs.Input; }): boolean => err(() => {
         try {
             const val = JSON.parse(d_inputs.Val.i.access({ input }));
@@ -136,7 +110,7 @@ export class Val {
     1017);
 
     public validate_ports_input = (
-        { input }: {input: i_inputs.Input; },
+        { input }: { input: i_inputs.Input },
     ): boolean => err(
         () => !/^\d+( *?, *?\d+)*$/.test(d_inputs.Val.i.access({ input })),
         1025,
