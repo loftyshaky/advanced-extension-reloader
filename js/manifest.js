@@ -29,6 +29,71 @@ class Manifest {
                 'management',
                 'contextMenus',
             ],
+            commands: {
+                reload_main: {
+                    description: '__MSG_reload_main_hotkey__',
+                },
+                reload_1: {
+                    description: '__MSG_reload_1_hotkey__',
+                },
+                reload_2: {
+                    description: '__MSG_reload_2_hotkey__',
+                },
+                reload_3: {
+                    description: '__MSG_reload_3_hotkey__',
+                },
+                reload_4: {
+                    description: '__MSG_reload_4_hotkey__',
+                },
+                reload_5: {
+                    description: '__MSG_reload_5_hotkey__',
+                },
+                reload_6: {
+                    description: '__MSG_reload_6_hotkey__',
+                },
+                reload_7: {
+                    description: '__MSG_reload_7_hotkey__',
+                },
+                reload_8: {
+                    description: '__MSG_reload_8_hotkey__',
+                },
+                reload_9: {
+                    description: '__MSG_reload_9_hotkey__',
+                },
+                reload_10: {
+                    description: '__MSG_reload_10_hotkey__',
+                },
+                reload_11: {
+                    description: '__MSG_reload_11_hotkey__',
+                },
+                reload_12: {
+                    description: '__MSG_reload_12_hotkey__',
+                },
+                reload_13: {
+                    description: '__MSG_reload_13_hotkey__',
+                },
+                reload_14: {
+                    description: '__MSG_reload_14_hotkey__',
+                },
+                reload_15: {
+                    description: '__MSG_reload_15_hotkey__',
+                },
+                reload_16: {
+                    description: '__MSG_reload_16_hotkey__',
+                },
+                reload_17: {
+                    description: '__MSG_reload_17_hotkey__',
+                },
+                reload_18: {
+                    description: '__MSG_reload_18_hotkey__',
+                },
+                reload_19: {
+                    description: '__MSG_reload_19_hotkey__',
+                },
+                reload_20: {
+                    description: '__MSG_reload_20_hotkey__',
+                },
+            },
         };
 
         manifest_shared.generate({

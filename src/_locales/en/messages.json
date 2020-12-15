@@ -43,5 +43,68 @@
     },
     "rate_firefox_link_href": {
         "message": "https://firefox"
+    },
+    "reload_main_hotkey": {
+        "message": "Reload extension main"
+    },
+    "reload_1_hotkey": {
+        "message": "Reload extension 1"
+    },
+    "reload_2_hotkey": {
+        "message": "Reload extension 2"
+    },
+    "reload_3_hotkey": {
+        "message": "Reload extension 3"
+    },
+    "reload_4_hotkey": {
+        "message": "Reload extension 4"
+    },
+    "reload_5_hotkey": {
+        "message": "Reload extension 5"
+    },
+    "reload_6_hotkey": {
+        "message": "Reload extension 6"
+    },
+    "reload_7_hotkey": {
+        "message": "Reload extension 7"
+    },
+    "reload_8_hotkey": {
+        "message": "Reload extension 8"
+    },
+    "reload_9_hotkey": {
+        "message": "Reload extension 9"
+    },
+    "reload_10_hotkey": {
+        "message": "Reload extension 10"
+    },
+    "reload_11_hotkey": {
+        "message": "Reload extension 11"
+    },
+    "reload_12_hotkey": {
+        "message": "Reload extension 12"
+    },
+    "reload_13_hotkey": {
+        "message": "Reload extension 13"
+    },
+    "reload_14_hotkey": {
+        "message": "Reload extension 14"
+    },
+    "reload_15_hotkey": {
+        "message": "Reload extension 15"
+    },
+    "reload_16_hotkey": {
+        "message": "Reload extension 16"
+    },
+    "reload_17_hotkey": {
+        "message": "Reload extension 17"
+    },
+    "reload_18_hotkey": {
+        "message": "Reload extension 18"
+    },
+    "reload_19_hotkey": {
+        "message": "Reload extension 19"
+    },
+    "reload_20_hotkey": {
+        "message": "Reload extension 20"
     }
 }
