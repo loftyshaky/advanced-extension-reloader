@@ -77,11 +77,19 @@ export class Val {
                 { reload_obj: i_shared.Options },
             ): boolean => err(() => !(
                 _.isObject(reload_obj)
-                    && _.size(reload_obj) === 2
-                    && n(reload_obj.all_tabs)
-                    && n(reload_obj.hard)
+                    && (
+                        _.size(reload_obj) === 2
+                        || _.size(reload_obj) === 3
+                    )
                     && typeof reload_obj.all_tabs === 'boolean'
                     && typeof reload_obj.hard === 'boolean'
+                    && (
+                        !n(reload_obj.ext_id)
+                        || (
+                            typeof reload_obj.ext_id === 'string'
+                            && reload_obj.ext_id.match(/^[a-z]+$/)
+                        )
+                    )
             ),
             1018);
 

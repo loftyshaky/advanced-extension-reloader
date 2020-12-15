@@ -5,10 +5,11 @@ import {
 } from 'webextension-polyfill-ts';
 import io from 'socket.io-client';
 
+import { i_shared } from 'shared/internal';
+
 import {
     s_badge,
     s_reload,
-    i_reload,
 } from 'background/internal';
 
 export class Watch {
@@ -45,7 +46,7 @@ export class Watch {
     1026);
 
     public reload = (
-        options: i_reload.Options,
+        options: i_shared.Options,
     ): Promise<void> => err_async(
         async () => {
             this.reloading = true;
