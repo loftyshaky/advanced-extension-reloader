@@ -1,7 +1,10 @@
 import { browser } from 'webextension-polyfill-ts';
 
 import { t } from '@loftyshaky/shared';
-import { s_settings } from 'background/internal';
+import {
+    s_settings,
+    s_side_effects,
+} from 'background/internal';
 
 browser.runtime.onMessage.addListener((msg: t.Msg): Promise<any> => err_async(async () => {
     const msg_str: string = msg.msg;
@@ -10,8 +13,8 @@ browser.runtime.onMessage.addListener((msg: t.Msg): Promise<any> => err_async(as
         s_settings.Settings.i.update_debounced({ settings: msg.settings });
     } else if (msg_str === 'get_default_settings') {
         return s_settings.Settings.i.default_settings;
-    } else if (msg_str === 'react_to_settings_change_or_load') {
-        s_settings.Settings.i.react_to_settings_change_or_load();
+    } else if (msg_str === 'react_to_change') {
+        s_side_effects.SideEffects.i.react_to_change();
     }
 
     return true;

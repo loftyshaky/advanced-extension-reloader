@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { s_reload } from 'background/internal';
+import { s_side_effects } from 'background/internal';
 
 export class Settings {
     private static i0: Settings;
@@ -47,7 +47,7 @@ export class Settings {
 
         await ext.storage_set(settings_final);
 
-        this.react_to_settings_change_or_load();
+        s_side_effects.SideEffects.i.react_to_change();
     },
     1036);
 
@@ -57,19 +57,13 @@ export class Settings {
     ): void => { this.update({ settings }); },
     1000);
 
-    public react_to_settings_change_or_load =() => err(() => {
-        s_reload.ContextMenu.i.create();
-        s_reload.Watch.i.connect();
-    },
-    1039);
-
     public set_from_storage = (): Promise<void> => err_async(async () => {
         const settings = await ext.storage_get();
 
         if (_.isEmpty(settings)) {
             this.update();
         } else {
-            this.react_to_settings_change_or_load();
+            s_side_effects.SideEffects.i.react_to_change();
         }
     },
     1038);

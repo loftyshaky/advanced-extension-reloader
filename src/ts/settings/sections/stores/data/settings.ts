@@ -62,7 +62,7 @@ export class Settings {
             data.settings = settings_final;
         });
 
-        ext.send_msg({ msg: 'react_to_settings_change_or_load' });
+        ext.send_msg({ msg: 'react_to_change' });
     },
     1015);
 
