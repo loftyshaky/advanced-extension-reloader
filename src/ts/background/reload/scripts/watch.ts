@@ -22,7 +22,7 @@ export class Watch {
     }
 
     private clients: any[] = [];
-    public reloading: boolean = false;
+    private reloading: boolean = false;
 
     public connect = (): Promise<void> => err_async(async () => {
         const settings = await ext.storage_get('ports');
@@ -49,78 +49,85 @@ export class Watch {
         options: i_shared.Options,
     ): Promise<void> => err_async(
         async () => {
-            this.reloading = true;
+            if (!this.reloading) {
+                this.reloading = true;
 
-            const apps_info: Management.ExtensionInfo[] = await browser.management.getAll();
-            const { last_active_tab_id } = s_reload.Tabs.i;
-            const app_id_exists = n(options.ext_id);
+                if (options.hard) {
+                    const apps_info: Management.ExtensionInfo[] = await browser.management.getAll();
+                    const app_id_exists = n(options.ext_id);
 
-            await Promise.all(apps_info.map(
-                (app_info: Management.ExtensionInfo): Promise<void> => err_async(
-                    async () => {
-                        const matched_app_id_from_options = (
-                            app_info.id === options.ext_id
-                        );
+                    const ids: string[] = [];
 
-                        if (
-                            app_info.id !== browser.runtime.id
-                                && app_info.installType === 'development'
-                                && (apps_info as any).type !== 'theme'
-                                && app_info.enabled
-                                && (
-                                    !app_id_exists
-                                    || matched_app_id_from_options
-                                )
-                        ) {
-                            if (options.hard) {
+                    apps_info.forEach(
+                        (app_info: Management.ExtensionInfo): void => err(
+                            () => {
+                                const matched_app_id_from_options = (
+                                    app_info.id === options.ext_id
+                                );
+
+                                if (
+                                    app_info.id !== browser.runtime.id
+                                    && app_info.installType === 'development'
+                                    && (apps_info as any).type !== 'theme'
+                                    && app_info.enabled
+                                    && (
+                                        !app_id_exists
+                                        || matched_app_id_from_options
+                                    )
+                                ) {
+                                    ids.push(app_info.id);
+                                }
+                            },
+                            1045,
+                        ),
+                    );
+
+                    const urls: string[] = ids.map((id: string) => err(
+                        () => `chrome-extension://${id}`,
+                        1046,
+                    ));
+
+                    const ext_tabs: Tabs.Tab[] = await s_reload.Tabs.i.get_opened_ext_tabs(
+                        { urls },
+                    );
+
+                    await Promise.all(ids.map(
+                        (id: string): Promise<void> => err_async(
+                            async () => {
                                 await browser.management.setEnabled(
-                                    app_info.id,
+                                    id,
                                     false,
                                 );
                                 await browser.management.setEnabled(
-                                    app_info.id,
+                                    id,
                                     true,
                                 );
-                            }
-                        }
-                    },
-                    1006,
-                ),
-            ));
+                            },
+                            1028,
+                        ),
+                    ));
 
-            if (options.hard) {
-                await Promise.all(s_reload.Tabs.i.opened_tabs.map(
-                    (tab: Tabs.Tab): Promise<void> => err_async(
-                        async () => {
-                            const matched_app_id_from_options = (
-                                n(tab.url)
-                                && options.ext_id
-                                && new URL(tab.url).hostname === options.ext_id
-                            );
-
-                            if (
-                                !app_id_exists
-                                || matched_app_id_from_options
-                            ) {
+                    await Promise.all(ext_tabs.map(
+                        (tab: Tabs.Tab): Promise<void> => err_async(
+                            async () => {
                                 await s_reload.Tabs.i.recreate_tab({ tab });
-                            }
-                        },
-                        1031,
-                    ),
-                ));
+                            },
+                            1031,
+                        ),
+                    ));
+                }
+
+                if (options.all_tabs) {
+                    await s_reload.Tabs.i.reload_all_tabs();
+                } else if (!options.hard) {
+                    const { last_active_tab_id } = s_reload.Tabs.i;
+                    await browser.tabs.reload(last_active_tab_id);
+                }
+
+                s_badge.Badge.i.show();
+
+                this.reloading = false;
             }
-
-            if (options.all_tabs) {
-                await s_reload.Tabs.i.reload_all_tabs();
-            } else if (!options.hard) {
-                await browser.tabs.reload(last_active_tab_id);
-            }
-
-            s_badge.Badge.i.show();
-
-            this.reloading = false;
-
-            s_reload.Tabs.i.get_opened_ext_tabs();
         },
         1005,
     );
