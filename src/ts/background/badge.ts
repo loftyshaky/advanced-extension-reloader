@@ -15,13 +15,17 @@ export class Badge {
         await browser.browserAction.setBadgeText({ text: 'OK' });
         await browser.browserAction.setBadgeBackgroundColor({ color: '#8b6fff' });
 
-        this.hide();
+        this.hide_debounce();
     },
     1034);
 
-    private hide = _.debounce((): Promise<void> => err_async(async () => {
+    public hide = (): Promise<void> => err_async(async () => {
         await browser.browserAction.setBadgeText({ text: '' });
     },
-    1035),
-    2000);
+    1035);
+
+    private hide_debounce = _.debounce(
+        this.hide,
+        2000,
+    );
 }
