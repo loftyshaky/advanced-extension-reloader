@@ -1,3 +1,5 @@
+import { browser } from 'webextension-polyfill-ts';
+
 import { s_reload } from 'background/internal';
 
 export class SideEffects {
@@ -15,3 +17,13 @@ export class SideEffects {
     },
     1039);
 }
+
+browser.management.onUninstalled.addListener((): void => err(() => {
+    SideEffects.i.react_to_change();
+},
+1047));
+
+browser.management.onInstalled.addListener((): void => err(() => {
+    SideEffects.i.react_to_change();
+},
+1048));
