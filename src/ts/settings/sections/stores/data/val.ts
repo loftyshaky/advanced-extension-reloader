@@ -78,18 +78,20 @@ export class Val {
             ): boolean => err(() => !(
                 _.isObject(reload_obj)
                     && (
-                        _.size(reload_obj) === 2
-                        || _.size(reload_obj) === 3
+                        typeof reload_obj.all_tabs === 'boolean'
+                        || !n(reload_obj.all_tabs)
                     )
-                    && typeof reload_obj.all_tabs === 'boolean'
-                    && typeof reload_obj.hard === 'boolean'
                     && (
-                        !n(reload_obj.ext_id)
-                        || (
-                            typeof reload_obj.ext_id === 'string'
-                            && reload_obj.ext_id.match(/^[a-z]+$/)
-                        )
+                        typeof reload_obj.hard === 'boolean'
+                        || !n(reload_obj.hard)
+                    ) && (
+                    reload_obj.ext_id === false
+                    || !n(reload_obj.ext_id)
+                    || (
+                        typeof reload_obj.ext_id === 'string'
+                        && reload_obj.ext_id.match(/^[a-z]+$/)
                     )
+                )
             ),
             1018);
 

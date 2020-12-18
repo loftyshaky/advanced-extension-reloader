@@ -52,9 +52,13 @@ export class Watch {
             if (!this.reloading) {
                 this.reloading = true;
 
-                if (options.hard) {
+                const options_final: i_shared.Options = (
+                    s_reload.DefaultValues.i.tranform_reload_action({ reload_action: options })
+                );
+
+                if (options_final.hard) {
                     const apps_info: Management.ExtensionInfo[] = await browser.management.getAll();
-                    const app_id_exists = n(options.ext_id);
+                    const app_id_exists = typeof options_final.ext_id === 'string';
 
                     const ids: string[] = [];
 
@@ -62,7 +66,7 @@ export class Watch {
                         (app_info: Management.ExtensionInfo): void => err(
                             () => {
                                 const matched_app_id_from_options = (
-                                    app_info.id === options.ext_id
+                                    app_info.id === options_final.ext_id
                                 );
 
                                 if (
@@ -117,9 +121,9 @@ export class Watch {
                     ));
                 }
 
-                if (options.all_tabs) {
+                if (options_final.all_tabs) {
                     await s_reload.Tabs.i.reload_all_tabs();
-                } else if (!options.hard) {
+                } else if (!options_final.hard) {
                     const { last_active_tab_id } = s_reload.Tabs.i;
                     await browser.tabs.reload(last_active_tab_id);
                 }

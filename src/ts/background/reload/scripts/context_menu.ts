@@ -29,7 +29,7 @@ export class ContextMenu {
                 { reload_action }:
                 { reload_action: i_shared.Options },
             ): Management.ExtensionInfo | undefined => err(() => (
-                (reload_action.ext_id)
+                (typeof reload_action.ext_id === 'string')
                     ? apps_info.find(
                         (app_info: Management.ExtensionInfo): boolean => (
                             app_info.id === reload_action.ext_id
@@ -40,8 +40,12 @@ export class ContextMenu {
             1043);
 
             settings.reload_actions.forEach((reload_action: i_shared.Options): void => err(() => {
+                const reload_actions_final: i_shared.Options = (
+                    s_reload.DefaultValues.i.tranform_reload_action({ reload_action })
+                );
+
                 const matched_app_info: Management.ExtensionInfo | undefined = (
-                    get_app_info_with_id({ reload_action })
+                    get_app_info_with_id({ reload_action: reload_actions_final })
                 );
 
                 const app_name: string = n(matched_app_info)
@@ -49,14 +53,14 @@ export class ContextMenu {
                     : '';
                 browser.contextMenus.create({
                     title: _.capitalize(
-                        `${app_name}${reload_action.hard
+                        `${app_name}${reload_actions_final.hard
                             ? ext.msg('hard_context_menu_item')
-                            : ext.msg('soft_context_menu_item')} + ${reload_action.all_tabs
+                            : ext.msg('soft_context_menu_item')} + ${reload_actions_final.all_tabs
                             ? ext.msg('all_tabs_context_menu_item')
                             : ext.msg('one_tab_context_menu_item')}`,
                     ),
                     contexts: ['browser_action'],
-                    onclick: (): void => { s_reload.Watch.i.reload(reload_action); },
+                    onclick: (): void => { s_reload.Watch.i.reload(reload_actions_final); },
                 });
             },
             1021));
