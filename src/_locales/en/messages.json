@@ -1,6 +1,6 @@
 {
     "description": {
-        "message": "App description."
+        "message": "Reload an unpacked extension with one click, hotkey or automatically."
     },
     "soft_context_menu_item": {
         "message": "soft"
@@ -15,13 +15,13 @@
         "message": "all tabs"
     },
     "ports_help_text": {
-        "message": "Ports that should expect a message to reload an extension. You will need multiple ports if you develop multiple extensions."
+        "message": "Ports separated by commas that should expect a messages to reload extensions. You will need multiple ports if you develop multiple extensions."
     },
     "click_action_help_text": {
-        "message": "An object that defines what happens when you click on the browser action icon.\n\nAccepted properties:\n\nall tabs: boolean\nWhether to reload all tabs as opposed to just reloading the current tab.\n\nhard: boolean\nWhether to reload the extension as opposed to just reloading its page. Can be combined with \"all tabs\"\n\nExample:\n\n{\n    all tabs: false,\n    hard: true,\n}"
+        "message": "An object that defines what happens when you click on the browser action icon or hit \"Reload extension main\" hotkey specified at chrome://extensions/shortcuts.\n\nAccepted properties:\n\nhard: boolean\nWhether to reload the extension. If set to false, the background page will not reload. The manifest.json will not reload even if this option is true. If you want to reload it, you need to do it the usual way. Can be combined with \"all tabs\".\n\nall tabs: boolean\nWhether to reload all tabs as opposed to just reloading the current tab.\n\next_id: string || false\nAn id of an extension to reload in \"hard\" mode. If unspecefied or false, all extensions will reload.\n\nExample:\n\n{\n    \"all tabs\": false,\n    \"hard\": true,\n    \"ext_id\": \"ffhljpfecjcfjdaneehmhdgplkaafnbb\"\n}"
     },
     "reload_actions_help_text": {
-        "message": "An array of objects that define additional reload actions that appear in the browser action context menu. Keep in mind that there are limit on how many items can appear there.\n\nAccepted properties:\n\nall tabs: boolean\nWhether to reload all tabs as opposed to just reloading the current tab.\n\nhard: boolean\nWhether to reload the extension as opposed to just reloading its page. Can be combined with \"all tabs\"\n\nExample:\n\n[\n   {\n        all tabs: false,\n        hard: false,\n    },\n   {\n        all tabs: true,\n        hard: false,\n    }\n]"
+        "message": "An array of objects with the same schema as seen in \"Extension's icon click action\" that define additional reload actions that appear in the browser action context menu. Keep in mind that there are limit on how many items can appear there. You can also use reload actions defined here by hitting one of the \"Reload extension X\" hotkeys, where X is the position in the array."
     },
     "ports_label_text": {
         "message": "Ports"
@@ -30,7 +30,7 @@
         "message": "Extension's icon click action"
     },
     "reload_actions_label_text": {
-        "message": "Extension's icon menu actions"
+        "message": "Extension's icon context menu actions"
     },
     "rate_chrome_link_href": {
         "message": "https://chrome"
