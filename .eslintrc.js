@@ -266,7 +266,7 @@ module.exports = {
         env: false,
         l: false,
         n: false,
-        nu: false,
+        nn: false,
         s: false,
         sa: false,
         sb: false,
