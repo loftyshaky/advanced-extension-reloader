@@ -2,9 +2,7 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 
-import {
-    Settings,
-} from '@loftyshaky/shared/settings';
+import { Settings } from '@loftyshaky/shared/settings';
 import { d_sections } from 'settings/internal';
 
 export const Body = observer(() => {

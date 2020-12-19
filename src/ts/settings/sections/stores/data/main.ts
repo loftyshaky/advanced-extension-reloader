@@ -1,9 +1,5 @@
-import {
-    Utils,
-} from '@loftyshaky/shared';
-import {
-    o_inputs,
-} from '@loftyshaky/shared/inputs';
+import { Utils } from '@loftyshaky/shared';
+import { o_inputs } from '@loftyshaky/shared/inputs';
 import { d_settings as d_sections_shared } from '@loftyshaky/shared/settings';
 import { d_sections } from 'settings/internal';
 

@@ -8,9 +8,7 @@ import {
     LoadingScreenBody,
     Theme,
 } from '@loftyshaky/shared';
-import {
-    u_settings,
-} from '@loftyshaky/shared/settings';
+import { u_settings } from '@loftyshaky/shared/settings';
 import {
     app_id,
     Suffix,
