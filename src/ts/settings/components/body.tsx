@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 
