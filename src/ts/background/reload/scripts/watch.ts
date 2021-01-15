@@ -123,7 +123,7 @@ export class Watch {
 
                 if (options_final.all_tabs) {
                     await s_reload.Tabs.i.reload_all_tabs();
-                } else if (!options_final.hard) {
+                } else {
                     const { last_active_tab_id } = s_reload.Tabs.i;
                     await browser.tabs.reload(last_active_tab_id);
                 }
