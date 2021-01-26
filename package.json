@@ -49,6 +49,7 @@
     },
     "dependencies": {
         "@loftyshaky/shared": "0.0.10",
+        "@simonwep/pickr": "^1.8.0",
         "lodash": "^4.17.20",
         "mobx": "^6.0.4",
         "mobx-react": "7.0.5",
