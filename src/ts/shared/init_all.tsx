@@ -72,7 +72,7 @@ export class InitAll {
                 },
             );
         },
-        1004);
+        1003);
 
         render(
             <Error app_id={app_id} />,
@@ -116,7 +116,7 @@ export class InitAll {
             },
         );
     },
-    1001);
+    1000);
 
     private create_root = (
         {
@@ -146,7 +146,7 @@ export class InitAll {
 
         return root;
     },
-    1002);
+    1001);
 
     private set_page_title = (): void => err(() => {
         const title_el = s<HTMLTitleElement>('title');
@@ -155,5 +155,5 @@ export class InitAll {
             title_el.textContent = ext.msg(`${page}_title_text`);
         }
     },
-    1003);
+    1002);
 }

@@ -55,7 +55,7 @@ export class Settings {
         { settings }:
         { settings: any },
     ): void => { this.update({ settings }); },
-    1000);
+    1004);
 
     public set_from_storage = (): Promise<void> => err_async(async () => {
         const settings = await ext.storage_get();
