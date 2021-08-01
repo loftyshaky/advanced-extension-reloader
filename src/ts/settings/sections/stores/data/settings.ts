@@ -10,7 +10,7 @@ export class Settings {
         return this.i0;
     }
 
-    private restore = ({ settings = undefined }: { settings?: any } = {}): void => err(() => {
+    private restore = ({ settings }: { settings?: any } = {}): void => err(() => {
         this.set_transformed({ settings });
 
         ext.send_msg(
@@ -23,7 +23,7 @@ export class Settings {
     1037);
 
     public restore_confirm = (
-        { settings = undefined }: { settings?: any } = {},
+        { settings }: { settings?: any } = {},
     ): void => err(() => {
         // eslint-disable-next-line no-alert
         const confirmed_restore: boolean = window.confirm(ext.msg('restore_defaults_confirm'));
@@ -35,16 +35,18 @@ export class Settings {
     1037);
 
     public set_transformed = (
-        { settings = undefined }: { settings?: any } = {},
+        { settings }: { settings?: any } = {},
     ): Promise<void> => err_async(async () => {
         let settings_final: any;
+
         if (_.isEmpty(settings)) {
-            const default_settings = await ext.send_msg_resp({ msg: 'get_default_settings' });
+            const default_settings = await ext.send_msg_resp({ msg: 'get_defaults' });
 
             settings_final = default_settings;
         } else {
             settings_final = settings;
         }
+
         Object.entries(settings_final).forEach(([
             key,
             val,
@@ -70,7 +72,7 @@ export class Settings {
         const settings = await ext.storage_get();
 
         if (_.isEmpty(settings)) {
-            const default_settings = await ext.send_msg_resp({ msg: 'get_default_settings' });
+            const default_settings = await ext.send_msg_resp({ msg: 'get_defaults' });
 
             await ext.storage_set(default_settings);
         }

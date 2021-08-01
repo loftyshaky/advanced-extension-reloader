@@ -11,7 +11,7 @@ browser.runtime.onMessage.addListener((msg: t.Msg): Promise<any> => err_async(as
 
     if (msg_str === 'update_setting') {
         s_settings.Settings.i.update_debounced({ settings: msg.settings });
-    } else if (msg_str === 'get_default_settings') {
+    } else if (msg_str === 'get_defaults') {
         return s_settings.Settings.i.default_settings;
     } else if (msg_str === 'react_to_change') {
         s_side_effects.SideEffects.i.react_to_change();
