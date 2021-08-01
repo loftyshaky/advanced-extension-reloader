@@ -22,11 +22,7 @@ const locales = new Locales({ app_root });
 
 module.exports = (env, argv) => {
     const paths = {
-        ts: path.join(
-            app_root,
-            'src',
-            'ts',
-        ),
+        ts: path.join(app_root, 'src', 'ts'),
     };
 
     const config = shared_config({
@@ -56,23 +52,9 @@ module.exports = (env, argv) => {
     config.entry = {
         ...config.entry,
         ...{
-            background: path.join(
-                paths.ts,
-                'background',
-                'background.ts',
-            ),
-            settings: path.join(
-                paths.ts,
-                'settings',
-                'settings.ts',
-            ),
-            settings_css: path.join(
-                app_root,
-                'src',
-                'scss',
-                'settings',
-                'index.scss',
-            ),
+            background: path.join(paths.ts, 'background', 'background.ts'),
+            settings: path.join(paths.ts, 'settings', 'settings.ts'),
+            settings_css: path.join(app_root, 'src', 'scss', 'settings', 'index.scss'),
         },
     };
 

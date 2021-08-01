@@ -5,10 +5,7 @@ const { Manifest: ManifestShared } = require('@loftyshaky/shared/js/ext/manifest
 const manifest_shared = new ManifestShared({ app_root: appRoot });
 
 class Manifest {
-    generate = ({
-        mode,
-        browser,
-    }) => {
+    generate = ({ mode, browser }) => {
         const manifest = {
             name: 'Advanced Extension Reloader',
             description: '__MSG_description__',
@@ -23,12 +20,7 @@ class Manifest {
                 chrome_style: false,
                 open_in_tab: true,
             },
-            permissions: [
-                'storage',
-                'tabs',
-                'management',
-                'contextMenus',
-            ],
+            permissions: ['storage', 'tabs', 'management', 'contextMenus'],
             commands: {
                 reload_main: {
                     description: '__MSG_reload_main_hotkey__',
@@ -101,7 +93,7 @@ class Manifest {
             mode,
             browser,
         });
-    }
+    };
 }
 
 module.exports = { Manifest };
