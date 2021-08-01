@@ -1,8 +1,7 @@
 const _ = require('lodash');
 
-const min_items = 2;
 const naming_convention_exceptions = {
-    regex: '^(marginBottom|minWidth|maxWidth|scrollTop|backgroundColor|componentDidMount|componentWillUnmount|componentDidUpdate|componentDidCatch|getDerivedStateFromError|enforceActions|recurseEverything|currentWindow|windowTypes|defaultProps|windowId)$',
+    regex: '^(marginBottom|minWidth|maxWidth|marginLeft|marginRight|scrollTop|backgroundColor|marginInlineStart|componentDidMount|componentWillUnmount|componentDidUpdate|componentDidCatch|getDerivedStateFromError|enforceActions|recurseEverything|currentWindow|windowTypes|defaultProps|windowId|useAsButton|autoReposition|lockOpacity|showAlways|childList|backgroundImage|attributeFilter|saveAs|tabId)$',
     match: false,
 };
 
@@ -15,16 +14,19 @@ const rules = {
         'prefer-arrow-callback': 'off',
         'func-names': 'off',
         'no-param-reassign': 'off',
-        camelcase: 'off',
-        indent: [
+        'class-methods-use-this': 'off',
+        'import/extensions': [
             'error',
-            4,
+            'ignorePackages',
+            {
+                js: 'never',
+                jsx: 'never',
+                ts: 'never',
+                tsx: 'never',
+            },
         ],
-        quotes: [
-            2,
-            'single',
-            { avoidEscape: true },
-        ],
+        camelcase: 'off',
+        quotes: [2, 'single', { avoidEscape: true }],
         'max-len': [
             'error',
             100,
@@ -37,47 +39,11 @@ const rules = {
                 ignoreTemplateLiterals: true,
             },
         ],
-        'max-depth': [
-            'error',
-            4,
-        ],
-        'max-nested-callbacks': [
-            'error',
-            4,
-        ],
-        'multiline-ternary': [
-            'error',
-            'always',
-        ],
+        'max-depth': ['error', 4],
+        'max-nested-callbacks': ['error', 8],
         'no-negated-condition': 'error',
-        'linebreak-style': [
-            'error',
-            'windows',
-        ],
-        'array-bracket-newline': [
-            'error',
-            { minItems: min_items },
-        ],
-        'array-element-newline': [
-            'error',
-            { minItems: min_items },
-        ],
-        'object-curly-newline': [
-            'error',
-            { consistent: true },
-        ],
-        'object-property-newline': [
-            'error',
-            { allowAllPropertiesOnSameLine: false },
-        ],
-        'function-paren-newline': [
-            'error',
-            'consistent',
-        ],
-        'function-call-argument-newline': [
-            'error',
-            'always',
-        ],
+        'linebreak-style': ['error', 'windows'],
+        'object-curly-newline': ['error', { consistent: true }],
         'padding-line-between-statements': [
             'error',
             {
@@ -86,19 +52,13 @@ const rules = {
                 next: 'return',
             },
         ],
-        curly: [
-            'error',
-            'all',
-        ],
+        curly: ['error', 'all'],
         'spaced-comment': [
             'error',
             'always',
             {
                 line: {
-                    markers: [
-                        '>',
-                        '<',
-                    ],
+                    markers: ['>', '<'],
                 },
                 block: {
                     markers: ['*'],
@@ -106,84 +66,27 @@ const rules = {
                 },
             },
         ],
-        'lines-between-class-members': [
-            'error',
-            'always',
-            { exceptAfterSingleLine: true },
-        ],
+        'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
         'import/no-extraneous-dependencies': [
             'error',
             {
-                devDependencies: [
-                    'js/*',
-                    'js/*/**',
-                    'rollup.config.js',
-                    'webpack.config.js',
-                ],
+                devDependencies: ['js/*', 'js/*/**', 'rollup.config.js', 'webpack.config.js'],
             },
         ],
         //< javascript
         //> react
         'react/no-array-index-key': 'off',
-        'jsx-quotes': [
-            'error',
-            'prefer-single',
-        ],
+        'jsx-quotes': ['error', 'prefer-single'],
         //< react
     },
     ts: {
         //> typescript
         '@typescript-eslint/explicit-module-boundary-types': 'off',
-        '@typescript-eslint/indent': [
-            'error',
-            4,
-            {
-                SwitchCase: 1,
-                VariableDeclarator: 1,
-                outerIIFEBody: 1,
-                FunctionDeclaration: {
-                    parameters: 1,
-                    body: 1,
-                },
-                FunctionExpression: {
-                    parameters: 1,
-                    body: 1,
-                },
-                CallExpression: { arguments: 1 },
-                ArrayExpression: 1,
-                ObjectExpression: 1,
-                ImportDeclaration: 1,
-                flatTernaryExpressions: false,
-                ignoredNodes: [
-                    'JSXElement',
-                    'JSXElement > *',
-                    'JSXAttribute',
-                    'JSXIdentifier',
-                    'JSXNamespacedName',
-                    'JSXMemberExpression',
-                    'JSXSpreadAttribute',
-                    'JSXExpressionContainer',
-                    'JSXOpeningElement',
-                    'JSXClosingElement',
-                    'JSXFragment',
-                    'JSXOpeningFragment',
-                    'JSXClosingFragment',
-                    'JSXText',
-                    'JSXEmptyExpression',
-                    'JSXSpreadChild',
-                ],
-                ignoreComments: false,
-            },
-        ],
         '@typescript-eslint/no-explicit-any': 'off',
         'brace-style': 'off',
         '@typescript-eslint/no-inferrable-types': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
-        '@typescript-eslint/brace-style': [
-            'error',
-            '1tbs',
-            { allowSingleLine: true },
-        ],
+        '@typescript-eslint/brace-style': ['error', '1tbs', { allowSingleLine: true }],
         '@typescript-eslint/naming-convention': [
             'error',
             {
@@ -196,14 +99,8 @@ const rules = {
                 format: ['PascalCase'],
             },
             {
-                selector: [
-                    'variable',
-                    'property',
-                ],
-                format: [
-                    'snake_case',
-                    'PascalCase',
-                ],
+                selector: ['variable', 'property'],
+                format: ['snake_case', 'PascalCase'],
                 filter: naming_convention_exceptions,
             },
         ],
@@ -215,51 +112,34 @@ const rules = {
         'react/prefer-stateless-function': 'off',
         'react/jsx-filename-extension': 'off',
         'react/static-property-placement': 'off',
-        'react/jsx-indent': [
-            'error',
-            4,
-        ],
-        'react/jsx-indent-props': [
-            'error',
-            4,
-        ],
+        'react/jsx-indent-props': ['error', 4],
         //< react
     },
 };
 
 module.exports = {
-    extends: [
-        'airbnb',
-        'airbnb/hooks',
-    ],
-    plugins: ['react'],
+    extends: ['airbnb', 'airbnb/hooks', 'prettier'],
+    plugins: ['react', 'prettier'],
     parser: 'babel-eslint',
-    rules: rules.js,
-    overrides: [{
-        extends: [
-            'airbnb',
-            'plugin:@typescript-eslint/recommended',
-        ],
-        parser: '@typescript-eslint/parser',
-        files: [
-            '*.ts',
-            '*.tsx',
-        ],
-        parserOptions: { // requered for some rules to work, like for example: '@typescript-eslint/prefer-includes': 'error'
-            project: 'tsconfig.json',
-            tsconfigRootDir: __dirname,
-        },
-        settings: {
-            'import/resolver': {
-                typescript: {},
+    rules: { ...rules.js, 'prettier/prettier': 'error' },
+    overrides: [
+        {
+            extends: ['airbnb', 'plugin:@typescript-eslint/recommended', 'prettier'],
+            parser: '@typescript-eslint/parser',
+            files: ['*.ts', '*.tsx'],
+            parserOptions: {
+                // requered for some rules to work, like for example: '@typescript-eslint/prefer-includes': 'error'
+                project: 'tsconfig.json',
+                tsconfigRootDir: __dirname,
             },
+            settings: {
+                'import/resolver': {
+                    typescript: {},
+                },
+            },
+            rules: _.merge({ 'no-use-before-define': 'off' }, rules.js, rules.ts),
         },
-        rules: _.merge(
-            { 'no-use-before-define': 'off' },
-            rules.js,
-            rules.ts,
-        ),
-    }],
+    ],
     globals: {
         window: false,
         document: false,
