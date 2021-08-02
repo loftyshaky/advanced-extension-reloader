@@ -1,49 +1,27 @@
 import { browser, Management, Tabs } from 'webextension-polyfill-ts';
-import io from 'socket.io-client';
 
-import { i_shared } from 'shared/internal';
-
-import { s_badge, s_reload } from 'background/internal';
+import { i_options } from 'shared/internal';
+import { s_reload } from 'background/internal';
 
 export class Watch {
     private static i0: Watch;
 
-    public static get i() {
-        if (!this.i0) {
-            this.i0 = new this();
-        }
-
-        return this.i0;
+    public static i(): Watch {
+        // eslint-disable-next-line no-return-assign
+        return this.i0 || (this.i0 = new this());
     }
 
-    private clients: any[] = [];
+    // eslint-disable-next-line no-useless-constructor, @typescript-eslint/no-empty-function
+    private constructor() {}
     private reloading: boolean = false;
 
-    public connect = (): Promise<void> =>
-        err_async(async () => {
-            const settings = await ext.storage_get('ports');
-
-            this.clients.forEach((client: any): void => {
-                client.close();
-            });
-
-            this.clients = [];
-
-            settings.ports.forEach((port: number): void => {
-                const client = io(`http://localhost:${port}`);
-                this.clients.push(client);
-
-                client.on('reload_app', Watch.i.reload);
-            });
-        }, 1026);
-
-    public reload = (options: i_shared.Options): Promise<void> =>
+    public reload = (options: i_options.Options): Promise<void> =>
         err_async(async () => {
             if (!this.reloading) {
                 this.reloading = true;
 
-                const options_final: i_shared.Options =
-                    s_reload.DefaultValues.i.tranform_reload_action({ reload_action: options });
+                const options_final: i_options.Options =
+                    s_reload.DefaultValues.i().tranform_reload_action({ reload_action: options });
 
                 if (options_final.hard) {
                     const apps_info: Management.ExtensionInfo[] = await browser.management.getAll();
@@ -65,14 +43,14 @@ export class Watch {
                             ) {
                                 ids.push(app_info.id);
                             }
-                        }, 1045),
+                        }, 'aer_1045'),
                     );
 
                     const urls: string[] = ids.map((id: string) =>
-                        err(() => `chrome-extension://${id}`, 1046),
+                        err(() => `chrome-extension://${id}`, 'aer_1046'),
                     );
 
-                    const ext_tabs: Tabs.Tab[] = await s_reload.Tabs.i.get_opened_ext_tabs({
+                    const ext_tabs: Tabs.Tab[] = await s_reload.Tabs.i().get_opened_ext_tabs({
                         urls,
                     });
 
@@ -82,7 +60,7 @@ export class Watch {
                                 err_async(async () => {
                                     await browser.management.setEnabled(id, false);
                                     await browser.management.setEnabled(id, true);
-                                }, 1028),
+                                }, 'aer_1028'),
                         ),
                     );
 
@@ -90,31 +68,22 @@ export class Watch {
                         ext_tabs.map(
                             (tab: Tabs.Tab): Promise<void> =>
                                 err_async(async () => {
-                                    await s_reload.Tabs.i.recreate_tab({ tab });
-                                }, 1031),
+                                    await s_reload.Tabs.i().recreate_tab({ tab });
+                                }, 'aer_1031'),
                         ),
                     );
                 }
 
                 if (options_final.all_tabs) {
-                    await s_reload.Tabs.i.reload_all_tabs();
+                    await s_reload.Tabs.i().reload_all_tabs();
                 } else {
-                    const { last_active_tab_id } = s_reload.Tabs.i;
+                    const { last_active_tab_id } = s_reload.Tabs.i();
                     await browser.tabs.reload(last_active_tab_id);
                 }
 
-                s_badge.Badge.i.show();
+                ext.send_msg({ msg: 'show_badge' });
 
                 this.reloading = false;
             }
-        }, 1005);
+        }, 'aer_1005');
 }
-
-browser.browserAction.onClicked.addListener(
-    (): Promise<void> =>
-        err_async(async () => {
-            const click_action = await ext.storage_get('click_action');
-
-            Watch.i.reload(click_action.click_action);
-        }, 1008),
-);

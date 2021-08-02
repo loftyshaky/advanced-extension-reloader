@@ -2,6 +2,9 @@
     "description": {
         "message": "Reload an unpacked extension with one click, hotkey or automatically."
     },
+    "background_tab_title_text": {
+        "message": "Advanced Extension Reloader"
+    },
     "soft_context_menu_item": {
         "message": "soft"
     },
@@ -32,17 +35,23 @@
     "reload_actions_label_text": {
         "message": "Extension's icon context menu actions"
     },
+    "advanced_extension_reloader_for_chrome_link_text": {
+        "message": "⚗️ Advanced Extension Reloader for Chrome"
+    },
+    "advanced_extension_reloader_for_edge_link_text": {
+        "message": "⚗️ Advanced Extension Reloader for Edge"
+    },
     "rate_chrome_link_href": {
-        "message": "https://chrome"
+        "message": ""
     },
     "rate_edge_link_href": {
-        "message": "https://edge"
+        "message": ""
     },
-    "rate_opera_link_href": {
-        "message": "https://opera"
+    "advanced_extension_reloader_for_chrome_link_href": {
+        "message": ""
     },
-    "rate_firefox_link_href": {
-        "message": "https://firefox"
+    "advanced_extension_reloader_for_edge_link_href": {
+        "message": ""
     },
     "reload_main_hotkey": {
         "message": "Reload extension main"

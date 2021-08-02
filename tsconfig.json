@@ -10,27 +10,14 @@
         "esModuleInterop": true,
         "sourceMap": true,
         "experimentalDecorators": true,
-        "typeRoots": [
-            "node_modules/@types",
-            "node_modules/web-ext-types"
-        ],
+        "typeRoots": ["node_modules/@types", "node_modules/web-ext-types"],
         "paths": {
-            "shared/*": [
-                "./ts/shared/*"
-            ],
-            "background/*": [
-                "./ts/background/*"
-            ],
-            "settings/*": [
-                "./ts/settings/*"
-            ],
+            "shared/*": ["./ts/shared/*"],
+            "background/*": ["./ts/background/*"],
+            "background_tab/*": ["./ts/background_tab/*"],
+            "settings/*": ["./ts/settings/*"]
         }
     },
-    "include": [
-        "src"
-    ],
-    "exclude": [
-        "node_modules",
-        "dist"
-    ],
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"]
 }

@@ -3,13 +3,13 @@ import { browser, Windows, Tabs as TabsExt } from 'webextension-polyfill-ts';
 export class Tabs {
     private static i0: Tabs;
 
-    public static get i() {
-        if (!this.i0) {
-            this.i0 = new this();
-        }
-
-        return this.i0;
+    public static i(): Tabs {
+        // eslint-disable-next-line no-return-assign
+        return this.i0 || (this.i0 = new this());
     }
+
+    // eslint-disable-next-line no-useless-constructor, @typescript-eslint/no-empty-function
+    private constructor() {}
 
     public last_active_tab_id: number = 0;
 
@@ -18,9 +18,9 @@ export class Tabs {
             const tab: TabsExt.Tab | undefined = await ext.get_active_tab();
 
             if (n(tab) && n(tab.id)) {
-                Tabs.i.last_active_tab_id = tab.id;
+                Tabs.i().last_active_tab_id = tab.id;
             }
-        }, 1031);
+        }, 'aer_1031');
 
     public get_opened_ext_tabs = ({ urls }: { urls: string[] }): Promise<TabsExt.Tab[]> =>
         err_async(async () => {
@@ -28,15 +28,15 @@ export class Tabs {
 
             const includes_url = ({ tab }: { tab: TabsExt.Tab }): boolean =>
                 urls.some((url: string): boolean =>
-                    err(() => n(tab.url) && tab.url.includes(url), 1029),
+                    err(() => n(tab.url) && tab.url.includes(url), 'aer_1029'),
                 );
 
             const opened_ext_tab: TabsExt.Tab[] = all_window_tabs.filter(
-                (tab: TabsExt.Tab): boolean => err(() => includes_url({ tab }), 1030),
+                (tab: TabsExt.Tab): boolean => err(() => includes_url({ tab }), 'aer_1030'),
             );
 
             return opened_ext_tab;
-        }, 1027);
+        }, 'aer_1027');
 
     public reload_all_tabs = (): Promise<void> =>
         err_async(async () => {
@@ -49,7 +49,7 @@ export class Tabs {
                     });
                 }
             });
-        }, 1007);
+        }, 'aer_1007');
 
     public recreate_tab = ({ tab }: { tab: TabsExt.Tab }): Promise<void> =>
         err_async(async () => {
@@ -62,20 +62,20 @@ export class Tabs {
                     pinned: tab.pinned,
                 });
             } catch (error_obj) {
-                show_err_ribbon(error_obj, 1033);
+                show_err_ribbon(error_obj, 'aer_1033');
             }
-        }, 1032);
+        }, 'aer_1032');
 }
 
 browser.windows.onFocusChanged.addListener(
     (): Promise<void> =>
         err_async(async () => {
-            Tabs.i.set_last_active_tab_id();
-        }, 1009),
+            Tabs.i().set_last_active_tab_id();
+        }, 'aer_1009'),
 );
 
 browser.tabs.onActivated.addListener((): void =>
     err(() => {
-        Tabs.i.set_last_active_tab_id();
-    }, 1010),
+        Tabs.i().set_last_active_tab_id();
+    }, 'aer_1010'),
 );

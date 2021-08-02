@@ -1,20 +1,18 @@
-import _ from 'lodash';
-import { browser, Management } from 'webextension-polyfill-ts';
+import { browser, Management, Tabs } from 'webextension-polyfill-ts';
 
-import { i_shared } from 'shared/internal';
-
+import { i_options } from 'shared/internal';
 import { s_reload } from 'background/internal';
 
 export class ContextMenu {
     private static i0: ContextMenu;
 
-    public static get i() {
-        if (!this.i0) {
-            this.i0 = new this();
-        }
-
-        return this.i0;
+    public static i(): ContextMenu {
+        // eslint-disable-next-line no-return-assign
+        return this.i0 || (this.i0 = new this());
     }
+
+    // eslint-disable-next-line no-useless-constructor, @typescript-eslint/no-empty-function
+    private constructor() {}
 
     public create = (): Promise<void> =>
         err_async(async () => {
@@ -22,13 +20,19 @@ export class ContextMenu {
 
             await browser.contextMenus.removeAll();
 
-            if (n(settings.reload_actions)) {
+            const background_tab_tabs: Tabs.Tab[] = await browser.tabs.query({
+                url: we.runtime.getURL('background_tab.html'),
+            });
+
+            const found_background_tab = background_tab_tabs.length !== 0;
+
+            if (found_background_tab && n(settings.reload_actions)) {
                 const apps_info: Management.ExtensionInfo[] = await browser.management.getAll();
 
                 const get_app_info_with_id = ({
                     reload_action,
                 }: {
-                    reload_action: i_shared.Options;
+                    reload_action: i_options.Options;
                 }): Management.ExtensionInfo | undefined =>
                     err(
                         () =>
@@ -38,39 +42,45 @@ export class ContextMenu {
                                           app_info.id === reload_action.ext_id,
                                   )
                                 : undefined,
-                        1043,
+                        'aer_1043',
                     );
 
-                settings.reload_actions.forEach((reload_action: i_shared.Options): void =>
-                    err(() => {
-                        const reload_actions_final: i_shared.Options =
-                            s_reload.DefaultValues.i.tranform_reload_action({ reload_action });
+                settings.reload_actions.forEach(
+                    (reload_action: i_options.Options): Promise<void> =>
+                        err_async(async () => {
+                            const reload_actions_final: i_options.Options =
+                                s_reload.DefaultValues.i().tranform_reload_action({
+                                    reload_action,
+                                });
 
-                        const matched_app_info: Management.ExtensionInfo | undefined =
-                            get_app_info_with_id({ reload_action: reload_actions_final });
+                            const matched_app_info: Management.ExtensionInfo | undefined =
+                                get_app_info_with_id({ reload_action: reload_actions_final });
 
-                        const app_name: string = n(matched_app_info)
-                            ? `${matched_app_info.name} + `
-                            : '';
-                        browser.contextMenus.create({
-                            title: _.capitalize(
-                                `${app_name}${
-                                    reload_actions_final.hard
-                                        ? ext.msg('hard_context_menu_item')
-                                        : ext.msg('soft_context_menu_item')
-                                } + ${
-                                    reload_actions_final.all_tabs
-                                        ? ext.msg('all_tabs_context_menu_item')
-                                        : ext.msg('one_tab_context_menu_item')
-                                }`,
-                            ),
-                            contexts: ['browser_action'],
-                            onclick: (): void => {
-                                s_reload.Watch.i.reload(reload_actions_final);
-                            },
-                        });
-                    }, 1021),
+                            const app_name: string = n(matched_app_info)
+                                ? `${matched_app_info.name} + `
+                                : '';
+                            if (n(background_tab_tabs[0].id)) {
+                                const context_menu_item_title: string =
+                                    await ext.send_msg_to_tab_resp(background_tab_tabs[0].id, {
+                                        msg: 'generate_context_menu_item_text',
+                                        app_name,
+                                        reload_actions: reload_actions_final,
+                                    });
+
+                                browser.contextMenus.create({
+                                    id: `${
+                                        n(reload_actions_final.ext_id)
+                                            ? reload_actions_final.ext_id
+                                            : 'undefined'
+                                    }-${reload_actions_final.hard ? 'true' : 'false'}-${
+                                        reload_actions_final.all_tabs ? 'true' : 'false'
+                                    }`,
+                                    title: context_menu_item_title,
+                                    contexts: ['action'],
+                                });
+                            }
+                        }, 'aer_1021'),
                 );
             }
-        }, 1020);
+        }, 'aer_1020');
 }

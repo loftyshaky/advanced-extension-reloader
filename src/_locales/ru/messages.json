@@ -2,6 +2,9 @@
     "description": {
         "message": "Перезагрузагружайте распакованное расширение в один клик, горячей клавишей или автоматически."
     },
+    "background_tab_title_text": {
+        "message": "Advanced Extension Reloader"
+    },
     "soft_context_menu_item": {
         "message": "soft"
     },
@@ -32,17 +35,23 @@
     "reload_actions_label_text": {
         "message": "Действия контекстного меню иконки расширения"
     },
+    "advanced_extension_reloader_for_chrome_link_text": {
+        "message": "⚗️ Advanced Extension Reloader для Chrome"
+    },
+    "advanced_extension_reloader_for_edge_link_text": {
+        "message": "⚗️ Advanced Extension Reloader для Edge"
+    },
     "rate_chrome_link_href": {
-        "message": "https://chrome"
+        "message": ""
     },
     "rate_edge_link_href": {
-        "message": "https://edge"
+        "message": ""
     },
-    "rate_opera_link_href": {
-        "message": "https://opera"
+    "advanced_extension_reloader_for_chrome_link_href": {
+        "message": ""
     },
-    "rate_firefox_link_href": {
-        "message": "https://firefox"
+    "advanced_extension_reloader_for_edge_link_href": {
+        "message": ""
     },
     "reload_main_hotkey": {
         "message": "Перезагрузить расширение (основное действие)"

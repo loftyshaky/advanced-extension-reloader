@@ -1,26 +1,26 @@
-import { i_shared } from 'shared/internal';
+import { i_options } from 'shared/internal';
 
 export class DefaultValues {
     private static i0: DefaultValues;
 
-    public static get i() {
-        if (!this.i0) {
-            this.i0 = new this();
-        }
-
-        return this.i0;
+    public static i(): DefaultValues {
+        // eslint-disable-next-line no-return-assign
+        return this.i0 || (this.i0 = new this());
     }
+
+    // eslint-disable-next-line no-useless-constructor, @typescript-eslint/no-empty-function
+    private constructor() {}
 
     public tranform_reload_action = ({
         reload_action,
     }: {
-        reload_action: i_shared.Options;
-    }): i_shared.Options =>
+        reload_action: i_options.Options;
+    }): i_options.Options =>
         err(() => {
-            const transformed_reload_action: i_shared.Options = reload_action;
+            const transformed_reload_action: i_options.Options = reload_action;
 
             if (!n(reload_action.ext_id)) {
-                transformed_reload_action.ext_id = false;
+                transformed_reload_action.ext_id = undefined;
             }
 
             if (!n(reload_action.hard)) {
@@ -32,5 +32,5 @@ export class DefaultValues {
             }
 
             return transformed_reload_action;
-        }, 1049);
+        }, 'aer_1049');
 }

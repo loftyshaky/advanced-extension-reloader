@@ -1,7 +1,9 @@
-import '@loftyshaky/shared';
+import '@loftyshaky/shared/ext';
+import { init_shared } from '@loftyshaky/shared';
 import 'shared/internal';
-import 'background/msgs';
-import { s_settings, s_badge } from 'background/internal';
+import { init } from 'background/internal';
 
-s_settings.Settings.i.set_from_storage();
-s_badge.Badge.i.hide();
+importScripts('/env.js');
+
+init_shared();
+init();

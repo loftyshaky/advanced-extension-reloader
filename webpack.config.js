@@ -3,7 +3,8 @@ const path = require('path');
 const appRoot = require('app-root-path').path;
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const { Env } = require('@loftyshaky/shared/js/ext/env');
@@ -31,11 +32,12 @@ module.exports = (env, argv) => {
         argv,
         env,
         MiniCssExtractPlugin,
-        // FixStyleOnlyEntriesPlugin,
+        OptimizeCssAssetsPlugin,
+        FixStyleOnlyEntriesPlugin,
         CopyWebpackPlugin,
         callback_begin: () => {
             task_scheduler.unlock_dist({
-                package_name: 'Extension Reloader',
+                package_name: 'Advanced Extension Reloader',
                 remove_dist: argv.mode === 'production',
             });
         },
@@ -49,10 +51,19 @@ module.exports = (env, argv) => {
         },
     });
 
+    config.resolve.alias = {
+        ...config.resolve.alias,
+        ...{
+            background_tab: path.join(paths.ts, 'background_tab'),
+        },
+    };
+
     config.entry = {
         ...config.entry,
         ...{
             background: path.join(paths.ts, 'background', 'background.ts'),
+            background_tab: path.join(paths.ts, 'background_tab', 'background_tab.ts'),
+            background_tab_css: path.join(app_root, 'src', 'scss', 'background_tab', 'index.scss'),
             settings: path.join(paths.ts, 'settings', 'settings.ts'),
             settings_css: path.join(app_root, 'src', 'scss', 'settings', 'index.scss'),
         },
