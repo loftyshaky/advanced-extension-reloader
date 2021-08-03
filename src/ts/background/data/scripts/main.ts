@@ -28,23 +28,28 @@ export class Main {
                 click_action: {
                     all_tabs: false,
                     hard: true,
+                    hardfull: false,
                 },
                 reload_actions: [
                     {
                         all_tabs: false,
                         hard: true,
+                        hardfull: false,
                     },
                     {
                         all_tabs: true,
                         hard: true,
+                        hardfull: false,
                     },
                     {
                         all_tabs: false,
                         hard: false,
+                        hardfull: false,
                     },
                     {
                         all_tabs: true,
                         hard: false,
+                        hardfull: false,
                     },
                 ],
             };

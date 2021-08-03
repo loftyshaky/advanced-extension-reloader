@@ -73,8 +73,8 @@ export class ContextMenu {
                                             ? reload_actions_final.ext_id
                                             : 'undefined'
                                     }-${reload_actions_final.hard ? 'true' : 'false'}-${
-                                        reload_actions_final.all_tabs ? 'true' : 'false'
-                                    }`,
+                                        reload_actions_final.hardfull ? 'true' : 'false'
+                                    }-${reload_actions_final.all_tabs ? 'true' : 'false'}`,
                                     title: context_menu_item_title,
                                     contexts: ['action'],
                                 });
