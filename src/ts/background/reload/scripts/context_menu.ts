@@ -20,8 +20,9 @@ export class ContextMenu {
 
             await browser.contextMenus.removeAll();
 
-            const background_tab_tab: Tabs.Tab =
-                await s_reload.Tabs.i().get_background_tab_page_tab();
+            const background_tab_tab: Tabs.Tab = await s_reload.Tabs.i().get_page_tab({
+                page: 'background_tab',
+            });
             const found_background_tab = n(background_tab_tab);
 
             if (found_background_tab && n(settings.reload_actions)) {
@@ -65,7 +66,7 @@ export class ContextMenu {
                                         reload_actions: reload_actions_final,
                                     });
 
-                                browser.contextMenus.create({
+                                await browser.contextMenus.create({
                                     id: `${i}`,
                                     title: context_menu_item_title,
                                     contexts: ['action'],

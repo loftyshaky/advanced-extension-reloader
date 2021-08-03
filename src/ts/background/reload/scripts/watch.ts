@@ -25,11 +25,15 @@ export class Watch {
 
                 if (options_final.hard) {
                     const apps_info: Management.ExtensionInfo[] = await browser.management.getAll();
+                    const apps_info_filtered: Management.ExtensionInfo[] = apps_info.filter(
+                        (app_info: Management.ExtensionInfo): boolean =>
+                            err(() => app_info.id !== browser.runtime.id, 'aer_1058'),
+                    );
                     const ext_id_exists = typeof options_final.ext_id === 'string';
 
                     const ids: string[] = [];
 
-                    apps_info.forEach((app_info: Management.ExtensionInfo): void =>
+                    apps_info_filtered.forEach((app_info: Management.ExtensionInfo): void =>
                         err(() => {
                             const matched_app_id_from_options =
                                 app_info.id === options_final.ext_id;
@@ -37,7 +41,7 @@ export class Watch {
                             if (
                                 app_info.id !== browser.runtime.id &&
                                 app_info.installType === 'development' &&
-                                (apps_info as any).type !== 'theme' &&
+                                (app_info as any).type !== 'theme' &&
                                 app_info.enabled &&
                                 (!ext_id_exists || matched_app_id_from_options)
                             ) {
@@ -100,8 +104,13 @@ export class Watch {
                     await s_reload.Tabs.i().reload_all_tabs();
                 } else {
                     const { last_active_tab_id } = s_reload.Tabs.i();
+                    const need_to_reload_tab = await s_reload.Tabs.i().check_if_need_to_reload_tab({
+                        tab_id: last_active_tab_id,
+                    });
 
-                    browser.tabs.reload(last_active_tab_id);
+                    if (need_to_reload_tab) {
+                        browser.tabs.reload(last_active_tab_id);
+                    }
                 }
 
                 ext.send_msg({ msg: 'show_badge' });

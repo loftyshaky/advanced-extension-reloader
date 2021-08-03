@@ -44,8 +44,16 @@ export class Tabs {
 
             wins.forEach((win: Windows.Window): void => {
                 if (n(win.tabs)) {
-                    win.tabs.forEach((tab: TabsExt.Tab): void => {
-                        browser.tabs.reload(tab.id);
+                    win.tabs.forEach(async (tab: TabsExt.Tab): Promise<void> => {
+                        if (n(tab.id)) {
+                            const need_to_reload_tab = await this.check_if_need_to_reload_tab({
+                                tab_id: tab.id,
+                            });
+
+                            if (need_to_reload_tab) {
+                                browser.tabs.reload(tab.id);
+                            }
+                        }
                     });
                 }
             });
@@ -66,10 +74,14 @@ export class Tabs {
             }
         }, 'aer_1032');
 
-    public get_background_tab_page_tab = (): Promise<TabsExt.Tab> =>
+    public get_page_tab = ({
+        page,
+    }: {
+        page: 'settings' | 'background_tab';
+    }): Promise<TabsExt.Tab> =>
         err(async () => {
             const tabs: TabsExt.Tab[] = await browser.tabs.query({
-                url: we.runtime.getURL('background_tab.html'),
+                url: we.runtime.getURL(`${page}.html`),
             });
 
             return tabs[0];
@@ -77,10 +89,28 @@ export class Tabs {
 
     public reload_background_tab_page_tab = (): Promise<void> =>
         err(async () => {
-            const background_tab_tab: TabsExt.Tab = await this.get_background_tab_page_tab();
+            const background_tab_tab: TabsExt.Tab = await this.get_page_tab({
+                page: 'background_tab',
+            });
 
             we.tabs.reload(background_tab_tab.id);
         }, 'aer_1057');
+
+    public check_if_need_to_reload_tab = ({ tab_id }: { tab_id: number }): Promise<boolean> =>
+        err_async(async () => {
+            const background_tab_page_tab = await this.get_page_tab({
+                page: 'background_tab',
+            });
+            const settings_page_tab = await this.get_page_tab({
+                page: 'settings',
+            });
+
+            if ([background_tab_page_tab.id, settings_page_tab.id].includes(tab_id)) {
+                return false;
+            }
+
+            return true;
+        }, 'aer_1059');
 }
 
 browser.windows.onFocusChanged.addListener(
