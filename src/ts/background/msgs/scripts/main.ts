@@ -12,6 +12,8 @@ browser.runtime.onMessage.addListener(
                 await s_data.Main.i().update_settings({
                     settings: msg.settings,
                 });
+
+                s_reload.Tabs.i().reload_background_tab_page_tab();
             } else if (msg_str === 'get_defaults') {
                 return s_data.Main.i().defaults;
             } else if (msg_str === 'reload') {

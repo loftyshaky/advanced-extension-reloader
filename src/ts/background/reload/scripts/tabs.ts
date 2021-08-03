@@ -65,6 +65,22 @@ export class Tabs {
                 show_err_ribbon(error_obj, 'aer_1033');
             }
         }, 'aer_1032');
+
+    public get_background_tab_page_tab = (): Promise<TabsExt.Tab> =>
+        err(async () => {
+            const tabs: TabsExt.Tab[] = await browser.tabs.query({
+                url: we.runtime.getURL('background_tab.html'),
+            });
+
+            return tabs[0];
+        }, 'aer_1056');
+
+    public reload_background_tab_page_tab = (): Promise<void> =>
+        err(async () => {
+            const background_tab_tab: TabsExt.Tab = await this.get_background_tab_page_tab();
+
+            we.tabs.reload(background_tab_tab.id);
+        }, 'aer_1057');
 }
 
 browser.windows.onFocusChanged.addListener(

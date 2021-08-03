@@ -20,11 +20,9 @@ export class ContextMenu {
 
             await browser.contextMenus.removeAll();
 
-            const background_tab_tabs: Tabs.Tab[] = await browser.tabs.query({
-                url: we.runtime.getURL('background_tab.html'),
-            });
-
-            const found_background_tab = background_tab_tabs.length !== 0;
+            const background_tab_tab: Tabs.Tab =
+                await s_reload.Tabs.i().get_background_tab_page_tab();
+            const found_background_tab = n(background_tab_tab);
 
             if (found_background_tab && n(settings.reload_actions)) {
                 const apps_info: Management.ExtensionInfo[] = await browser.management.getAll();
@@ -59,9 +57,9 @@ export class ContextMenu {
                             const app_name: string = n(matched_app_info)
                                 ? `${matched_app_info.name} + `
                                 : '';
-                            if (n(background_tab_tabs[0].id)) {
+                            if (n(background_tab_tab.id)) {
                                 const context_menu_item_title: string =
-                                    await ext.send_msg_to_tab_resp(background_tab_tabs[0].id, {
+                                    await ext.send_msg_to_tab_resp(background_tab_tab.id, {
                                         msg: 'generate_context_menu_item_text',
                                         app_name,
                                         reload_actions: reload_actions_final,
