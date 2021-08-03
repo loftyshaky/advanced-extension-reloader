@@ -46,7 +46,7 @@ export class ContextMenu {
                     );
 
                 settings.reload_actions.forEach(
-                    (reload_action: i_options.Options): Promise<void> =>
+                    (reload_action: i_options.Options, i: number): Promise<void> =>
                         err_async(async () => {
                             const reload_actions_final: i_options.Options =
                                 s_reload.DefaultValues.i().tranform_reload_action({
@@ -68,13 +68,7 @@ export class ContextMenu {
                                     });
 
                                 browser.contextMenus.create({
-                                    id: `${
-                                        n(reload_actions_final.ext_id)
-                                            ? reload_actions_final.ext_id
-                                            : 'undefined'
-                                    }-${reload_actions_final.hard ? 'true' : 'false'}-${
-                                        reload_actions_final.hardfull ? 'true' : 'false'
-                                    }-${reload_actions_final.all_tabs ? 'true' : 'false'}`,
+                                    id: `${i}`,
                                     title: context_menu_item_title,
                                     contexts: ['action'],
                                 });
