@@ -64,5 +64,5 @@ export class Main {
             if (!_.isEqual(toJS(data.settings), settings)) {
                 this.set({ settings });
             }
-        }, 'ges_1166');
+        }, 'aer_1166');
 }
