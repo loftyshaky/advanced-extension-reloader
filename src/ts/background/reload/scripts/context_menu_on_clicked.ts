@@ -1,8 +1,6 @@
-import { browser } from 'webextension-polyfill-ts';
-
 import { s_reload } from 'background/internal';
 
-browser.contextMenus.onClicked.addListener(
+we.contextMenus.onClicked.addListener(
     (info): Promise<void> =>
         err_async(async () => {
             const settings = await ext.storage_get(['click_action', 'reload_actions']);

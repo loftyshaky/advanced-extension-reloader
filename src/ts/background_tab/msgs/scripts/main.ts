@@ -1,9 +1,7 @@
-import { browser } from 'webextension-polyfill-ts';
-
 import { t } from '@loftyshaky/shared';
 import { s_reload } from 'background_tab/internal';
 
-browser.runtime.onMessage.addListener(
+we.runtime.onMessage.addListener(
     (msg: t.Msg): Promise<any> =>
         err_async(async () => {
             const msg_str: string = msg.msg;

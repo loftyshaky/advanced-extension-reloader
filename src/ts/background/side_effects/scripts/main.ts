@@ -1,5 +1,3 @@
-import { browser } from 'webextension-polyfill-ts';
-
 import { s_reload } from 'background/internal';
 
 export class Main {
@@ -21,13 +19,13 @@ export class Main {
         }, 'aer_1039');
 }
 
-browser.management.onUninstalled.addListener((): void =>
+we.management.onUninstalled.addListener((): void =>
     err(() => {
         Main.i().react_to_change();
     }, 'aer_1047'),
 );
 
-browser.management.onInstalled.addListener((): void =>
+we.management.onInstalled.addListener((): void =>
     err(() => {
         Main.i().react_to_change();
     }, 'aer_1048'),

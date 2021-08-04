@@ -1,9 +1,7 @@
-import { browser } from 'webextension-polyfill-ts';
-
 import { i_options } from 'shared/internal';
 import { s_reload } from 'background/internal';
 
-browser.commands.onCommand.addListener(
+we.commands.onCommand.addListener(
     async (command: string): Promise<void> =>
         err_async(async () => {
             const settings = await ext.storage_get(['click_action', 'reload_actions']);

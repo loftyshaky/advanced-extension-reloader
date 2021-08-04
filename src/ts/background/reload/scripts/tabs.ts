@@ -1,4 +1,4 @@
-import { browser, Windows, Tabs as TabsExt } from 'webextension-polyfill-ts';
+import { Windows, Tabs as TabsExt } from 'webextension-polyfill-ts';
 
 import { s_reload } from 'background/internal';
 
@@ -27,7 +27,7 @@ export class Tabs {
 
     public get_opened_ext_tabs_urls = ({ urls }: { urls: string[] }): Promise<TabsExt.Tab[]> =>
         err_async(async () => {
-            const all_window_tabs: TabsExt.Tab[] = await browser.tabs.query({});
+            const all_window_tabs: TabsExt.Tab[] = await we.tabs.query({});
 
             const includes_url = ({ tab }: { tab: TabsExt.Tab }): boolean =>
                 urls.some((url: string): boolean =>
@@ -43,7 +43,7 @@ export class Tabs {
 
     public get_opened_ext_tabs_specefic_ext = (): Promise<void> =>
         err_async(async () => {
-            const all_window_tabs: TabsExt.Tab[] = await browser.tabs.query({});
+            const all_window_tabs: TabsExt.Tab[] = await we.tabs.query({});
 
             this.opened_ext_tabs = all_window_tabs.filter((tab: TabsExt.Tab): boolean =>
                 err(
@@ -55,7 +55,7 @@ export class Tabs {
 
     public reload_all_tabs = (): Promise<void> =>
         err_async(async () => {
-            const wins: Windows.Window[] = await browser.windows.getAll({ populate: true });
+            const wins: Windows.Window[] = await we.windows.getAll({ populate: true });
 
             wins.forEach((win: Windows.Window): void => {
                 if (n(win.tabs)) {
@@ -66,7 +66,7 @@ export class Tabs {
                             });
 
                             if (need_to_reload_tab) {
-                                browser.tabs.reload(tab.id);
+                                we.tabs.reload(tab.id);
                             }
                         }
                     });
@@ -77,7 +77,7 @@ export class Tabs {
     public recreate_tab = ({ tab }: { tab: TabsExt.Tab }) =>
         err_async(async () => {
             try {
-                await browser.tabs.create({
+                await we.tabs.create({
                     windowId: tab.windowId,
                     index: tab.index,
                     url: tab.url,
@@ -95,7 +95,7 @@ export class Tabs {
         page: 'settings' | 'background_tab';
     }): Promise<TabsExt.Tab | { id: number }> =>
         err_async(async () => {
-            const tabs: TabsExt.Tab[] = await browser.tabs.query({
+            const tabs: TabsExt.Tab[] = await we.tabs.query({
                 url: we.runtime.getURL(`${page}.html`),
             });
 
@@ -128,35 +128,35 @@ export class Tabs {
         }, 'aer_1059');
 }
 
-browser.tabs.onUpdated.addListener(
+we.tabs.onUpdated.addListener(
     (): Promise<void> =>
         err_async(async () => {
             Tabs.i().get_opened_ext_tabs_specefic_ext();
         }, 'aer_1009'),
 );
 
-browser.tabs.onMoved.addListener(
+we.tabs.onMoved.addListener(
     (): Promise<void> =>
         err_async(async () => {
             Tabs.i().get_opened_ext_tabs_specefic_ext();
         }, 'aer_1064'),
 );
 
-browser.tabs.onDetached.addListener(
+we.tabs.onDetached.addListener(
     (): Promise<void> =>
         err_async(async () => {
             Tabs.i().get_opened_ext_tabs_specefic_ext();
         }, 'aer_1065'),
 );
 
-browser.windows.onFocusChanged.addListener(
+we.windows.onFocusChanged.addListener(
     (): Promise<void> =>
         err_async(async () => {
             Tabs.i().set_last_active_tab_id();
         }, 'aer_1009'),
 );
 
-browser.tabs.onActivated.addListener((): void =>
+we.tabs.onActivated.addListener((): void =>
     err(() => {
         Tabs.i().set_last_active_tab_id();
     }, 'aer_1010'),

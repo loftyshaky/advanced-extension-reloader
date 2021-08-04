@@ -1,8 +1,6 @@
-import { browser } from 'webextension-polyfill-ts';
-
 import { s_reload } from 'background/internal';
 
-browser.action.onClicked.addListener(
+we.action.onClicked.addListener(
     (): Promise<void> =>
         err_async(async () => {
             const click_action = await ext.storage_get('click_action');

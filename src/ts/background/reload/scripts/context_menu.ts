@@ -1,4 +1,4 @@
-import { browser, Management } from 'webextension-polyfill-ts';
+import { Management } from 'webextension-polyfill-ts';
 
 import { i_options } from 'shared/internal';
 import { s_reload } from 'background/internal';
@@ -18,7 +18,7 @@ export class ContextMenu {
         err_async(async () => {
             const settings = await ext.storage_get('reload_actions');
 
-            await browser.contextMenus.removeAll();
+            await we.contextMenus.removeAll();
 
             const background_tab_tab = await s_reload.Tabs.i().get_page_tab({
                 page: 'background_tab',
@@ -26,7 +26,7 @@ export class ContextMenu {
             const found_background_tab = n(background_tab_tab);
 
             if (found_background_tab && n(settings.reload_actions)) {
-                const apps_info: Management.ExtensionInfo[] = await browser.management.getAll();
+                const apps_info: Management.ExtensionInfo[] = await we.management.getAll();
 
                 const get_app_info_with_id = ({
                     reload_action,
@@ -66,7 +66,7 @@ export class ContextMenu {
                                         reload_actions: reload_actions_final,
                                     });
 
-                                await browser.contextMenus.create({
+                                await we.contextMenus.create({
                                     id: `${i}`,
                                     title: context_menu_item_title,
                                     contexts: ['action'],

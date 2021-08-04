@@ -1,7 +1,5 @@
 import _ from 'lodash';
 
-import { browser } from 'webextension-polyfill-ts';
-
 export class Main {
     private static i0: Main;
 
@@ -15,15 +13,15 @@ export class Main {
 
     public show = (): Promise<void> =>
         err_async(async () => {
-            await browser.action.setBadgeText({ text: 'OK' });
-            await browser.action.setBadgeBackgroundColor({ color: '#8b6fff' });
+            await we.action.setBadgeText({ text: 'OK' });
+            await we.action.setBadgeBackgroundColor({ color: '#8b6fff' });
 
             this.hide_debounce();
         }, 'aer_1034');
 
     public hide = (): Promise<void> =>
         err_async(async () => {
-            await browser.action.setBadgeText({ text: '' });
+            await we.action.setBadgeText({ text: '' });
         }, 'aer_1035');
 
     private hide_debounce = _.debounce(this.hide, 2000);

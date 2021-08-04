@@ -1,4 +1,4 @@
-import { browser, Management, Tabs } from 'webextension-polyfill-ts';
+import { Management, Tabs } from 'webextension-polyfill-ts';
 
 import { s_suffix, i_options } from 'shared/internal';
 import { s_reload } from 'background/internal';
@@ -44,10 +44,10 @@ export class Watch {
                         }
                     }
 
-                    const apps_info: Management.ExtensionInfo[] = await browser.management.getAll();
+                    const apps_info: Management.ExtensionInfo[] = await we.management.getAll();
                     const apps_info_filtered: Management.ExtensionInfo[] = apps_info.filter(
                         (app_info: Management.ExtensionInfo): boolean =>
-                            err(() => app_info.id !== browser.runtime.id, 'aer_1058'),
+                            err(() => app_info.id !== we.runtime.id, 'aer_1058'),
                     );
                     const ext_id_exists = typeof options_final.ext_id === 'string';
 
@@ -59,7 +59,7 @@ export class Watch {
                                 app_info.id === options_final.ext_id;
 
                             if (
-                                app_info.id !== browser.runtime.id &&
+                                app_info.id !== we.runtime.id &&
                                 app_info.installType === 'development' &&
                                 (app_info as any).type !== 'theme' &&
                                 app_info.enabled &&
@@ -87,8 +87,8 @@ export class Watch {
                             ids.map(
                                 (id: string): Promise<void> =>
                                     err_async(async () => {
-                                        await browser.management.setEnabled(id, false);
-                                        await browser.management.setEnabled(id, true);
+                                        await we.management.setEnabled(id, false);
+                                        await we.management.setEnabled(id, true);
                                     }, 'aer_1028'),
                             ),
                         );
@@ -108,7 +108,7 @@ export class Watch {
                     });
 
                     if (need_to_reload_tab) {
-                        await browser.tabs.reload(last_active_tab_id);
+                        await we.tabs.reload(last_active_tab_id);
                     }
                 }
 
