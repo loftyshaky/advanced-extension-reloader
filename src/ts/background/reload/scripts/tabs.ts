@@ -46,10 +46,7 @@ export class Tabs {
             const all_window_tabs: TabsExt.Tab[] = await we.tabs.query({});
 
             this.opened_ext_tabs = all_window_tabs.filter((tab: TabsExt.Tab): boolean =>
-                err(
-                    () => n(tab.url) && tab.url.includes(`://${s_reload.Watch.i().ext_id}`),
-                    'aer_1030',
-                ),
+                err(() => this.check_if_target_ext_url({ url: tab.url }), 'aer_1030'),
             );
         }, 'aer_1027');
 
@@ -126,34 +123,53 @@ export class Tabs {
 
             return true;
         }, 'aer_1059');
+
+    public check_if_target_ext_url = ({ url }: { url: string | undefined }): boolean =>
+        err(
+            () =>
+                n(url) &&
+                url !== '' &&
+                s_reload.Watch.i().ext_id !== '' &&
+                url.includes(`://${s_reload.Watch.i().ext_id}`),
+            'aer_1068',
+        );
 }
 
-we.tabs.onUpdated.addListener(
-    (): Promise<void> =>
+we.tabs.onActivated.addListener(
+    (info): Promise<void> =>
         err_async(async () => {
-            Tabs.i().get_opened_ext_tabs_specefic_ext();
-        }, 'aer_1009'),
+            const tab = await we.tabs.get(info.tabId);
+            if (
+                tab.status === 'complete' &&
+                s_reload.Tabs.i().check_if_target_ext_url({ url: tab.url })
+            ) {
+                Tabs.i().get_opened_ext_tabs_specefic_ext();
+            }
+        }, 'aer_1067'),
 );
 
-we.tabs.onMoved.addListener(
-    (): Promise<void> =>
-        err_async(async () => {
-            Tabs.i().get_opened_ext_tabs_specefic_ext();
-        }, 'aer_1064'),
+we.tabs.onUpdated.addListener((): void =>
+    err(() => {
+        Tabs.i().get_opened_ext_tabs_specefic_ext();
+    }, 'aer_1009'),
 );
 
-we.tabs.onDetached.addListener(
-    (): Promise<void> =>
-        err_async(async () => {
-            Tabs.i().get_opened_ext_tabs_specefic_ext();
-        }, 'aer_1065'),
+we.tabs.onMoved.addListener((): void =>
+    err(() => {
+        Tabs.i().get_opened_ext_tabs_specefic_ext();
+    }, 'aer_1064'),
 );
 
-we.windows.onFocusChanged.addListener(
-    (): Promise<void> =>
-        err_async(async () => {
-            Tabs.i().set_last_active_tab_id();
-        }, 'aer_1009'),
+we.tabs.onAttached.addListener((): void =>
+    err(() => {
+        Tabs.i().get_opened_ext_tabs_specefic_ext();
+    }, 'aer_1065'),
+);
+
+we.windows.onFocusChanged.addListener((): void =>
+    err(() => {
+        Tabs.i().set_last_active_tab_id();
+    }, 'aer_1009'),
 );
 
 we.tabs.onActivated.addListener((): void =>
