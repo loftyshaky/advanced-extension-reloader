@@ -16,15 +16,13 @@ export class Watch {
 
     public connect = (): Promise<void> =>
         err_async(async () => {
-            const settings = await ext.storage_get('ports');
-
             this.clients.forEach((client: any): void => {
                 client.close();
             });
 
             this.clients = [];
 
-            settings.ports.forEach((port: number): void => {
+            data.settings.ports.forEach((port: number): void => {
                 const client = io(`http://localhost:${port}`);
                 this.clients.push(client);
 

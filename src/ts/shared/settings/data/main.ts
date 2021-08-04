@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { runInAction } from 'mobx';
+import { runInAction, toJS } from 'mobx';
 
 import { t } from '@loftyshaky/shared';
 import { i_data } from 'shared/internal';
@@ -50,4 +50,19 @@ export class Main {
                 rerun_actions: true,
             });
         }, 'aer_1165');
+
+    public set_from_storage = (): Promise<void> =>
+        err_async(async () => {
+            const settings = await ext.storage_get();
+
+            if (_.isEmpty(settings)) {
+                const default_settings = await ext.send_msg_resp({ msg: 'get_defaults' });
+
+                await ext.storage_set(default_settings);
+            }
+
+            if (!_.isEqual(toJS(data.settings), settings)) {
+                this.set({ settings });
+            }
+        }, 'ges_1166');
 }

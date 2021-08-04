@@ -32,7 +32,9 @@ export class InitAll {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             __webpack_public_path__ = we.runtime.getURL('');
 
-            await d_settings.Transform.i().set_transformed_from_storage();
+            if (page === 'settings') {
+                await d_settings.Transform.i().set_transformed_from_storage();
+            }
 
             this.set_page_title();
 
