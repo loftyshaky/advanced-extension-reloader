@@ -1,5 +1,22 @@
 @import '../../../node_modules/@loftyshaky/shared/scss/shared/index';
+@import '../../../node_modules/@loftyshaky/shared/scss/shared/themes/colors/light';
 
+html,
 body {
-    background-color: yellow !important;
+    height: 100%;
+}
+
+.main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.background_tab_manifest_3_msg {
+    font-size: 36px;
+    padding: 26px;
+    max-width: 894px;
+    margin: 60px;
+    border: 5px solid;
 }

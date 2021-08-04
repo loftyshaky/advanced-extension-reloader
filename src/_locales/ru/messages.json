@@ -5,6 +5,9 @@
     "background_tab_title_text": {
         "message": "Advanced Extension Reloader"
     },
+    "background_tab_manifest_3_msg_text": {
+        "message": "Эта вкладка необходима для правильной работы Advanced Extension Reloader, не закрывайте ее."
+    },
     "soft_context_menu_item": {
         "message": "soft"
     },

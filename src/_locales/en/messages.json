@@ -5,6 +5,9 @@
     "background_tab_title_text": {
         "message": "Advanced Extension Reloader"
     },
+    "background_tab_manifest_3_msg_text": {
+        "message": "This tab is required for Advanced Extension Reloader to function correctly, don't close it."
+    },
     "soft_context_menu_item": {
         "message": "soft"
     },
