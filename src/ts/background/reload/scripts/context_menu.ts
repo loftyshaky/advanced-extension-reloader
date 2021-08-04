@@ -1,4 +1,4 @@
-import { browser, Management, Tabs } from 'webextension-polyfill-ts';
+import { browser, Management } from 'webextension-polyfill-ts';
 
 import { i_options } from 'shared/internal';
 import { s_reload } from 'background/internal';
@@ -20,7 +20,7 @@ export class ContextMenu {
 
             await browser.contextMenus.removeAll();
 
-            const background_tab_tab: Tabs.Tab = await s_reload.Tabs.i().get_page_tab({
+            const background_tab_tab = await s_reload.Tabs.i().get_page_tab({
                 page: 'background_tab',
             });
             const found_background_tab = n(background_tab_tab);
