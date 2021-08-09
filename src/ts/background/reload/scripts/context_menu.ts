@@ -16,7 +16,7 @@ export class ContextMenu {
 
     public create = (): Promise<void> =>
         err_async(async () => {
-            const settings = await ext.storage_get('reload_actions');
+            const settings = await ext.storage_get('context_menu_actions');
 
             await we.contextMenus.removeAll();
 
@@ -25,7 +25,7 @@ export class ContextMenu {
             });
             const found_background_tab = n(background_tab_tab);
 
-            if (found_background_tab && n(settings.reload_actions)) {
+            if (found_background_tab && n(settings.context_menu_actions)) {
                 const apps_info: Management.ExtensionInfo[] = await we.management.getAll();
 
                 const get_app_info_with_id = ({
@@ -44,7 +44,7 @@ export class ContextMenu {
                         'aer_1043',
                     );
 
-                settings.reload_actions.forEach(
+                settings.context_menu_actions.forEach(
                     (reload_action: i_options.Options, i: number): Promise<void> =>
                         err_async(async () => {
                             const reload_actions_final: i_options.Options =
@@ -63,7 +63,7 @@ export class ContextMenu {
                                     await ext.send_msg_to_tab_resp(background_tab_tab.id, {
                                         msg: 'generate_context_menu_item_text',
                                         app_name,
-                                        reload_actions: reload_actions_final,
+                                        context_menu_actions: reload_actions_final,
                                     });
 
                                 await we.contextMenus.create({

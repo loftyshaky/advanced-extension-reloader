@@ -7,6 +7,7 @@ export interface Settings {
     show_color_help: boolean;
     enable_cut_features: boolean;
     ports: string[];
+    full_reload_timeout: number;
     click_action: i_options.Options;
-    reload_actions: i_options.Options[];
+    context_menu_actions: i_options.Options[];
 }

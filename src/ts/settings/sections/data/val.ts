@@ -26,8 +26,10 @@ export class Val {
                     val = _.map((raw_val as string).split(','), _.trim);
                 } else if (this.check_if_json_input({ name: input.name })) {
                     val = JSON.parse(raw_val as string);
-                } else {
-                    val = raw_val;
+                } else if (n(raw_val)) {
+                    val = ['transition_duration', 'full_reload_timeout'].includes(input.name)
+                        ? +raw_val
+                        : raw_val;
 
                     s_settings.Theme.i().change({
                         input,
@@ -89,7 +91,7 @@ export class Val {
                     return validate_inner({ reload_obj: val });
                 }
 
-                if (input.name === 'reload_actions') {
+                if (input.name === 'context_menu_actions') {
                     const val = JSON.parse(raw_val as string);
 
                     if (_.isArray(val)) {
@@ -99,6 +101,10 @@ export class Val {
                     }
 
                     return true;
+                }
+
+                if (input.name === 'full_reload_timeout') {
+                    return !/^\d+$/.test(raw_val as string);
                 }
 
                 if (input.name === 'transition_duration') {
@@ -117,5 +123,5 @@ export class Val {
         }, 'aer_1142');
 
     private check_if_json_input = ({ name }: { name: string }): boolean =>
-        err(() => ['click_action', 'reload_actions'].includes(name), 'aer_1050');
+        err(() => ['click_action', 'context_menu_actions'].includes(name), 'aer_1050');
 }

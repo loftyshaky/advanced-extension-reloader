@@ -45,7 +45,7 @@ export class Main {
                                 warn_state_checker: d_sections.Val.i().validate_input,
                             }),
                             new o_inputs.Textarea({
-                                name: 'reload_actions',
+                                name: 'context_menu_actions',
                                 include_help: true,
                                 event_callback: d_sections.Val.i().change,
                                 warn_state_checker: d_sections.Val.i().validate_input,
@@ -58,6 +58,14 @@ export class Main {
                     upload_back_up_callback: d_sections.Restore.i().restore_back_up,
                     restore_defaults_callback: () => d_sections.Restore.i().restore_confirm(),
                     input_change_val_callback: d_sections.Val.i().change,
+                    admin_inputs: [
+                        new o_inputs.Text({
+                            name: 'full_reload_timeout',
+                            include_help: true,
+                            event_callback: d_sections.Val.i().change,
+                            warn_state_checker: d_sections.Val.i().validate_input,
+                        }),
+                    ],
                 }),
                 ...[
                     new o_inputs.Section({

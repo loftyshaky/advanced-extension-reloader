@@ -5,6 +5,6 @@ we.action.onClicked.addListener(
         err_async(async () => {
             const click_action = await ext.storage_get('click_action');
 
-            s_reload.Watch.i().reload(click_action.click_action);
+            s_reload.Watch.i().reload_debounce(click_action.click_action);
         }, 'aer_1008'),
 );

@@ -14,20 +14,20 @@ export class ContextMenu {
 
     public generate_context_menu_item_text = ({
         app_name,
-        reload_actions,
+        context_menu_actions,
     }: {
         app_name: string;
-        reload_actions: i_options.Options;
+        context_menu_actions: i_options.Options;
     }): string =>
         err(
             () =>
                 _.capitalize(
                     `${app_name}${
-                        reload_actions.hard
+                        context_menu_actions.hard
                             ? ext.msg('hard_context_menu_item')
                             : ext.msg('soft_context_menu_item')
                     } + ${
-                        reload_actions.all_tabs
+                        context_menu_actions.all_tabs
                             ? ext.msg('all_tabs_context_menu_item')
                             : ext.msg('one_tab_context_menu_item')
                     }`,

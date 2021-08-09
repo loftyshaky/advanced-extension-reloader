@@ -27,10 +27,6 @@ export class DefaultValues {
                 transformed_reload_action.hard = true;
             }
 
-            if (!n(reload_action.hardfull)) {
-                transformed_reload_action.hardfull = false;
-            }
-
             if (!n(reload_action.all_tabs)) {
                 transformed_reload_action.all_tabs = false;
             }

@@ -1,7 +1,9 @@
-import { Management, Tabs } from 'webextension-polyfill-ts';
+import _ from 'lodash';
+import { Tabs, Management } from 'webextension-polyfill-ts';
 
-import { s_suffix, i_options } from 'shared/internal';
-import { s_reload } from 'background/internal';
+import { t } from '@loftyshaky/shared';
+import { s_suffix, i_data, i_options } from 'shared/internal';
+import { s_badge, s_reload, i_reload } from 'background/internal';
 
 export class Watch {
     private static i0: Watch;
@@ -14,130 +16,116 @@ export class Watch {
     // eslint-disable-next-line no-useless-constructor, @typescript-eslint/no-empty-function
     private constructor() {}
 
-    private reloading: boolean = false;
-    public ext_id: string = '';
-    private hardfull: boolean = false;
-    private reload_call_count: number = 0;
+    private full_reload_timeout: number = 0;
+    public generate_reload_debounce_f = (): Promise<void> =>
+        err_async(async () => {
+            const settings: i_data.Settings = await ext.storage_get();
+
+            this.full_reload_timeout = settings.full_reload_timeout;
+
+            this.reload_debounce = _.debounce(this.reload, this.full_reload_timeout);
+        }, 'aer_1089');
+
+    public reload_debounce: t.CallbackVariadicVoid = () => undefined;
 
     public reload = (options: i_options.Options): Promise<void> =>
         err_async(async () => {
-            this.reload_call_count += 1;
-
             const options_final: i_options.Options =
                 s_reload.DefaultValues.i().tranform_reload_action({
                     reload_action: options,
                 });
 
-            this.hardfull = options_final.hardfull;
+            if (options_final.hard) {
+                const ext_id_option_specified = typeof options_final.ext_id === 'string';
+                const exts: Management.ExtensionInfo[] = await we.management.getAll();
+                const ext_tabs: Tabs.Tab[] = await s_reload.Tabs.i().get_ext_tabs();
+                let tab_url_is_null: boolean = false;
 
-            if (!this.reloading || this.hardfull) {
-                this.reloading = true;
-
-                if (options_final.hard) {
-                    if (n(options_final.ext_id)) {
-                        const running_for_the_first_time = this.ext_id === '';
-
-                        this.ext_id = options_final.ext_id;
-
-                        if (running_for_the_first_time) {
-                            await s_reload.Tabs.i().get_opened_ext_tabs_specefic_ext();
-                        }
-                    }
-
-                    const apps_info: Management.ExtensionInfo[] = await we.management.getAll();
-                    const apps_info_filtered: Management.ExtensionInfo[] = apps_info.filter(
-                        (app_info: Management.ExtensionInfo): boolean =>
-                            err(() => app_info.id !== we.runtime.id, 'aer_1058'),
-                    );
-                    const ext_id_exists = typeof options_final.ext_id === 'string';
-
-                    const ids: string[] = [];
-
-                    apps_info_filtered.forEach((app_info: Management.ExtensionInfo): void =>
+                const ext_tabs_final: i_reload.TabWithExtId[] = ext_tabs.map(
+                    (ext_tab: t.AnyRecord): i_reload.TabWithExtId =>
                         err(() => {
-                            const matched_app_id_from_options =
-                                app_info.id === options_final.ext_id;
+                            if (_.isNull(ext_tab.url)) {
+                                tab_url_is_null = true;
+                            } else {
+                                const reg_exp = new RegExp(
+                                    `^${s_reload.Tabs.i().ext_protocol}([\\s\\S]*?)/`,
+                                );
 
-                            if (
-                                app_info.id !== we.runtime.id &&
-                                app_info.installType === 'development' &&
-                                (app_info as any).type !== 'theme' &&
-                                app_info.enabled &&
-                                (!ext_id_exists || matched_app_id_from_options)
-                            ) {
-                                ids.push(app_info.id);
+                                const match = ext_tab.url.match(reg_exp);
+
+                                if (_.isNull(match)) {
+                                    tab_url_is_null = true;
+                                } else {
+                                    ext_tab.ext_id = match.pop();
+                                }
                             }
-                        }, 'aer_1045'),
+
+                            return ext_tab as i_reload.TabWithExtId;
+                        }, 'aer_1081'),
+                );
+
+                if (!tab_url_is_null) {
+                    await Promise.all(
+                        exts.map(async (ext: Management.ExtensionInfo) =>
+                            err_async(async () => {
+                                const matched_ext_id_from_options = ext.id === options_final.ext_id;
+
+                                if (
+                                    ext.id !== we.runtime.id &&
+                                    ext.enabled &&
+                                    ext.installType === 'development' &&
+                                    (!ext_id_option_specified || matched_ext_id_from_options)
+                                ) {
+                                    await this.re_enable({
+                                        ext,
+                                        ext_tabs: ext_tabs_final,
+                                    });
+                                }
+                            }, 'aer_1082'),
+                        ),
                     );
-
-                    if (options_final.hardfull && ext_id_exists) {
-                        await (we as any).runtime.sendMessage(options_final.ext_id, {
-                            msg: new s_suffix.Main('reload_extension').result,
-                        });
-                    } else {
-                        const urls: string[] = ids.map((id: string) =>
-                            err(() => `chrome-extension://${id}`, 'aer_1046'),
-                        );
-                        const ext_tabs: Tabs.Tab[] =
-                            await s_reload.Tabs.i().get_opened_ext_tabs_urls({
-                                urls,
-                            });
-
-                        await Promise.all(
-                            ids.map(
-                                (id: string): Promise<void> =>
-                                    err_async(async () => {
-                                        await we.management.setEnabled(id, false);
-                                        await we.management.setEnabled(id, true);
-                                    }, 'aer_1028'),
-                            ),
-                        );
-
-                        await this.after_enabled({ tabs: ext_tabs });
-                    }
                 }
-
-                this.reloading = false;
-
-                if (options_final.all_tabs) {
-                    await s_reload.Tabs.i().reload_all_tabs();
-                } else {
-                    const { last_active_tab_id } = s_reload.Tabs.i();
-                    const need_to_reload_tab = await s_reload.Tabs.i().check_if_need_to_reload_tab({
-                        tab_id: last_active_tab_id,
-                    });
-
-                    if (need_to_reload_tab) {
-                        await we.tabs.reload(last_active_tab_id);
-                    }
-                }
-
-                ext.send_msg({ msg: 'show_badge' });
             }
+
+            s_reload.Tabs.i().reload_tabs({ all_tabs: options_final.all_tabs });
+
+            s_badge.Main.i().show();
         }, 'aer_1005');
 
-    private after_enabled = ({ tabs }: { tabs: Tabs.Tab[] }): Promise<void> =>
+    private re_enable = ({
+        ext,
+        ext_tabs,
+    }: {
+        ext: Management.ExtensionInfo;
+        ext_tabs: i_reload.TabWithExtId[];
+    }): Promise<void> =>
         err_async(async () => {
-            await Promise.all(
-                tabs.map(
-                    (tab): Promise<void> =>
-                        err_async(async () => {
-                            await s_reload.Tabs.i().recreate_tab({ tab });
-                        }, 'aer_1031'),
-                ),
+            let reload_triggered = false;
+
+            ((env.browser === 'firefox' ? browser : chrome) as any).runtime.sendMessage(
+                ext.id,
+                {
+                    msg: new s_suffix.Main('reload_extension').result,
+                },
+                (response: any) => {
+                    if (we.runtime.lastError) {
+                        // eslint-disable-next-line no-console
+                        console.error(we.runtime.lastError.message);
+                    }
+
+                    if (response === new s_suffix.Main('reload_triggered').result) {
+                        reload_triggered = true;
+                    }
+                },
             );
-        }, 'aer_1052');
 
-    public on_enabled = (info: Management.ExtensionInfo): void =>
-        err(() => {
-            this.reload_call_count -= 1;
+            await x.delay(this.full_reload_timeout);
 
-            if (this.hardfull && info.id === this.ext_id && this.reload_call_count >= 0) {
-                this.reload_call_count = 0;
-
-                this.after_enabled({ tabs: s_reload.Tabs.i().opened_ext_tabs });
-            } else if (this.reload_call_count < 0) {
-                this.reload_call_count = 0;
+            if (!reload_triggered) {
+                await we.management.setEnabled(ext.id, false);
+                await we.management.setEnabled(ext.id, true);
             }
-        }, 'aer_1054');
+
+            await s_reload.Tabs.i().recreate_tabs({ ext, ext_tabs });
+        }, 'aer_1079');
 }

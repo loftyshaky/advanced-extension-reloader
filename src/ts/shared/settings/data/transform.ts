@@ -25,7 +25,7 @@ export class Transform {
             Object.entries(settings_final).forEach(([key, val]) => {
                 if (key === 'ports') {
                     settings_final[key] = (val as string[]).join(',');
-                } else if (['click_action', 'reload_actions'].includes(key)) {
+                } else if (['click_action', 'context_menu_actions'].includes(key)) {
                     settings_final[key] = JSON.stringify(val, undefined, 4);
                 } else {
                     settings_final[key] = val;

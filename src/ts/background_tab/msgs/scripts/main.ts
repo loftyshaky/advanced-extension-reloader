@@ -14,7 +14,7 @@ we.runtime.onMessage.addListener(
             } else if (msg_str === 'generate_context_menu_item_text') {
                 return s_reload.ContextMenu.i().generate_context_menu_item_text({
                     app_name: msg.app_name,
-                    reload_actions: msg.reload_actions,
+                    context_menu_actions: msg.context_menu_actions,
                 });
             }
 

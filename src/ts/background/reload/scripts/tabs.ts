@@ -1,6 +1,6 @@
-import { Windows, Tabs as TabsExt } from 'webextension-polyfill-ts';
+import { Tabs as TabsExt, Management } from 'webextension-polyfill-ts';
 
-import { s_reload } from 'background/internal';
+import { i_reload } from 'background/internal';
 
 export class Tabs {
     private static i0: Tabs;
@@ -13,78 +13,82 @@ export class Tabs {
     // eslint-disable-next-line no-useless-constructor, @typescript-eslint/no-empty-function
     private constructor() {}
 
-    public last_active_tab_id: number = 0;
     public opened_ext_tabs: TabsExt.Tab[] = [];
+    public ext_protocol: string = `${env.browser}-extension://`;
+    private ext_match_pattern: string = `${this.ext_protocol}*/*`;
 
-    public set_last_active_tab_id = (): Promise<void> =>
+    public get_tabs = (): Promise<TabsExt.Tab[]> =>
         err_async(async () => {
-            const tab: TabsExt.Tab | undefined = await ext.get_active_tab();
+            const tabs: TabsExt.Tab[] = await we.tabs.query({});
 
-            if (n(tab) && n(tab.id)) {
-                Tabs.i().last_active_tab_id = tab.id;
-            }
-        }, 'aer_1031');
-
-    public get_opened_ext_tabs_urls = ({ urls }: { urls: string[] }): Promise<TabsExt.Tab[]> =>
-        err_async(async () => {
-            const all_window_tabs: TabsExt.Tab[] = await we.tabs.query({});
-
-            const includes_url = ({ tab }: { tab: TabsExt.Tab }): boolean =>
-                urls.some((url: string): boolean =>
-                    err(() => n(tab.url) && tab.url.includes(url), 'aer_1029'),
-                );
-
-            const opened_ext_tab: TabsExt.Tab[] = all_window_tabs.filter(
-                (tab: TabsExt.Tab): boolean => err(() => includes_url({ tab }), 'aer_1030'),
+            const tabs_filtered: TabsExt.Tab[] = tabs.filter((tab: TabsExt.Tab): boolean =>
+                err(() => !this.check_if_excluded_tab({ url: tab.url }), 'aer_1090'),
             );
 
-            return opened_ext_tab;
-        }, 'aer_1027');
+            return tabs_filtered;
+        }, 'aer_1087');
 
-    public get_opened_ext_tabs_specefic_ext = (): Promise<void> =>
+    public get_ext_tabs = (): Promise<TabsExt.Tab[]> =>
         err_async(async () => {
-            const all_window_tabs: TabsExt.Tab[] = await we.tabs.query({});
-
-            this.opened_ext_tabs = all_window_tabs.filter((tab: TabsExt.Tab): boolean =>
-                err(() => this.check_if_target_ext_url({ url: tab.url }), 'aer_1030'),
-            );
-        }, 'aer_1027');
-
-    public reload_all_tabs = (): Promise<void> =>
-        err_async(async () => {
-            const wins: Windows.Window[] = await we.windows.getAll({ populate: true });
-
-            wins.forEach((win: Windows.Window): void => {
-                if (n(win.tabs)) {
-                    win.tabs.forEach(async (tab: TabsExt.Tab): Promise<void> => {
-                        if (n(tab.id)) {
-                            const need_to_reload_tab = await this.check_if_need_to_reload_tab({
-                                tab_id: tab.id,
-                            });
-
-                            if (need_to_reload_tab) {
-                                we.tabs.reload(tab.id);
-                            }
-                        }
-                    });
-                }
+            const tabs: TabsExt.Tab[] = await we.tabs.query({
+                url: this.ext_match_pattern,
             });
+
+            return tabs;
+        }, 'aer_1027');
+
+    private check_if_excluded_tab = ({ url }: { url: string | undefined }): boolean =>
+        err(
+            () =>
+                n(url) &&
+                (url === 'chrome://extensions/' ||
+                    url.includes(`${this.ext_protocol}${we.runtime.id}`)),
+            'aer_1091',
+        );
+
+    public reload_tabs = ({ all_tabs }: { all_tabs: boolean }): Promise<void> =>
+        err_async(async () => {
+            const tabs: TabsExt.Tab[] = await this.get_tabs();
+
+            if (all_tabs) {
+                tabs.forEach((ext_tab: TabsExt.Tab): void =>
+                    err(() => {
+                        we.tabs.reload(ext_tab.id);
+                    }, 'aer_1083'),
+                );
+            } else {
+                const current_tab: TabsExt.Tab | undefined = await ext.get_active_tab();
+
+                if (n(current_tab) && !this.check_if_excluded_tab({ url: current_tab.url })) {
+                    await we.tabs.reload(current_tab.id);
+                }
+            }
         }, 'aer_1007');
 
-    public recreate_tab = ({ tab }: { tab: TabsExt.Tab }) =>
+    public recreate_tabs = ({
+        ext,
+        ext_tabs,
+    }: {
+        ext: Management.ExtensionInfo;
+        ext_tabs: i_reload.TabWithExtId[];
+    }): Promise<void> =>
         err_async(async () => {
-            try {
-                await we.tabs.create({
-                    windowId: tab.windowId,
-                    index: tab.index,
-                    url: tab.url,
-                    active: tab.active,
-                    pinned: tab.pinned,
-                });
-            } catch (error_obj) {
-                show_err_ribbon(error_obj, 'aer_1033');
-            }
-        }, 'aer_1032');
+            await Promise.all(
+                ext_tabs.map(async (text_tab: i_reload.TabWithExtId) =>
+                    err_async(async () => {
+                        if (text_tab.ext_id === ext.id) {
+                            await we.tabs.create({
+                                windowId: text_tab.windowId,
+                                index: text_tab.index,
+                                url: text_tab.url,
+                                active: text_tab.active,
+                                pinned: text_tab.pinned,
+                            });
+                        }
+                    }, 'aer_1085'),
+                ),
+            );
+        }, 'aer_1086');
 
     public get_page_tab = ({
         page,
@@ -107,73 +111,4 @@ export class Tabs {
 
             we.tabs.reload(background_tab_tab.id);
         }, 'aer_1057');
-
-    public check_if_need_to_reload_tab = ({ tab_id }: { tab_id: number }): Promise<boolean> =>
-        err_async(async () => {
-            const background_tab_page_tab = await this.get_page_tab({
-                page: 'background_tab',
-            });
-            const settings_page_tab = await this.get_page_tab({
-                page: 'settings',
-            });
-
-            if ([background_tab_page_tab.id, settings_page_tab.id].includes(tab_id)) {
-                return false;
-            }
-
-            return true;
-        }, 'aer_1059');
-
-    public check_if_target_ext_url = ({ url }: { url: string | undefined }): boolean =>
-        err(
-            () =>
-                n(url) &&
-                url !== '' &&
-                s_reload.Watch.i().ext_id !== '' &&
-                url.includes(`://${s_reload.Watch.i().ext_id}`),
-            'aer_1068',
-        );
 }
-
-we.tabs.onActivated.addListener(
-    (info): Promise<void> =>
-        err_async(async () => {
-            const tab = await we.tabs.get(info.tabId);
-            if (
-                tab.status === 'complete' &&
-                s_reload.Tabs.i().check_if_target_ext_url({ url: tab.url })
-            ) {
-                Tabs.i().get_opened_ext_tabs_specefic_ext();
-            }
-        }, 'aer_1067'),
-);
-
-we.tabs.onUpdated.addListener((): void =>
-    err(() => {
-        Tabs.i().get_opened_ext_tabs_specefic_ext();
-    }, 'aer_1009'),
-);
-
-we.tabs.onMoved.addListener((): void =>
-    err(() => {
-        Tabs.i().get_opened_ext_tabs_specefic_ext();
-    }, 'aer_1064'),
-);
-
-we.tabs.onAttached.addListener((): void =>
-    err(() => {
-        Tabs.i().get_opened_ext_tabs_specefic_ext();
-    }, 'aer_1065'),
-);
-
-we.windows.onFocusChanged.addListener((): void =>
-    err(() => {
-        Tabs.i().set_last_active_tab_id();
-    }, 'aer_1009'),
-);
-
-we.tabs.onActivated.addListener((): void =>
-    err(() => {
-        Tabs.i().set_last_active_tab_id();
-    }, 'aer_1010'),
-);
