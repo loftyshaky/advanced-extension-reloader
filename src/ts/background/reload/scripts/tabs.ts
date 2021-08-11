@@ -51,10 +51,12 @@ export class Tabs {
             const tabs: TabsExt.Tab[] = await this.get_tabs();
 
             if (all_tabs) {
-                tabs.forEach((ext_tab: TabsExt.Tab): void =>
-                    err(() => {
-                        we.tabs.reload(ext_tab.id);
-                    }, 'aer_1083'),
+                await Promise.all(
+                    tabs.map(async (ext_tab: TabsExt.Tab) =>
+                        err_async(async () => {
+                            await we.tabs.reload(ext_tab.id);
+                        }, 'aer_1083'),
+                    ),
                 );
             } else {
                 const current_tab: TabsExt.Tab | undefined = await ext.get_active_tab();

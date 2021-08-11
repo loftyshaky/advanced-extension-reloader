@@ -87,9 +87,8 @@ export class Watch {
                 }
             }
 
-            s_reload.Tabs.i().reload_tabs({ all_tabs: options_final.all_tabs });
-
-            s_badge.Main.i().show();
+            await s_reload.Tabs.i().reload_tabs({ all_tabs: options_final.all_tabs });
+            await s_badge.Main.i().show();
         }, 'aer_1005');
 
     private re_enable = ({
