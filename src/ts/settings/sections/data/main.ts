@@ -61,6 +61,7 @@ export class Main {
                     admin_inputs: [
                         new o_inputs.Text({
                             name: 'full_reload_timeout',
+                            text_type: 'number',
                             include_help: true,
                             event_callback: d_sections.Val.i().change,
                             warn_state_checker: d_sections.Val.i().validate_input,
