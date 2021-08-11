@@ -47,10 +47,7 @@ export class Val {
 
                     s_css_vars.Main.i().set();
 
-                    ext.send_msg({
-                        msg: 'update_settings',
-                        settings: { [input.name]: val },
-                    });
+                    this.update_settings_debounce({ input, val });
                 }
             } catch (error_obj) {
                 show_err_ribbon(error_obj, 'aer_1016', { silent: true });
@@ -124,4 +121,15 @@ export class Val {
 
     private check_if_json_input = ({ name }: { name: string }): boolean =>
         err(() => ['click_action', 'context_menu_actions'].includes(name), 'aer_1050');
+
+    private update_settings_debounce = _.debounce(
+        ({ input, val }: { input: i_inputs.Input; val: t.AnyUndefined }): void =>
+            err(() => {
+                ext.send_msg({
+                    msg: 'update_settings',
+                    settings: { [input.name]: val },
+                });
+            }, 'aer_1096'),
+        500,
+    );
 }
