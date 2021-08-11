@@ -31,4 +31,11 @@ export class Watch {
                 });
             });
         }, 'aer_1026');
+
+    public play_sound = ({ volume }: { volume: number }): void =>
+        err(() => {
+            const audio = new Audio('330046__paulmorek__beep-03-positive.wav');
+            audio.volume = volume;
+            audio.play();
+        }, 'aer_1095');
 }

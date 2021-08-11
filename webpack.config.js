@@ -35,6 +35,7 @@ module.exports = (env, argv) => {
         OptimizeCssAssetsPlugin,
         FixStyleOnlyEntriesPlugin,
         CopyWebpackPlugin,
+        copy_patters: [path.join('src', 'audio', '330046__paulmorek__beep-03-positive.wav')],
         callback_begin: () => {
             task_scheduler.unlock_dist({
                 package_name: 'Advanced Extension Reloader',

@@ -89,6 +89,10 @@ export class Watch {
 
             await s_reload.Tabs.i().reload_tabs({ all_tabs: options_final.all_tabs });
             await s_badge.Main.i().show();
+
+            if (options_final.play_sound) {
+                ext.send_msg({ msg: 'play_sound' });
+            }
         }, 'aer_1005');
 
     private re_enable = ({

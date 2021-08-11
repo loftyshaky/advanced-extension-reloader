@@ -31,6 +31,10 @@ export class DefaultValues {
                 transformed_reload_action.all_tabs = false;
             }
 
+            if (!n(reload_action.play_sound)) {
+                transformed_reload_action.play_sound = true;
+            }
+
             return transformed_reload_action;
         }, 'aer_1049');
 }
