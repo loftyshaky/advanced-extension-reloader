@@ -12,7 +12,7 @@ we.runtime.onMessage.addListener(
             } else if (msg_str === 'connect_to_ext_servers') {
                 s_reload.Watch.i().connect();
             } else if (msg_str === 'play_sound') {
-                s_reload.Watch.i().play_sound({ volume: 1 });
+                s_reload.Watch.i().play_sound();
             } else if (msg_str === 'generate_context_menu_item_text') {
                 return s_reload.ContextMenu.i().generate_context_menu_item_text({
                     app_name: msg.app_name,

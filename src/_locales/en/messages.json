@@ -44,6 +44,9 @@
     "reload_actions_label_text": {
         "message": "Extension's icon context menu actions"
     },
+    "reload_notification_volume_label_text": {
+        "message": "Reload notification volume"
+    },
     "advanced_extension_reloader_for_chrome_link_text": {
         "message": "⚗️ Advanced Extension Reloader for Chrome"
     },

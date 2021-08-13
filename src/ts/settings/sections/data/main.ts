@@ -50,6 +50,12 @@ export class Main {
                                 event_callback: d_sections.Val.i().change,
                                 warn_state_checker: d_sections.Val.i().validate_input,
                             }),
+                            new o_inputs.Range({
+                                name: 'reload_notification_volume',
+                                max: 1,
+                                step: 0.01,
+                                event_callback: d_sections.Val.i().change,
+                            }),
                         ],
                     }),
                 ],

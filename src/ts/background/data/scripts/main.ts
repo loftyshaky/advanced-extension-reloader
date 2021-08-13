@@ -27,6 +27,7 @@ export class Main {
                 enable_cut_features: false,
                 ports: ['7220'],
                 full_reload_timeout: 300,
+                reload_notification_volume: '1',
                 click_action: {
                     all_tabs: false,
                     hard: true,

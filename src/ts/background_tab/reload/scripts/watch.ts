@@ -32,10 +32,10 @@ export class Watch {
             });
         }, 'aer_1026');
 
-    public play_sound = ({ volume }: { volume: number }): void =>
+    public play_sound = ({ mute = false }: { mute?: boolean } = {}): void =>
         err(() => {
             const audio = new Audio('330046__paulmorek__beep-03-positive.wav');
-            audio.volume = volume;
+            audio.volume = mute ? 0 : data.settings.reload_notification_volume;
             audio.play();
         }, 'aer_1095');
 }

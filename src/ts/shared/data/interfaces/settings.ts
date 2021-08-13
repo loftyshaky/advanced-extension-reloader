@@ -8,6 +8,7 @@ export interface Settings {
     enable_cut_features: boolean;
     ports: string[];
     full_reload_timeout: number;
+    reload_notification_volume: string;
     click_action: i_options.Options;
     context_menu_actions: i_options.Options[];
 }

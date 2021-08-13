@@ -44,6 +44,9 @@
     "reload_actions_label_text": {
         "message": "Действия контекстного меню иконки расширения"
     },
+    "reload_notification_volume_label_text": {
+        "message": "Громкость уведомления перезагрузки"
+    },
     "advanced_extension_reloader_for_chrome_link_text": {
         "message": "⚗️ Advanced Extension Reloader для Chrome"
     },
