@@ -89,17 +89,17 @@ export class Tabs {
         }, 'aer_1007');
 
     public recreate_tabs = ({
-        ext,
+        ext_info,
         ext_tabs,
     }: {
-        ext: Management.ExtensionInfo;
+        ext_info: Management.ExtensionInfo;
         ext_tabs: i_reload.TabWithExtId[];
     }): Promise<void> =>
         err_async(async () => {
             await Promise.all(
                 ext_tabs.map(async (text_tab: i_reload.TabWithExtId) =>
                     err_async(async () => {
-                        if (text_tab.ext_id === ext.id) {
+                        if (text_tab.ext_id === ext_info.id) {
                             await we.tabs.create({
                                 windowId: text_tab.windowId,
                                 index: text_tab.index,

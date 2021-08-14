@@ -66,18 +66,19 @@ export class Watch {
 
                 if (!tab_url_is_null) {
                     await Promise.all(
-                        exts.map(async (ext: Management.ExtensionInfo) =>
+                        exts.map(async (ext_info: Management.ExtensionInfo) =>
                             err_async(async () => {
-                                const matched_ext_id_from_options = ext.id === options_final.ext_id;
+                                const matched_ext_id_from_options =
+                                    ext_info.id === options_final.ext_id;
 
                                 if (
-                                    ext.id !== we.runtime.id &&
-                                    ext.enabled &&
-                                    ext.installType === 'development' &&
+                                    ext_info.id !== we.runtime.id &&
+                                    ext_info.enabled &&
+                                    ext_info.installType === 'development' &&
                                     (!ext_id_option_specified || matched_ext_id_from_options)
                                 ) {
                                     await this.re_enable({
-                                        ext,
+                                        ext_info,
                                         ext_tabs: ext_tabs_final,
                                     });
                                 }
@@ -96,17 +97,17 @@ export class Watch {
         }, 'aer_1005');
 
     private re_enable = ({
-        ext,
+        ext_info,
         ext_tabs,
     }: {
-        ext: Management.ExtensionInfo;
+        ext_info: Management.ExtensionInfo;
         ext_tabs: i_reload.TabWithExtId[];
     }): Promise<void> =>
         err_async(async () => {
             let reload_triggered = false;
 
             ((env.browser === 'firefox' ? browser : chrome) as any).runtime.sendMessage(
-                ext.id,
+                ext_info.id,
                 {
                     msg: new s_suffix.Main('reload_extension').result,
                 },
@@ -125,10 +126,10 @@ export class Watch {
             await x.delay(this.full_reload_timeout);
 
             if (!reload_triggered) {
-                await we.management.setEnabled(ext.id, false);
-                await we.management.setEnabled(ext.id, true);
+                await we.management.setEnabled(ext_info.id, false);
+                await we.management.setEnabled(ext_info.id, true);
             }
 
-            await s_reload.Tabs.i().recreate_tabs({ ext, ext_tabs });
+            await s_reload.Tabs.i().recreate_tabs({ ext_info, ext_tabs });
         }, 'aer_1079');
 }

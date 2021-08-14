@@ -35,7 +35,7 @@ export class ContextMenu {
             if (found_background_tab && n(settings.context_menu_actions)) {
                 const apps_info: Management.ExtensionInfo[] = await we.management.getAll();
 
-                const get_app_info_with_id = ({
+                const get_ext_info_with_id = ({
                     reload_action,
                 }: {
                     reload_action: i_options.Options;
@@ -44,8 +44,8 @@ export class ContextMenu {
                         () =>
                             typeof reload_action.ext_id === 'string'
                                 ? apps_info.find(
-                                      (app_info: Management.ExtensionInfo): boolean =>
-                                          app_info.id === reload_action.ext_id,
+                                      (ext_info: Management.ExtensionInfo): boolean =>
+                                          ext_info.id === reload_action.ext_id,
                                   )
                                 : undefined,
                         'aer_1043',
@@ -59,11 +59,11 @@ export class ContextMenu {
                                     reload_action,
                                 });
 
-                            const matched_app_info: Management.ExtensionInfo | undefined =
-                                get_app_info_with_id({ reload_action: reload_actions_final });
+                            const matched_ext_info: Management.ExtensionInfo | undefined =
+                                get_ext_info_with_id({ reload_action: reload_actions_final });
 
-                            const app_name: string = n(matched_app_info)
-                                ? `${matched_app_info.name} + `
+                            const app_name: string = n(matched_ext_info)
+                                ? `${matched_ext_info.name} + `
                                 : '';
                             if (n(background_tab_tab.id)) {
                                 const context_menu_item_title: string = _.capitalize(
