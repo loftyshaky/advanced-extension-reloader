@@ -43,9 +43,8 @@ export class ContextMenu {
                     err(
                         () =>
                             typeof reload_action.ext_id === 'string'
-                                ? apps_info.find(
-                                      (ext_info: Management.ExtensionInfo): boolean =>
-                                          ext_info.id === reload_action.ext_id,
+                                ? apps_info.find((ext_info: Management.ExtensionInfo): boolean =>
+                                      err(() => ext_info.id === reload_action.ext_id, 'aer_1099'),
                                   )
                                 : undefined,
                         'aer_1043',

@@ -22,14 +22,16 @@ export class Watch {
 
             this.clients = [];
 
-            data.settings.ports.forEach((port: number): void => {
-                const client = io(`http://localhost:${port}`);
-                this.clients.push(client);
+            data.settings.ports.forEach((port: number): void =>
+                err(() => {
+                    const client = io(`http://localhost:${port}`);
+                    this.clients.push(client);
 
-                client.on('reload_app', (options: i_options.Options): void => {
-                    ext.send_msg({ msg: 'reload', options });
-                });
-            });
+                    client.on('reload_app', (options: i_options.Options): void => {
+                        ext.send_msg({ msg: 'reload', options });
+                    });
+                }, 'aer_1100'),
+            );
         }, 'aer_1026');
 
     public play_sound = ({ mute = false }: { mute?: boolean } = {}): void =>
