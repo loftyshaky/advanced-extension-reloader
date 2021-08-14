@@ -12,6 +12,7 @@ we.runtime.onMessage.addListener(
                 });
 
                 s_reload.Tabs.i().reload_background_tab_page_tab();
+                s_reload.Tabs.i().open_background_tab();
             } else if (msg_str === 'get_defaults') {
                 return s_data.Main.i().defaults;
             } else if (msg_str === 'reload') {

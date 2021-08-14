@@ -27,7 +27,11 @@ export class Val {
                 } else if (this.check_if_json_input({ name: input.name })) {
                     val = JSON.parse(raw_val as string);
                 } else if (n(raw_val)) {
-                    val = ['transition_duration', 'full_reload_timeout'].includes(input.name)
+                    val = [
+                        'transition_duration',
+                        'full_reload_timeout',
+                        'open_position_in_tab_strip',
+                    ].includes(input.name)
                         ? +raw_val
                         : raw_val;
 
@@ -100,7 +104,7 @@ export class Val {
                     return true;
                 }
 
-                if (input.name === 'full_reload_timeout') {
+                if (['full_reload_timeout', 'open_position_in_tab_strip'].includes(input.name)) {
                     return !/^\d+$/.test(raw_val as string);
                 }
 

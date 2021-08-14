@@ -20,7 +20,7 @@ export class Main {
     }
 
     public get current_section() {
-        return n(data.settings.current_section) ? data.settings.current_section : 'all';
+        return n(data.settings.current_section) ? data.settings.current_section : 'кудщфв';
     }
 
     public sections: o_inputs.Section[] | i_inputs.Sections = [];
@@ -30,7 +30,7 @@ export class Main {
             this.sections = [
                 ...[
                     new o_inputs.Section({
-                        name: 'settings',
+                        name: 'reload',
                         inputs: [
                             new o_inputs.Text({
                                 name: 'ports',
@@ -62,6 +62,22 @@ export class Main {
                                 max: 1,
                                 step: 0.01,
                                 event_callback: d_sections.Val.i().change,
+                            }),
+                        ],
+                    }),
+                    new o_inputs.Section({
+                        name: 'background_tab',
+                        inputs: [
+                            new o_inputs.Checkbox({
+                                name: 'open_background_tab_automatically',
+                                include_help: true,
+                                event_callback: d_sections.Val.i().change,
+                            }),
+                            new o_inputs.Text({
+                                name: 'open_position_in_tab_strip',
+                                text_type: 'number',
+                                event_callback: d_sections.Val.i().change,
+                                warn_state_checker: d_sections.Val.i().validate_input,
                             }),
                         ],
                     }),
@@ -113,9 +129,13 @@ export class Main {
             this.sections = s_utils.Main.i().to_object({
                 arr: this.sections as o_inputs.Section[],
             });
-            this.sections.settings.inputs = s_utils.Main.i().to_object({
-                arr: this.sections.settings.inputs as o_inputs.Section[],
-                section: 'settings',
+            this.sections.reload.inputs = s_utils.Main.i().to_object({
+                arr: this.sections.reload.inputs as o_inputs.Section[],
+                section: 'reload',
+            });
+            this.sections.background_tab.inputs = s_utils.Main.i().to_object({
+                arr: this.sections.background_tab.inputs as o_inputs.Section[],
+                section: 'background_tab',
             });
             this.sections.links.inputs = s_utils.Main.i().to_object({
                 arr: this.sections.links.inputs as o_inputs.Section[],

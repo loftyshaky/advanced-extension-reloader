@@ -9,6 +9,8 @@ export interface Settings {
     ports: string[];
     full_reload_timeout: number;
     reload_notification_volume: string;
+    open_background_tab_automatically: boolean;
+    open_position_in_tab_strip: number;
     click_action: i_options.Options;
     context_menu_actions: i_options.Options[];
 }

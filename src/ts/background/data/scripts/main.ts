@@ -20,7 +20,7 @@ export class Main {
     public init_defaults = (): void =>
         err(() => {
             this.defaults = {
-                current_section: 'settings',
+                current_section: 'reload',
                 options_page_theme: 'light',
                 transition_duration: 200,
                 show_color_help: true,
@@ -28,6 +28,8 @@ export class Main {
                 ports: ['7220'],
                 full_reload_timeout: 300,
                 reload_notification_volume: '1',
+                open_background_tab_automatically: true,
+                open_position_in_tab_strip: 0,
                 click_action: {
                     all_tabs: false,
                     hard: true,
@@ -69,7 +71,7 @@ export class Main {
             const settings: i_data.Settings = await ext.storage_get();
 
             if (_.isEmpty(settings)) {
-                this.update_settings();
+                await this.update_settings();
             }
         }, 'aer_1004');
 }

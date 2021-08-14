@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { Management } from 'webextension-polyfill-ts';
 
 import { i_options } from 'shared/internal';
@@ -19,6 +20,12 @@ export class ContextMenu {
             const settings = await ext.storage_get('context_menu_actions');
 
             await we.contextMenus.removeAll();
+
+            await we.contextMenus.create({
+                id: 'open_background_tab',
+                title: 'Open background tab',
+                contexts: ['action'],
+            });
 
             const background_tab_tab = await s_reload.Tabs.i().get_page_tab({
                 page: 'background_tab',
@@ -59,12 +66,11 @@ export class ContextMenu {
                                 ? `${matched_app_info.name} + `
                                 : '';
                             if (n(background_tab_tab.id)) {
-                                const context_menu_item_title: string =
-                                    await ext.send_msg_to_tab_resp(background_tab_tab.id, {
-                                        msg: 'generate_context_menu_item_text',
-                                        app_name,
-                                        context_menu_actions: reload_actions_final,
-                                    });
+                                const context_menu_item_title: string = _.capitalize(
+                                    `${app_name}${reload_actions_final.hard ? 'hard' : 'soft'} + ${
+                                        reload_actions_final.all_tabs ? 'all tabs' : 'one tab'
+                                    }`,
+                                );
 
                                 await we.contextMenus.create({
                                     id: `${i}`,
@@ -77,3 +83,16 @@ export class ContextMenu {
             }
         }, 'aer_1020');
 }
+
+we.contextMenus.onClicked.addListener(
+    (info): Promise<void> =>
+        err_async(async () => {
+            if (info.menuItemId === 'open_background_tab') {
+                s_reload.Tabs.i().open_background_tab({ force: true });
+            } else {
+                const settings = await ext.storage_get(['click_action', 'context_menu_actions']);
+
+                s_reload.Watch.i().reload_debounce(settings.context_menu_actions[info.menuItemId]);
+            }
+        }, 'aer_1055'),
+);

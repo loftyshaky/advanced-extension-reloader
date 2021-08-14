@@ -3,22 +3,19 @@
         "message": "Reload an unpacked extension with one click, hotkey or automatically."
     },
     "background_tab_title_text": {
-        "message": "Advanced Extension Reloader"
+        "message": "Background tab"
     },
     "background_tab_manifest_3_msg_text": {
-        "message": "This tab is required for Advanced Extension Reloader to function correctly, don't close it."
+        "message": "This is the background tab. This tab is required for Advanced Extension Reloader to function correctly, don't close it."
     },
-    "soft_context_menu_item": {
-        "message": "soft"
+    "open_background_tab_context_menu_item": {
+        "message": "Open background tab"
     },
-    "hard_context_menu_item": {
-        "message": "hard"
+    "reload_section_text": {
+        "message": "Reload"
     },
-    "one_tab_context_menu_item": {
-        "message": "one tab"
-    },
-    "all_tabs_context_menu_item": {
-        "message": "all tabs"
+    "background_tab_section_text": {
+        "message": "Background tab"
     },
     "ports_help_text": {
         "message": "Ports separated by commas that should expect a messages to reload extensions. You will need multiple ports if you develop multiple extensions."
@@ -31,6 +28,9 @@
     },
     "context_menu_actions_help_text": {
         "message": "An array of objects with the same schema as seen in \"Extension's icon click action\" that define additional reload actions that appear in the browser action context menu. Keep in mind that there are limit on how many items can appear there. You can also use reload actions defined here by hitting one of the \"Reload extension X\" hotkeys, where X is the position in the array."
+    },
+    "open_background_tab_automatically_help_text": {
+        "message": "Always keep one background tab open, reopening it if it's closed."
     },
     "ports_label_text": {
         "message": "Ports"
@@ -46,6 +46,12 @@
     },
     "reload_notification_volume_label_text": {
         "message": "Reload notification volume"
+    },
+    "open_background_tab_automatically_label_text": {
+        "message": "Open background tab automatically"
+    },
+    "open_position_in_tab_strip_label_text": {
+        "message": "Open position in the tab strip"
     },
     "advanced_extension_reloader_for_chrome_link_text": {
         "message": "⚗️ Advanced Extension Reloader for Chrome"
