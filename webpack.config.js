@@ -45,6 +45,7 @@ module.exports = (env, argv) => {
         callback_done: () => {
             manifest.generate({
                 mode: argv.mode,
+                test: env.test,
                 browser: env.browser,
             });
             env_instance.generate({ browser: env.browser });

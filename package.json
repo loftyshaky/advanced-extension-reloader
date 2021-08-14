@@ -9,10 +9,12 @@
         "url": "https://github.com/loftyshaky/advanced-extension-reloader.git"
     },
     "scripts": {
-        "dev": "webpack --watch --mode=development --env browser=chrome",
+        "dev": "webpack --watch --mode=development --env test --env browser=chrome",
         "prod": "webpack --mode=production --env browser=chrome",
-        "deve": "webpack --watch --mode=development --env browser=edge",
+        "prodtest": "webpack --mode=production --env test --env browser=chrome",
+        "deve": "webpack --watch --mode=development --env test --env browser=edge",
         "prode": "webpack --mode=production --env browser=edge",
+        "prodteste": "webpack --mode=production --env test --env browser=edge",
         "format": "prettier --config .prettierrc.js webpack.config.js js/**/*.js src/**/*.ts src/scss/**/*.scss src/_locales/**/*.json src/html/**/*.html --write"
     },
     "devDependencies": {
