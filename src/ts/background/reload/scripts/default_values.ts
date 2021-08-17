@@ -32,7 +32,7 @@ export class DefaultValues {
             }
 
             if (!n(reload_action.play_sound)) {
-                transformed_reload_action.play_sound = true;
+                transformed_reload_action.play_sound = false;
             }
 
             if (!n(reload_action.full_reload_timeout)) {
