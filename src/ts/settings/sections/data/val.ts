@@ -68,19 +68,31 @@ export class Val {
                 }: {
                     reload_obj: i_options.Options;
                 }): boolean =>
-                    err(
-                        () =>
-                            !(
-                                _.isObject(reload_obj) &&
-                                (typeof reload_obj.all_tabs === 'boolean' ||
-                                    !n(reload_obj.all_tabs)) &&
-                                (typeof reload_obj.hard === 'boolean' || !n(reload_obj.hard)) &&
-                                (!n(reload_obj.ext_id) ||
-                                    (typeof reload_obj.ext_id === 'string' &&
-                                        reload_obj.ext_id.match(/^[a-z]+$/)))
-                            ),
-                        'aer_1018',
-                    );
+                    err(() => {
+                        const validate_bool_val = ({
+                            val,
+                        }: {
+                            val: boolean | undefined;
+                        }): boolean => err(() => typeof val === 'boolean' || !n(val), 'aer_1103');
+
+                        const allowed_keys: string[] = ['hard', 'all_tabs', 'ext_id', 'play_sound'];
+                        const reload_obj_keys: string[] = Object.keys(reload_obj);
+
+                        const reload_obj_has_only_allowed_els: boolean = reload_obj_keys.every(
+                            (key: string): boolean =>
+                                err(() => allowed_keys.includes(key), 'aer_1102'),
+                        );
+
+                        return !(
+                            reload_obj_has_only_allowed_els &&
+                            validate_bool_val({ val: reload_obj.hard }) &&
+                            validate_bool_val({ val: reload_obj.all_tabs }) &&
+                            validate_bool_val({ val: reload_obj.play_sound }) &&
+                            (!n(reload_obj.ext_id) ||
+                                (typeof reload_obj.ext_id === 'string' &&
+                                    /^[a-z]+$/.test(reload_obj.ext_id)))
+                        );
+                    }, 'aer_1018');
 
                 if (input.name === 'ports') {
                     return !/^\d+( *?, *?\d+)*$/.test(raw_val as string);
