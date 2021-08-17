@@ -20,9 +20,6 @@
     "ports_help_text": {
         "message": "Ports separated by commas that should expect a messages to reload extensions. You will need multiple ports if you develop multiple extensions."
     },
-    "full_reload_timeout_help_text": {
-        "message": "The amount of time to wait for confirmation that an extension has started reloading using browser.runtime.reload();. If no confirmation is received, the extension will be reloaded using browser.management.setEnabled(id, false); browser.management.setEnabled(id, true);."
-    },
     "click_action_help_text": {
         "message": "An object that defines what happens when you click on the browser action icon or hit \"Reload extension main\" hotkey specified at chrome://extensions/shortcuts.\n\nAccepted properties:\n\nhard: boolean\nWhether to reload the extension. If set to false, the background page will not reload. The manifest.json will not reload even if this option is true. If you want to reload it, you need to do it the usual way. Can be combined with \"all tabs\".\n\nall tabs: boolean\nWhether to reload all tabs as opposed to just reloading the current tab.\n\next_id: string || false\nAn id of an extension to reload in \"hard\" mode. If unspecefied or false, all extensions will reload.\n\nExample:\n\n{\n    \"all tabs\": false,\n    \"hard\": true,\n    \"ext_id\": \"ffhljpfecjcfjdaneehmhdgplkaafnbb\"\n}"
     },
@@ -34,9 +31,6 @@
     },
     "ports_label_text": {
         "message": "Ports"
-    },
-    "full_reload_timeout_label_text": {
-        "message": "Full reload timeout (ms)"
     },
     "click_action_label_text": {
         "message": "Extension's icon click action"
