@@ -2,7 +2,6 @@ import _ from 'lodash';
 
 import { t } from '@loftyshaky/shared';
 import { i_data } from 'shared/internal';
-import { s_reload } from 'background/internal';
 
 export class Main {
     private static i0: Main;
@@ -26,7 +25,6 @@ export class Main {
                 show_color_help: true,
                 enable_cut_features: false,
                 ports: ['7220'],
-                full_reload_timeout: 300,
                 reload_notification_volume: '1',
                 open_background_tab_automatically: true,
                 open_position_in_tab_strip: 0,
@@ -62,8 +60,6 @@ export class Main {
                 : (this.defaults as i_data.Settings);
 
             await ext.storage_set(settings_final);
-
-            s_reload.Watch.i().generate_reload_debounce_f();
         }, 'aer_1003');
 
     public set_from_storage = (): Promise<void> =>

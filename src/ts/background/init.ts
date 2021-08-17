@@ -5,7 +5,6 @@ export const init = (): Promise<void> =>
         s_data.Main.i().init_defaults();
         await s_data.Main.i().set_from_storage();
         s_badge.Main.i().hide();
-        s_reload.Watch.i().generate_reload_debounce_f();
         s_reload.ContextMenu.i().create();
         s_reload.Tabs.i().open_background_tab();
     }, 'aer_1016');

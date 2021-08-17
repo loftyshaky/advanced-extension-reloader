@@ -14,7 +14,9 @@ we.commands.onCommand.addListener(
             }
 
             if (n(reload_action)) {
-                s_reload.Watch.i().reload_debounce(reload_action);
+                s_reload.Watch.i().generate_reload_debounce_and_run_reload_f({
+                    options: reload_action,
+                });
             }
         }, 'aer_1044'),
 );

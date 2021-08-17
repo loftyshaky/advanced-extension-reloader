@@ -91,7 +91,9 @@ we.contextMenus.onClicked.addListener(
             } else {
                 const settings = await ext.storage_get(['click_action', 'context_menu_actions']);
 
-                s_reload.Watch.i().reload_debounce(settings.context_menu_actions[info.menuItemId]);
+                s_reload.Watch.i().generate_reload_debounce_and_run_reload_f({
+                    options: settings.context_menu_actions[info.menuItemId],
+                });
             }
         }, 'aer_1055'),
 );

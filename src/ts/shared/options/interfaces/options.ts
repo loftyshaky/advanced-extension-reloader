@@ -3,4 +3,5 @@ export interface Options {
     hard?: boolean;
     play_sound?: boolean;
     ext_id?: string;
+    full_reload_timeout?: number;
 }

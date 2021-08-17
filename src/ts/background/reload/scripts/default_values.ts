@@ -35,6 +35,10 @@ export class DefaultValues {
                 transformed_reload_action.play_sound = true;
             }
 
+            if (!n(reload_action.full_reload_timeout)) {
+                transformed_reload_action.full_reload_timeout = 300;
+            }
+
             return transformed_reload_action;
         }, 'aer_1049');
 }

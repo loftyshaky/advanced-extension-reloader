@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Tabs, Management } from 'webextension-polyfill-ts';
 
 import { t } from '@loftyshaky/shared';
-import { s_suffix, i_data, i_options } from 'shared/internal';
+import { s_suffix, i_options } from 'shared/internal';
 import { s_badge, s_reload, i_reload } from 'background/internal';
 
 export class Watch {
@@ -16,14 +16,34 @@ export class Watch {
     // eslint-disable-next-line no-useless-constructor, @typescript-eslint/no-empty-function
     private constructor() {}
 
-    private full_reload_timeout: number = 0;
-    public generate_reload_debounce_f = (): Promise<void> =>
+    private previous_full_reload_timeout: number | undefined;
+    public generate_reload_debounce_and_run_reload_f = ({
+        options,
+    }: {
+        options: i_options.Options;
+    }): Promise<void> =>
         err_async(async () => {
-            const settings: i_data.Settings = await ext.storage_get();
+            const options_final: i_options.Options =
+                s_reload.DefaultValues.i().tranform_reload_action({
+                    reload_action: options,
+                });
 
-            this.full_reload_timeout = settings.full_reload_timeout;
+            if (n(options_final.full_reload_timeout)) {
+                if (
+                    !this.previous_full_reload_timeout ||
+                    (n(this.previous_full_reload_timeout) &&
+                        options_final.full_reload_timeout !== this.previous_full_reload_timeout)
+                ) {
+                    this.reload_debounce = _.debounce(
+                        this.reload,
+                        options_final.full_reload_timeout,
+                    );
+                }
 
-            this.reload_debounce = _.debounce(this.reload, this.full_reload_timeout);
+                this.previous_full_reload_timeout = options_final.full_reload_timeout;
+
+                this.reload_debounce(options_final);
+            }
         }, 'aer_1089');
 
     public reload_debounce: t.CallbackVariadicVoid = () => undefined;
@@ -125,7 +145,9 @@ export class Watch {
                 },
             );
 
-            await x.delay(this.full_reload_timeout);
+            if (n(this.previous_full_reload_timeout)) {
+                await x.delay(this.previous_full_reload_timeout);
+            }
 
             if (!reload_triggered) {
                 await we.management.setEnabled(ext_info.id, false);

@@ -75,7 +75,13 @@ export class Val {
                             val: boolean | undefined;
                         }): boolean => err(() => typeof val === 'boolean' || !n(val), 'aer_1103');
 
-                        const allowed_keys: string[] = ['hard', 'all_tabs', 'ext_id', 'play_sound'];
+                        const allowed_keys: string[] = [
+                            'hard',
+                            'all_tabs',
+                            'ext_id',
+                            'play_sound',
+                            'full_reload_timeout',
+                        ];
                         const reload_obj_keys: string[] = Object.keys(reload_obj);
 
                         const reload_obj_has_only_allowed_els: boolean = reload_obj_keys.every(
@@ -90,7 +96,10 @@ export class Val {
                             validate_bool_val({ val: reload_obj.play_sound }) &&
                             (!n(reload_obj.ext_id) ||
                                 (typeof reload_obj.ext_id === 'string' &&
-                                    /^[a-z]+$/.test(reload_obj.ext_id)))
+                                    /^[a-z]+$/.test(reload_obj.ext_id))) &&
+                            (!n(reload_obj.full_reload_timeout) ||
+                                (typeof reload_obj.full_reload_timeout === 'number' &&
+                                    /^\d+$/.test(reload_obj.full_reload_timeout.toString())))
                         );
                     }, 'aer_1018');
 

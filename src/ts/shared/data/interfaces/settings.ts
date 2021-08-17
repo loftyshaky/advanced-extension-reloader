@@ -7,7 +7,6 @@ export interface Settings {
     show_color_help: boolean;
     enable_cut_features: boolean;
     ports: string[];
-    full_reload_timeout: number;
     reload_notification_volume: string;
     open_background_tab_automatically: boolean;
     open_position_in_tab_strip: number;
