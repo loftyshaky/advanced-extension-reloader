@@ -41,6 +41,7 @@ export class Main {
                             new o_inputs.Textarea({
                                 name: 'click_action',
                                 include_help: true,
+                                alt_help_msg: ext.msg(`click_action_help_text_${env.browser}`),
                                 event_callback: d_sections.Val.i().change,
                                 warn_state_checker: d_sections.Val.i().validate_input,
                             }),
