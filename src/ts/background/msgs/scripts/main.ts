@@ -16,7 +16,9 @@ we.runtime.onMessage.addListener(
             } else if (msg_str === 'get_defaults') {
                 return s_data.Main.i().defaults;
             } else if (msg_str === 'reload') {
-                s_reload.Watch.i().reload(msg.options);
+                s_reload.Watch.i().generate_reload_debounce_and_run_reload_f({
+                    options: msg.options,
+                });
             } else if (msg_str === 'show_badge') {
                 s_badge.Main.i().show();
             } else if (msg_str === 'react_to_change') {
