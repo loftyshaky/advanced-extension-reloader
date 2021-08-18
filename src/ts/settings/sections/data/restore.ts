@@ -22,7 +22,7 @@ export class Restore {
             if (confirmed_restore) {
                 const settings_final: i_data.Settings = await this.set({ settings });
 
-                await ext.send_msg_resp({
+                ext.send_msg({
                     msg: 'update_settings',
                     settings: settings_final,
                 });
@@ -38,7 +38,7 @@ export class Restore {
 
             await this.set({ settings });
 
-            await ext.send_msg_resp({
+            ext.send_msg({
                 msg: 'update_settings',
                 settings,
             });
@@ -50,7 +50,7 @@ export class Restore {
 
             if (_.isEmpty(settings)) {
                 const default_settings = await ext.send_msg_resp({ msg: 'get_defaults' });
-
+                l(default_settings, 'default_settings');
                 settings_final = { ...default_settings, ...this.get_unchanged_settings() };
             } else if (n(settings)) {
                 settings_final = settings;

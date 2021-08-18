@@ -1,5 +1,3 @@
-import 'settings/msgs/scripts';
-
 misplaced_dependency('settings');
 
 export * from 'settings/init';

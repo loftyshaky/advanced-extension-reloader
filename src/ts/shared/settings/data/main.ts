@@ -44,7 +44,7 @@ export class Main {
 
             this.allow_rerun_actions = false;
 
-            ext.send_msg_resp({
+            ext.send_msg({
                 msg: 'update_settings',
                 settings: { [key]: val },
                 rerun_actions: true,
