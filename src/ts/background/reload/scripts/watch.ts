@@ -29,18 +29,24 @@ export class Watch {
                 });
 
             if (n(options_final.full_reload_timeout)) {
-                if (
-                    !this.previous_full_reload_timeout ||
-                    (n(this.previous_full_reload_timeout) &&
-                        options_final.full_reload_timeout !== this.previous_full_reload_timeout)
-                ) {
-                    this.reload_debounce = _.debounce(
-                        this.reload,
-                        options_final.full_reload_timeout,
-                    );
-                }
+                if (options_final.hard) {
+                    if (
+                        !n(this.previous_full_reload_timeout) ||
+                        (n(this.previous_full_reload_timeout) &&
+                            options_final.full_reload_timeout !== this.previous_full_reload_timeout)
+                    ) {
+                        this.reload_debounce = _.debounce(
+                            this.reload,
+                            options_final.full_reload_timeout,
+                        );
+                    }
 
-                this.previous_full_reload_timeout = options_final.full_reload_timeout;
+                    this.previous_full_reload_timeout = options_final.full_reload_timeout;
+                } else {
+                    this.reload_debounce = this.reload;
+
+                    this.previous_full_reload_timeout = undefined;
+                }
 
                 this.reload_debounce(options_final);
             }
