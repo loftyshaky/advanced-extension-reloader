@@ -8,5 +8,3 @@ export * as s_badge from 'background/badge/scripts';
 export * as s_data from 'background/data/scripts';
 export * as s_reload from 'background/reload/scripts';
 export * as s_side_effects from 'background/side_effects/scripts';
-
-export * as i_reload from 'background/reload/interfaces';

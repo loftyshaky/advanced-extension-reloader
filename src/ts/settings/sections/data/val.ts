@@ -73,13 +73,26 @@ export class Val {
                             val,
                         }: {
                             val: boolean | undefined;
-                        }): boolean => err(() => typeof val === 'boolean' || !n(val), 'aer_1103');
+                        }): boolean => err(() => !n(val) || typeof val === 'boolean', 'aer_1103');
+
+                        const validate_number_val = ({
+                            val,
+                        }: {
+                            val: number | undefined;
+                        }): boolean =>
+                            err(
+                                () =>
+                                    !n(val) ||
+                                    (typeof val === 'number' && /^\d+$/.test(val.toString())),
+                                'aer_1103',
+                            );
 
                         const allowed_keys: string[] = [
                             'hard',
                             'all_tabs',
                             'ext_id',
                             'play_sound',
+                            'after_enable_delay',
                             'full_reload_timeout',
                         ];
                         const reload_obj_keys: string[] = Object.keys(reload_obj);
@@ -94,12 +107,10 @@ export class Val {
                             validate_bool_val({ val: reload_obj.hard }) &&
                             validate_bool_val({ val: reload_obj.all_tabs }) &&
                             validate_bool_val({ val: reload_obj.play_sound }) &&
+                            validate_number_val({ val: reload_obj.full_reload_timeout }) &&
                             (!n(reload_obj.ext_id) ||
                                 (typeof reload_obj.ext_id === 'string' &&
-                                    /^[a-z]+$/.test(reload_obj.ext_id))) &&
-                            (!n(reload_obj.full_reload_timeout) ||
-                                (typeof reload_obj.full_reload_timeout === 'number' &&
-                                    /^\d+$/.test(reload_obj.full_reload_timeout.toString())))
+                                    /^[a-z]+$/.test(reload_obj.ext_id)))
                         );
                     }, 'aer_1018');
 

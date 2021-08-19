@@ -50,7 +50,7 @@ export class Restore {
 
             if (_.isEmpty(settings)) {
                 const default_settings = await ext.send_msg_resp({ msg: 'get_defaults' });
-                l(default_settings, 'default_settings');
+
                 settings_final = { ...default_settings, ...this.get_unchanged_settings() };
             } else if (n(settings)) {
                 settings_final = settings;

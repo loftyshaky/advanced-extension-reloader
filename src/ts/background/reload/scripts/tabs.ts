@@ -1,7 +1,6 @@
-import { Tabs as TabsExt, Management } from 'webextension-polyfill-ts';
+import { Tabs as TabsExt } from 'webextension-polyfill-ts';
 
 import { i_data } from 'shared/internal';
-import { i_reload } from 'background/internal';
 
 export class Tabs {
     private static i0: Tabs;
@@ -67,47 +66,62 @@ export class Tabs {
             'aer_1091',
         );
 
-    public reload_tabs = ({ all_tabs }: { all_tabs: boolean }): Promise<void> =>
+    public reload_tabs = ({
+        hard,
+        all_tabs,
+    }: {
+        hard: boolean;
+        all_tabs: boolean;
+    }): Promise<void> =>
         err_async(async () => {
+            const check_if_excluded_tab_hard = ({ url }: { url: string | undefined }): boolean =>
+                err(() => {
+                    const reg_exp = new RegExp(this.ext_protocol);
+                    let is_extension_tab: boolean = false;
+                    if (n(url)) {
+                        is_extension_tab = reg_exp.test(url);
+                    }
+
+                    return hard ? is_extension_tab : false;
+                }, 'aer_1107');
+
             const tabs: TabsExt.Tab[] = await this.get_tabs();
 
             if (all_tabs) {
                 await Promise.all(
                     tabs.map(async (ext_tab: TabsExt.Tab) =>
                         err_async(async () => {
-                            await we.tabs.reload(ext_tab.id);
+                            if (!check_if_excluded_tab_hard({ url: ext_tab.url })) {
+                                await we.tabs.reload(ext_tab.id);
+                            }
                         }, 'aer_1083'),
                     ),
                 );
             } else {
                 const current_tab: TabsExt.Tab | undefined = await ext.get_active_tab();
 
-                if (n(current_tab) && !this.check_if_excluded_tab({ url: current_tab.url })) {
+                if (
+                    n(current_tab) &&
+                    !this.check_if_excluded_tab({ url: current_tab.url }) &&
+                    !check_if_excluded_tab_hard({ url: current_tab.url })
+                ) {
                     await we.tabs.reload(current_tab.id);
                 }
             }
         }, 'aer_1007');
 
-    public recreate_tabs = ({
-        ext_info,
-        ext_tabs,
-    }: {
-        ext_info: Management.ExtensionInfo;
-        ext_tabs: i_reload.TabWithExtId[];
-    }): Promise<void> =>
+    public recreate_tabs = ({ ext_tabs }: { ext_tabs: TabsExt.Tab[] }): Promise<void> =>
         err_async(async () => {
             await Promise.all(
-                ext_tabs.map(async (text_tab: i_reload.TabWithExtId) =>
+                ext_tabs.map(async (text_tab: TabsExt.Tab) =>
                     err_async(async () => {
-                        if (text_tab.ext_id === ext_info.id) {
-                            await we.tabs.create({
-                                windowId: text_tab.windowId,
-                                index: text_tab.index,
-                                url: text_tab.url,
-                                active: text_tab.active,
-                                pinned: text_tab.pinned,
-                            });
-                        }
+                        await we.tabs.create({
+                            windowId: text_tab.windowId,
+                            index: text_tab.index,
+                            url: text_tab.url,
+                            active: text_tab.active,
+                            pinned: text_tab.pinned,
+                        });
                     }, 'aer_1085'),
                 ),
             );
