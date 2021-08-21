@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const restrictedGlobals = require('confusing-browser-globals');
 
 const naming_convention_exceptions = {
     regex: '^(marginBottom|minWidth|maxWidth|marginLeft|marginRight|scrollTop|backgroundColor|marginInlineStart|componentDidMount|componentWillUnmount|componentDidUpdate|componentDidCatch|getDerivedStateFromError|enforceActions|recurseEverything|currentWindow|windowTypes|defaultProps|windowId|useAsButton|autoReposition|lockOpacity|showAlways|childList|backgroundImage|attributeFilter|saveAs|tabId|sendResponse)$',
@@ -73,6 +74,19 @@ const rules = {
                 devDependencies: ['js/*', 'js/*/**', 'rollup.config.js', 'webpack.config.js'],
             },
         ],
+        'no-restricted-globals': [
+            'error',
+            {
+                name: 'isFinite',
+                message:
+                    'Use Number.isFinite instead https://github.com/airbnb/javascript#standard-library--isfinite',
+            },
+            {
+                name: 'isNaN',
+                message:
+                    'Use Number.isNaN instead https://github.com/airbnb/javascript#standard-library--isnan',
+            },
+        ].concat(restrictedGlobals.filter((restricted_global) => restricted_global !== 'self')),
         //< javascript
         //> react
         'react/no-array-index-key': 'off',
@@ -141,7 +155,7 @@ module.exports = {
         },
     ],
     globals: {
-        window: false,
+        self: false,
         document: false,
         env: false,
         l: false,
