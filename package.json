@@ -1,13 +1,6 @@
 {
     "name": "advanced-extension-reloader",
-    "description": "-",
     "version": "0.0.1",
-    "author": "loftyshaky",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/loftyshaky/advanced-extension-reloader.git"
-    },
     "scripts": {
         "dev": "webpack --watch --mode=development --env test --env browser=chrome",
         "prod": "webpack --mode=production --env browser=chrome",
