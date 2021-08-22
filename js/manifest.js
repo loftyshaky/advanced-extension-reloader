@@ -92,7 +92,6 @@ class Manifest {
 
         manifest_shared.generate({
             manifest,
-            mode,
             browser,
         });
     };
