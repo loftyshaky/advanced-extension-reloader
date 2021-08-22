@@ -5,7 +5,7 @@ const { Manifest: ManifestShared } = require('@loftyshaky/shared/js/ext/manifest
 const manifest_shared = new ManifestShared({ app_root: appRoot });
 
 class Manifest {
-    generate = ({ mode, test, browser }) => {
+    generate = ({ test, browser }) => {
         const manifest = {
             manifest_version: 3,
             name: 'Advanced Extension Reloader',
