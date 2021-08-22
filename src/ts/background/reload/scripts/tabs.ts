@@ -16,7 +16,7 @@ export class Tabs {
     public background_path_url: string = we.runtime.getURL('background_tab.html');
     public background_tab: TabsExt.Tab | undefined;
     public opened_ext_tabs: TabsExt.Tab[] = [];
-    public ext_protocol: string = `${env.browser}-extension://`;
+    public ext_protocol: string = 'chrome-extension://';
     private ext_match_pattern: string = `${this.ext_protocol}*/*`;
 
     public open_background_tab = ({ force = false }: { force?: boolean } = {}): Promise<void> =>
