@@ -10,6 +10,6 @@ The extension was built on Windows. It uses webpack.
 ## Build steps
 
 1. git clone https://github.com/loftyshaky/advanced-extension-reloader
-2. cd into cloned repository
+2. cd into the cloned repository
 3. npm install
 4. npm run prod (Chrome) / npm run prode (Edge)
