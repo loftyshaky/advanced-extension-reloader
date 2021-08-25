@@ -49,7 +49,7 @@ export class Watch {
 
                 this.reload_debounce(options_final);
             }
-        }, 'aer_1089');
+        }, 'aer_1035');
 
     public reload_debounce: t.CallbackVariadicVoid = () => undefined;
 
@@ -83,10 +83,10 @@ export class Watch {
                                         }
 
                                         return undefined;
-                                    }, 'aer_1081'),
+                                    }, 'aer_1036'),
                                 )
                                 .filter((ext_tab: Tabs.Tab | undefined): boolean =>
-                                    err(() => n(ext_tab), 'aer_1106'),
+                                    err(() => n(ext_tab), 'aer_1037'),
                                 );
 
                             const matched_ext_id_from_options =
@@ -110,7 +110,7 @@ export class Watch {
                                     });
                                 }
                             }
-                        }, 'aer_1082'),
+                        }, 'aer_1038'),
                     ),
                 );
             }
@@ -127,7 +127,7 @@ export class Watch {
             if (options_final.play_sound) {
                 ext.send_msg({ msg: 'play_sound' });
             }
-        }, 'aer_1005');
+        }, 'aer_1039');
 
     private re_enable = ({
         ext_info,
@@ -170,5 +170,5 @@ export class Watch {
             }
 
             await s_reload.Tabs.i().recreate_tabs({ ext_tabs });
-        }, 'aer_1079');
+        }, 'aer_1040');
 }

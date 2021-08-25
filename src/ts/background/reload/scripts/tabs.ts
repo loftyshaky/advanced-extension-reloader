@@ -35,18 +35,18 @@ export class Tabs {
                     });
                 }
             }
-        }, 'aer_1098');
+        }, 'aer_1021');
 
     public get_tabs = (): Promise<TabsExt.Tab[]> =>
         err_async(async () => {
             const tabs: TabsExt.Tab[] = await we.tabs.query({});
 
             const tabs_filtered: TabsExt.Tab[] = tabs.filter((tab: TabsExt.Tab): boolean =>
-                err(() => !this.check_if_excluded_tab({ url: tab.url }), 'aer_1090'),
+                err(() => !this.check_if_excluded_tab({ url: tab.url }), 'aer_1022'),
             );
 
             return tabs_filtered;
-        }, 'aer_1087');
+        }, 'aer_1023');
 
     public get_ext_tabs = (): Promise<TabsExt.Tab[]> =>
         err_async(async () => {
@@ -55,7 +55,7 @@ export class Tabs {
             });
 
             return tabs;
-        }, 'aer_1027');
+        }, 'aer_1024');
 
     private check_if_excluded_tab = ({ url }: { url: string | undefined }): boolean =>
         err(
@@ -63,7 +63,7 @@ export class Tabs {
                 n(url) &&
                 (url === `${env.browser}://extensions/` ||
                     url.includes(`${this.ext_protocol}${we.runtime.id}`)),
-            'aer_1091',
+            'aer_1025',
         );
 
     public reload_tabs = ({
@@ -83,7 +83,7 @@ export class Tabs {
                     }
 
                     return hard ? is_extension_tab : false;
-                }, 'aer_1107');
+                }, 'aer_1026');
 
             const tabs: TabsExt.Tab[] = await this.get_tabs();
 
@@ -94,7 +94,7 @@ export class Tabs {
                             if (!check_if_excluded_tab_hard({ url: ext_tab.url })) {
                                 await we.tabs.reload(ext_tab.id);
                             }
-                        }, 'aer_1083'),
+                        }, 'aer_1027'),
                     ),
                 );
             } else {
@@ -108,7 +108,7 @@ export class Tabs {
                     await we.tabs.reload(current_tab.id);
                 }
             }
-        }, 'aer_1007');
+        }, 'aer_1028');
 
     public recreate_tabs = ({ ext_tabs }: { ext_tabs: TabsExt.Tab[] }): Promise<void> =>
         err_async(async () => {
@@ -122,10 +122,10 @@ export class Tabs {
                             active: text_tab.active,
                             pinned: text_tab.pinned,
                         });
-                    }, 'aer_1085'),
+                    }, 'aer_1029'),
                 ),
             );
-        }, 'aer_1086');
+        }, 'aer_1030');
 
     public get_page_tab = ({
         page,
@@ -138,16 +138,16 @@ export class Tabs {
             });
 
             return n(tabs[0]) ? tabs[0] : { id: 0 };
-        }, 'aer_1056');
+        }, 'aer_1031');
 
     public reload_background_tab_page_tab = (): Promise<void> =>
-        err(async () => {
+        err_async(async () => {
             const background_tab_tab = await this.get_page_tab({
                 page: 'background_tab',
             });
 
             we.tabs.reload(background_tab_tab.id);
-        }, 'aer_1057');
+        }, 'aer_1032');
 }
 
 we.tabs.onRemoved.addListener(
@@ -156,7 +156,7 @@ we.tabs.onRemoved.addListener(
             if (n(Tabs.i().background_tab) && tab_id === Tabs.i().background_tab!.id) {
                 Tabs.i().open_background_tab();
             }
-        }, 'aer_1097'),
+        }, 'aer_1033'),
 );
 
 we.tabs.onUpdated.addListener(
@@ -170,5 +170,5 @@ we.tabs.onUpdated.addListener(
                     we.tabs.remove(tab_id);
                 }
             }
-        }, 'aer_1097'),
+        }, 'aer_1034'),
 );

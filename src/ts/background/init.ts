@@ -7,4 +7,4 @@ export const init = (): Promise<void> =>
         s_badge.Main.i().hide();
         s_reload.ContextMenu.i().create();
         s_reload.Tabs.i().open_background_tab();
-    }, 'aer_1016');
+    }, 'aer_1010');

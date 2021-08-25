@@ -44,10 +44,10 @@ export class ContextMenu {
                         () =>
                             typeof reload_action.ext_id === 'string'
                                 ? apps_info.find((ext_info: Management.ExtensionInfo): boolean =>
-                                      err(() => ext_info.id === reload_action.ext_id, 'aer_1099'),
+                                      err(() => ext_info.id === reload_action.ext_id, 'aer_1014'),
                                   )
                                 : undefined,
-                        'aer_1043',
+                        'aer_1015',
                     );
 
                 settings.context_menu_actions.forEach(
@@ -77,10 +77,10 @@ export class ContextMenu {
                                     contexts: ['action'],
                                 });
                             }
-                        }, 'aer_1021'),
+                        }, 'aer_1016'),
                 );
             }
-        }, 'aer_1020');
+        }, 'aer_1017');
 }
 
 we.contextMenus.onClicked.addListener(
@@ -95,5 +95,5 @@ we.contextMenus.onClicked.addListener(
                     options: settings.context_menu_actions[info.menuItemId],
                 });
             }
-        }, 'aer_1055'),
+        }, 'aer_1018'),
 );

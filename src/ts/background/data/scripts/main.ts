@@ -51,7 +51,7 @@ export class Main {
                     },
                 ],
             };
-        }, 'aer_1002');
+        }, 'aer_1007');
 
     public update_settings = ({ settings }: { settings?: i_data.Settings } = {}): Promise<void> =>
         err_async(async () => {
@@ -60,7 +60,7 @@ export class Main {
                 : (this.defaults as i_data.Settings);
 
             await ext.storage_set(settings_final);
-        }, 'aer_1003');
+        }, 'aer_1008');
 
     public set_from_storage = (): Promise<void> =>
         err_async(async () => {
@@ -69,5 +69,5 @@ export class Main {
             if (_.isEmpty(settings)) {
                 await this.update_settings();
             }
-        }, 'aer_1004');
+        }, 'aer_1009');
 }

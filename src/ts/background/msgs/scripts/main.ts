@@ -15,7 +15,7 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
                     s_reload.Tabs.i().open_background_tab();
                 })
                 .catch((error_obj) => {
-                    show_err_ribbon(error_obj, 'aer_1104');
+                    show_err_ribbon(error_obj, 'aer_1011');
                 });
         } else if (msg_str === 'get_defaults') {
             return Promise.resolve(s_data.Main.i().defaults);
@@ -30,5 +30,5 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
         }
 
         return false;
-    }, 'aer_1009'),
+    }, 'aer_1012'),
 );

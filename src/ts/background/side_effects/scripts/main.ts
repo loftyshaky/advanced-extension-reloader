@@ -16,17 +16,17 @@ export class Main {
             // react to settings change or extension reinstall/removal
             s_reload.ContextMenu.i().create();
             ext.send_msg({ msg: 'connect_to_ext_servers' });
-        }, 'aer_1039');
+        }, 'aer_1041');
 }
 
 we.management.onUninstalled.addListener((): void =>
     err(() => {
         Main.i().react_to_change();
-    }, 'aer_1047'),
+    }, 'aer_1042'),
 );
 
 we.management.onInstalled.addListener((): void =>
     err(() => {
         Main.i().react_to_change();
-    }, 'aer_1048'),
+    }, 'aer_1043'),
 );

@@ -74,7 +74,7 @@ export class InitAll {
                             d_loading_screen.Main.i().hide();
 
                             s_tab_index.Main.i().bind_set_input_type_f();
-                        }, 'aer_1148');
+                        }, 'aer_1066');
 
                     render(
                         <c_crash_handler.Body>
@@ -92,9 +92,9 @@ export class InitAll {
                                 if (n(settings_css)) {
                                     x.bind(settings_css, 'load', on_render);
                                 }
-                            }, 'aer_1149'),
+                            }, 'aer_1067'),
                     );
-                }, 'aer_1150');
+                }, 'aer_1068');
 
             const render_background_tab = (): Promise<void> =>
                 err_async(async () => {
@@ -102,7 +102,7 @@ export class InitAll {
                     const on_render = (): Promise<void> =>
                         err_async(async () => {
                             d_loading_screen.Main.i().hide();
-                        }, 'aer_1148');
+                        }, 'aer_1069');
 
                     render(
                         <c_crash_handler.Body>
@@ -120,9 +120,9 @@ export class InitAll {
                                 if (n(settings_css)) {
                                     x.bind(settings_css, 'load', on_render);
                                 }
-                            }, 'aer_1149'),
+                            }, 'aer_1070'),
                     );
-                }, 'aer_1150');
+                }, 'aer_1071');
 
             render(<c_error.Body app_id={s_suffix.app_id} />, error_root, (): void => {
                 render(
@@ -152,14 +152,14 @@ export class InitAll {
                                             } else if (page === 'background_tab') {
                                                 render_background_tab();
                                             }
-                                        }, 'aer_1158'),
+                                        }, 'aer_1072'),
                                     );
                                 }
                             }
-                        }, 'aer_1159'),
+                        }, 'aer_1073'),
                 );
             });
-        }, 'aer_1160');
+        }, 'aer_1074');
 
     private create_root = ({
         prefix,
@@ -181,7 +181,7 @@ export class InitAll {
             }
 
             return root;
-        }, 'aer_1161');
+        }, 'aer_1075');
 
     private set_page_title = (): void =>
         err(() => {
@@ -190,5 +190,5 @@ export class InitAll {
             if (n(title_el)) {
                 title_el.textContent = ext.msg(`${page}_title_text`);
             }
-        }, 'aer_1162');
+        }, 'aer_1076');
 }

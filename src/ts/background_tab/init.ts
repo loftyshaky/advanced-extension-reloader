@@ -5,4 +5,4 @@ export const init = (): void =>
         s_reload.Watch.i().connect();
         s_reload.Watch.i().play_sound({ mute: true });
         ext.send_msg({ msg: 'react_to_change' });
-    }, 'aer_1051');
+    }, 'aer_1000');

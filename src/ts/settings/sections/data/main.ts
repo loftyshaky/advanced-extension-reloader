@@ -135,7 +135,7 @@ export class Main {
                 arr: this.sections.links.inputs as o_inputs.Section[],
                 section: 'links',
             });
-        }, 'aer_1128');
+        }, 'aer_1047');
 
     public change_section_val = (): void =>
         err(() => {
@@ -145,5 +145,5 @@ export class Main {
                 msg: 'update_settings',
                 settings: { current_section: d_settings.Sections.i().current_section },
             });
-        }, 'aer_1129');
+        }, 'aer_1048');
 }

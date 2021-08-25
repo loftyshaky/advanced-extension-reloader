@@ -30,14 +30,14 @@ export class Watch {
                     client.on('reload_app', (options: i_options.Options): void => {
                         ext.send_msg({ msg: 'reload', options });
                     });
-                }, 'aer_1100'),
+                }, 'aer_1002'),
             );
-        }, 'aer_1026');
+        }, 'aer_1003');
 
     public play_sound = ({ mute = false }: { mute?: boolean } = {}): void =>
         err(() => {
             const audio = new Audio('330046__paulmorek__beep-03-positive.wav');
             audio.volume = mute ? 0 : data.settings.reload_notification_volume;
             audio.play();
-        }, 'aer_1095');
+        }, 'aer_1004');
 }

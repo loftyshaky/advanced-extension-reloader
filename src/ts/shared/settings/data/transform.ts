@@ -32,7 +32,7 @@ export class Transform {
                     } else {
                         settings_final[key] = val;
                     }
-                }, 'aer_1101'),
+                }, 'aer_1081'),
             );
 
             runInAction((): void => {
@@ -40,7 +40,7 @@ export class Transform {
             });
 
             ext.send_msg({ msg: 'react_to_change' });
-        }, 'aer_1015');
+        }, 'aer_1082');
 
     public set_transformed_from_storage = (): Promise<void> =>
         err_async(async () => {
@@ -53,5 +53,5 @@ export class Transform {
             }
 
             this.set_transformed({ settings });
-        }, 'aer_1038');
+        }, 'aer_1083');
 }

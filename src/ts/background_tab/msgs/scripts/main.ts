@@ -12,5 +12,5 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
         }
 
         return false;
-    }, 'aer_1009'),
+    }, 'aer_1001'),
 );

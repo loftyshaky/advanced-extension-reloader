@@ -18,5 +18,5 @@ we.commands.onCommand.addListener(
                     options: reload_action,
                 });
             }
-        }, 'aer_1044'),
+        }, 'aer_1020'),
 );

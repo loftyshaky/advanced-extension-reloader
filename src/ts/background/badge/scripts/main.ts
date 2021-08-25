@@ -17,12 +17,12 @@ export class Main {
             await we.action.setBadgeBackgroundColor({ color: '#8b6fff' });
 
             this.hide_debounce();
-        }, 'aer_1034');
+        }, 'aer_1005');
 
     public hide = (): Promise<void> =>
         err_async(async () => {
             await we.action.setBadgeText({ text: '' });
-        }, 'aer_1035');
+        }, 'aer_1006');
 
     private hide_debounce = _.debounce(this.hide, 2000);
 }

@@ -27,7 +27,7 @@ export class Restore {
                     settings: settings_final,
                 });
             }
-        }, 'aer_1130');
+        }, 'aer_1049');
 
     public restore_back_up = ({ data_obj }: { data_obj: t.AnyRecord }): Promise<void> =>
         err_async(async () => {
@@ -42,7 +42,7 @@ export class Restore {
                 msg: 'update_settings',
                 settings,
             });
-        }, 'aer_1131');
+        }, 'aer_1050');
 
     private set = ({ settings }: { settings?: i_data.Settings } = {}): Promise<i_data.Settings> =>
         err_async(async () => {
@@ -63,7 +63,7 @@ export class Restore {
             };
 
             return set_inner();
-        }, 'aer_1133');
+        }, 'aer_1051');
 
     public get_unchanged_settings = (): t.AnyRecord =>
         err(
@@ -71,6 +71,6 @@ export class Restore {
                 current_section: data.settings.current_section,
                 show_color_help: data.settings.show_color_help,
             }),
-            'aer_1135',
+            'aer_1052',
         );
 }

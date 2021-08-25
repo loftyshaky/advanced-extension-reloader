@@ -54,9 +54,9 @@ export class Val {
                     this.update_settings_debounce({ input, val });
                 }
             } catch (error_obj) {
-                show_err_ribbon(error_obj, 'aer_1016', { silent: true });
+                show_err_ribbon(error_obj, 'aer_1053', { silent: true });
             }
-        }, 'aer_1014');
+        }, 'aer_1054');
 
     public validate_input = ({ input }: { input: i_inputs.Input }): boolean =>
         err(() => {
@@ -73,7 +73,7 @@ export class Val {
                             val,
                         }: {
                             val: boolean | undefined;
-                        }): boolean => err(() => !n(val) || typeof val === 'boolean', 'aer_1103');
+                        }): boolean => err(() => !n(val) || typeof val === 'boolean', 'aer_1055');
 
                         const validate_number_val = ({
                             val,
@@ -84,7 +84,7 @@ export class Val {
                                 () =>
                                     !n(val) ||
                                     (typeof val === 'number' && /^\d+$/.test(val.toString())),
-                                'aer_1103',
+                                'aer_1056',
                             );
 
                         const allowed_keys: string[] = [
@@ -99,7 +99,7 @@ export class Val {
 
                         const reload_obj_has_only_allowed_els: boolean = reload_obj_keys.every(
                             (key: string): boolean =>
-                                err(() => allowed_keys.includes(key), 'aer_1102'),
+                                err(() => allowed_keys.includes(key), 'aer_1057'),
                         );
 
                         return !(
@@ -112,7 +112,7 @@ export class Val {
                                 (typeof reload_obj.ext_id === 'string' &&
                                     /^[a-z]+$/.test(reload_obj.ext_id)))
                         );
-                    }, 'aer_1018');
+                    }, 'aer_1058');
 
                 if (input.name === 'ports') {
                     return !/^\d+( *?, *?\d+)*$/.test(raw_val as string);
@@ -129,7 +129,7 @@ export class Val {
 
                     if (_.isArray(val)) {
                         return val.some((reload_obj: i_options.Options): boolean =>
-                            err(() => validate_inner({ reload_obj }), 'aer_1019'),
+                            err(() => validate_inner({ reload_obj }), 'aer_1059'),
                         );
                     }
 
@@ -144,19 +144,19 @@ export class Val {
                     return d_inputs.Val.i().validate_input({ input });
                 }
             } catch (error_obj) {
-                show_err_ribbon(error_obj, 'aer_1016', { silent: true });
+                show_err_ribbon(error_obj, 'aer_1060', { silent: true });
             }
 
             return this.check_if_json_input({ name: input.name });
-        }, 'aer_1017');
+        }, 'aer_1061');
 
     public remove_val = ({ input }: { input: i_inputs.Input }): Promise<void> =>
         err_async(async () => {
             this.change({ input });
-        }, 'aer_1142');
+        }, 'aer_1062');
 
     private check_if_json_input = ({ name }: { name: string }): boolean =>
-        err(() => ['click_action', 'context_menu_actions'].includes(name), 'aer_1050');
+        err(() => ['click_action', 'context_menu_actions'].includes(name), 'aer_1063');
 
     private update_settings_debounce = _.debounce(
         ({ input, val }: { input: i_inputs.Input; val: t.AnyUndefined }): void =>
@@ -165,7 +165,7 @@ export class Val {
                     msg: 'update_settings',
                     settings: { [input.name]: val },
                 });
-            }, 'aer_1096'),
+            }, 'aer_1064'),
         500,
     );
 }
