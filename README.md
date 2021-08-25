@@ -2,12 +2,12 @@ A browser extension that lets you reload an unpacked extension with one click, h
 
 The extension was built on Windows. It uses webpack.
 
-## Links:
+## Links
 
 [Chrome Web Store](https://chrome)<br>
 [Edge Add-ons](https://edge)
 
-## Build steps:
+## Build steps
 
 1. git clone https://github.com/loftyshaky/advanced-extension-reloader
 2. cd into cloned repository
