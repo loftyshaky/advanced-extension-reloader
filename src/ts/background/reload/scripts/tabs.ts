@@ -61,7 +61,7 @@ export class Tabs {
         err(
             () =>
                 n(url) &&
-                (url === 'chrome://extensions/' ||
+                (url === `${env.browser}://extensions/` ||
                     url.includes(`${this.ext_protocol}${we.runtime.id}`)),
             'aer_1091',
         );
