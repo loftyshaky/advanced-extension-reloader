@@ -1,6 +1,6 @@
 {
     "name": "advanced-extension-reloader",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "scripts": {
         "dev": "webpack --watch --mode=development --env test --env browser=chrome",
         "prod": "webpack --mode=production --env browser=chrome",
