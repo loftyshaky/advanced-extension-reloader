@@ -57,16 +57,16 @@
         "message": "⚗️ Advanced Extension Reloader for Edge"
     },
     "rate_chrome_link_href": {
-        "message": ""
+        "message": "https://bit.ly/advanced-extension-reloader-rate"
     },
     "rate_edge_link_href": {
-        "message": ""
+        "message": "https://bit.ly/advanced-extension-reloader-edge"
     },
     "advanced_extension_reloader_for_chrome_link_href": {
-        "message": ""
+        "message": "https://bit.ly/advanced-extension-reloader"
     },
     "advanced_extension_reloader_for_edge_link_href": {
-        "message": ""
+        "message": "https://bit.ly/advanced-extension-reloader-edge"
     },
     "reload_main_hotkey": {
         "message": "Reload extension main"

@@ -57,16 +57,16 @@
         "message": "⚗️ Advanced Extension Reloader для Edge"
     },
     "rate_chrome_link_href": {
-        "message": ""
+        "message": "https://bit.ly/advanced-extension-reloader-rate-ru"
     },
     "rate_edge_link_href": {
-        "message": ""
+        "message": "https://bit.ly/advanced-extension-reloader-edge-ru"
     },
     "advanced_extension_reloader_for_chrome_link_href": {
-        "message": ""
+        "message": "https://bit.ly/advanced-extension-reloader-ru"
     },
     "advanced_extension_reloader_for_edge_link_href": {
-        "message": ""
+        "message": "https://bit.ly/advanced-extension-reloader-edge-ru"
     },
     "reload_main_hotkey": {
         "message": "Перезагрузить расширение (основное действие)"
