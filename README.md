@@ -1,11 +1,9 @@
 A browser extension that lets you reload an unpacked extension with one click, hotkey or automatically.
 
-The extension was built on Windows. It uses webpack.
-
 ## Links
 
-[Chrome Web Store](https://chrome)<br>
-[Edge Add-ons](https://edge)
+[Chrome Web Store](https://bit.ly/advanced-extension-reloader)<br>
+[Edge Add-ons](https://bit.ly/advanced-extension-reloader-edge)
 
 ## Build steps
 
