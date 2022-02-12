@@ -2,7 +2,7 @@ const _ = require('lodash');
 const restrictedGlobals = require('confusing-browser-globals');
 
 const naming_convention_exceptions = {
-    regex: '^(marginBottom|minWidth|maxWidth|marginLeft|marginRight|scrollTop|backgroundColor|marginInlineStart|componentDidMount|componentWillUnmount|componentDidUpdate|componentDidCatch|getDerivedStateFromError|enforceActions|recurseEverything|currentWindow|windowTypes|defaultProps|windowId|useAsButton|autoReposition|lockOpacity|showAlways|childList|backgroundImage|attributeFilter|saveAs|tabId|sendResponse)$',
+    regex: '^(marginBottom|minWidth|maxWidth|marginLeft|marginRight|scrollTop|backgroundColor|marginInlineStart|componentDidMount|componentWillUnmount|componentDidUpdate|componentDidCatch|getDerivedStateFromError|enforceActions|recurseEverything|currentWindow|windowTypes|defaultProps|windowId|useAsButton|autoReposition|lockOpacity|showAlways|childList|backgroundImage|attributeFilter|saveAs|tabId|sendResponse|unsharpAmount|unsharpRadius|unsharpThreshold|onDragEnter|onDragLeave|onDrop|onDragOver|lastModified|objectFit|objectPosition|ROUNDING_MODE)$',
     match: false,
 };
 
@@ -43,7 +43,7 @@ const rules = {
         'max-depth': ['error', 4],
         'max-nested-callbacks': ['error', 8],
         'no-negated-condition': 'error',
-        'linebreak-style': ['error', 'windows'],
+        'linebreak-style': ['error', 'unix'],
         'object-curly-newline': ['error', { consistent: true }],
         'padding-line-between-statements': [
             'error',
@@ -135,7 +135,21 @@ module.exports = {
     extends: ['airbnb', 'airbnb/hooks', 'prettier'],
     plugins: ['react', 'prettier'],
     parser: 'babel-eslint',
-    rules: { ...rules.js, 'prettier/prettier': 'error' },
+    rules: {
+        ...rules.js,
+        'prettier/prettier': [
+            'error',
+            {
+                singleQuote: true,
+                jsxSingleQuote: true,
+                tabWidth: 4,
+                printWidth: 100,
+                semi: true,
+                trailingComma: 'all',
+                endOfLine: 'lf',
+            },
+        ],
+    },
     overrides: [
         {
             extends: ['airbnb', 'plugin:@typescript-eslint/recommended', 'prettier'],
@@ -172,6 +186,7 @@ module.exports = {
         err: false,
         err_async: false,
         throw_err: false,
+        throw_err_obj: false,
         err_obj: false,
         doc: true,
         doc_state: false,
