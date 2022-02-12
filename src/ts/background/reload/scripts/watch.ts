@@ -71,10 +71,23 @@ export class Watch {
                             const ext_tabs_final: (Tabs.Tab | undefined)[] = ext_tabs
                                 .map((ext_tab: t.AnyRecord): Tabs.Tab | undefined =>
                                     err(() => {
-                                        const reg_exp = new RegExp(
+                                        const reg_exp_browser = new RegExp(
+                                            `${s_reload.Tabs.i().browser_protocol}newtab`,
+                                        );
+                                        const reg_exp_extension = new RegExp(
                                             s_reload.Tabs.i().ext_protocol + ext_info.id,
                                         );
-                                        const matched_tab = reg_exp.test(ext_tab.url);
+                                        const browser_protocol_tab: boolean = reg_exp_browser.test(
+                                            ext_tab.url,
+                                        ); // for example new tab
+
+                                        if (browser_protocol_tab) {
+                                            we.tabs.remove(ext_tab.id);
+                                        }
+
+                                        const matched_tab =
+                                            browser_protocol_tab ||
+                                            reg_exp_extension.test(ext_tab.url);
 
                                         if (matched_tab) {
                                             ext_tab.ext_id = ext_info.id;

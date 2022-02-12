@@ -16,8 +16,8 @@ export class Tabs {
     public background_path_url: string = we.runtime.getURL('background_tab.html');
     public background_tab: TabsExt.Tab | undefined;
     public opened_ext_tabs: TabsExt.Tab[] = [];
+    public browser_protocol: string = 'chrome://';
     public ext_protocol: string = 'chrome-extension://';
-    private ext_match_pattern: string = `${this.ext_protocol}*/*`;
 
     public open_background_tab = ({ force = false }: { force?: boolean } = {}): Promise<void> =>
         err_async(async () => {
@@ -51,7 +51,7 @@ export class Tabs {
     public get_ext_tabs = (): Promise<TabsExt.Tab[]> =>
         err_async(async () => {
             const tabs: TabsExt.Tab[] = await we.tabs.query({
-                url: this.ext_match_pattern,
+                url: [`${this.browser_protocol}*/*`, `${this.ext_protocol}*/*`],
             });
 
             return tabs;
@@ -76,10 +76,11 @@ export class Tabs {
         err_async(async () => {
             const check_if_excluded_tab_hard = ({ url }: { url: string | undefined }): boolean =>
                 err(() => {
-                    const reg_exp = new RegExp(this.ext_protocol);
+                    const reg_exp_extension = new RegExp(this.ext_protocol);
+                    const reg_exp_browser = new RegExp(this.browser_protocol);
                     let is_extension_tab: boolean = false;
                     if (n(url)) {
-                        is_extension_tab = reg_exp.test(url);
+                        is_extension_tab = reg_exp_extension.test(url) || reg_exp_browser.test(url);
                     }
 
                     return hard ? is_extension_tab : false;
