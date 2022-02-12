@@ -6,7 +6,7 @@
         "message": "Background tab"
     },
     "background_tab_manifest_3_msg_text": {
-        "message": "This is the background tab. This tab is required for Advanced Extension Reloader to function correctly, don't close it."
+        "message": "This is the background tab. This tab is required for automatic reload to work properly. If you only reload an extension by clicking on the Advanced Extension Reloader's browser action icon, this tab is not required. You can disable the automatic opening of the background tab in the settings."
     },
     "open_background_tab_context_menu_item": {
         "message": "Open background tab"
