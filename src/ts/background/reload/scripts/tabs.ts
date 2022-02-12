@@ -78,6 +78,7 @@ export class Tabs {
                 err(() => {
                     const reg_exp_extension = new RegExp(this.ext_protocol);
                     const reg_exp_browser = new RegExp(this.browser_protocol);
+
                     let is_extension_tab: boolean = false;
                     if (n(url)) {
                         is_extension_tab = reg_exp_extension.test(url) || reg_exp_browser.test(url);
