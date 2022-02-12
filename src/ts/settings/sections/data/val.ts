@@ -53,7 +53,7 @@ export class Val {
 
                     this.update_settings_debounce({ input, val });
                 }
-            } catch (error_obj) {
+            } catch (error_obj: any) {
                 show_err_ribbon(error_obj, 'aer_1053', { silent: true });
             }
         }, 'aer_1054');
@@ -143,7 +143,7 @@ export class Val {
                 if (input.name === 'transition_duration') {
                     return d_inputs.Val.i().validate_input({ input });
                 }
-            } catch (error_obj) {
+            } catch (error_obj: any) {
                 show_err_ribbon(error_obj, 'aer_1060', { silent: true });
             }
 
