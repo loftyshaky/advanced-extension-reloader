@@ -14,7 +14,7 @@ we.commands.onCommand.addListener(
             }
 
             if (n(reload_action)) {
-                s_reload.Watch.i().generate_reload_debounce_and_run_reload_f({
+                s_reload.Watch.i().try_to_reload({
                     options: reload_action,
                 });
             }

@@ -35,12 +35,8 @@ export class DefaultValues {
                 transformed_reload_action.play_sound = false;
             }
 
-            if (!n(reload_action.after_enable_delay)) {
-                transformed_reload_action.after_enable_delay = 300;
-            }
-
-            if (!n(reload_action.full_reload_timeout)) {
-                transformed_reload_action.full_reload_timeout = 300;
+            if (!n(reload_action.after_reload_delay)) {
+                transformed_reload_action.after_reload_delay = 0;
             }
 
             return transformed_reload_action;

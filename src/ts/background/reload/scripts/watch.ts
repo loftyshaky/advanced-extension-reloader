@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { Tabs, Management } from 'webextension-polyfill-ts';
 
 import { t } from '@loftyshaky/shared';
@@ -16,42 +15,40 @@ export class Watch {
     // eslint-disable-next-line no-useless-constructor, @typescript-eslint/no-empty-function
     private constructor() {}
 
-    private old_debounce_delay: number | undefined;
-    public generate_reload_debounce_and_run_reload_f = ({
-        options,
-    }: {
-        options: i_options.Options;
-    }): Promise<void> =>
+    private cancel_reload: boolean = false;
+    private reload_canceled: boolean = false;
+    private cancel_reload_timer: number = 0;
+
+    public try_to_reload = ({ options }: { options: i_options.Options }): Promise<void> =>
         err_async(async () => {
             const options_final: i_options.Options =
                 s_reload.DefaultValues.i().tranform_reload_action({
                     reload_action: options,
                 });
 
-            if (n(options_final.after_enable_delay) && n(options_final.full_reload_timeout)) {
-                if (options_final.hard) {
-                    const new_debounce_delay =
-                        options_final.after_enable_delay + options_final.full_reload_timeout;
-                    if (
-                        !n(this.old_debounce_delay) ||
-                        (n(this.old_debounce_delay) &&
-                            new_debounce_delay !== this.old_debounce_delay)
-                    ) {
-                        this.reload_debounce = _.debounce(this.reload, new_debounce_delay);
-                    }
+            if (this.cancel_reload) {
+                this.reload_canceled = true;
+            } else {
+                this.reload(options_final);
+            }
 
-                    this.old_debounce_delay = new_debounce_delay;
-                } else {
-                    this.reload_debounce = this.reload;
+            if (n(options_final.after_reload_delay)) {
+                this.cancel_reload = true;
 
-                    this.old_debounce_delay = undefined;
-                }
+                self.clearTimeout(this.cancel_reload_timer);
 
-                this.reload_debounce(options_final);
+                this.cancel_reload_timer = self.setTimeout(() => {
+                    err(() => {
+                        this.cancel_reload = false;
+
+                        if (this.reload_canceled) {
+                            this.reload_canceled = false;
+                            this.reload(options_final);
+                        }
+                    }, 'cnt_53566');
+                }, options_final.after_reload_delay + 500);
             }
         }, 'aer_1035');
-
-    public reload_debounce: t.CallbackVariadicVoid = () => undefined;
 
     public reload = (options: i_options.Options): Promise<void> =>
         err_async(async () => {
@@ -80,13 +77,22 @@ export class Watch {
                                         const browser_protocol_tab: boolean = reg_exp_browser.test(
                                             ext_tab.url,
                                         ); // for example new tab
+                                        const tab_belongs_to_this_extension: boolean =
+                                            ext_tab.favIconUrl.includes(ext_info.id);
+                                        const matched_new_tab_page_tab: boolean =
+                                            browser_protocol_tab && tab_belongs_to_this_extension;
 
-                                        if (browser_protocol_tab) {
+                                        if (
+                                            matched_new_tab_page_tab &&
+                                            ((n(options_final.ext_id) &&
+                                                ext_info.id === options_final.ext_id) ||
+                                                !n(options_final.ext_id))
+                                        ) {
                                             we.tabs.remove(ext_tab.id);
                                         }
 
                                         const matched_tab =
-                                            browser_protocol_tab ||
+                                            matched_new_tab_page_tab ||
                                             reg_exp_extension.test(ext_tab.url);
 
                                         if (matched_tab) {
@@ -111,15 +117,11 @@ export class Watch {
                                 ext_info.installType === 'development' &&
                                 (!ext_id_option_specified || matched_ext_id_from_options)
                             ) {
-                                if (
-                                    n(options_final.full_reload_timeout) &&
-                                    n(options_final.after_enable_delay)
-                                ) {
+                                if (n(options_final.after_reload_delay)) {
                                     await this.re_enable({
                                         ext_info,
                                         ext_tabs: ext_tabs_final as Tabs.Tab[],
-                                        after_enable_delay: options_final.after_enable_delay,
-                                        full_reload_timeout: options_final.full_reload_timeout,
+                                        after_reload_delay: options_final.after_reload_delay,
                                     });
                                 }
                             }
@@ -145,42 +147,31 @@ export class Watch {
     private re_enable = ({
         ext_info,
         ext_tabs,
-        after_enable_delay,
-        full_reload_timeout,
+        after_reload_delay,
     }: {
         ext_info: Management.ExtensionInfo;
         ext_tabs: Tabs.Tab[];
-        after_enable_delay: number;
-        full_reload_timeout: number;
+        after_reload_delay: number;
     }): Promise<void> =>
         err_async(async () => {
             let reload_triggered = false;
 
-            ((env.browser === 'firefox' ? browser : chrome) as any).runtime.sendMessage(
-                ext_info.id,
-                {
+            try {
+                await we.runtime.sendMessage(ext_info.id, {
                     msg: new s_suffix.Main('reload_extension').result,
-                },
-                (response: any) => {
-                    if (we.runtime.lastError) {
-                        // eslint-disable-next-line no-console
-                        console.error(we.runtime.lastError.message);
-                    }
+                });
 
-                    if (response === new s_suffix.Main('reload_triggered').result) {
-                        reload_triggered = true;
-                    }
-                },
-            );
-
-            await x.delay(full_reload_timeout);
+                reload_triggered = true;
+            } catch (error_obj: any) {
+                show_err_ribbon(error_obj, 'aer_1084', { silent: true });
+            }
 
             if (!reload_triggered) {
                 await we.management.setEnabled(ext_info.id, false);
                 await we.management.setEnabled(ext_info.id, true);
-
-                await x.delay(after_enable_delay);
             }
+
+            await x.delay(after_reload_delay);
 
             await s_reload.Tabs.i().recreate_tabs({ ext_tabs });
         }, 'aer_1040');

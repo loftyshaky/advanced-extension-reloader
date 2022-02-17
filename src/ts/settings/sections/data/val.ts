@@ -27,11 +27,7 @@ export class Val {
                 } else if (this.check_if_json_input({ name: input.name })) {
                     val = JSON.parse(raw_val as string);
                 } else if (n(raw_val)) {
-                    val = [
-                        'transition_duration',
-                        'full_reload_timeout',
-                        'open_position_in_tab_strip',
-                    ].includes(input.name)
+                    val = ['transition_duration', 'open_position_in_tab_strip'].includes(input.name)
                         ? +raw_val
                         : raw_val;
 
@@ -51,7 +47,10 @@ export class Val {
 
                     s_css_vars.Main.i().set();
 
-                    this.update_settings_debounce({ input, val });
+                    ext.send_msg({
+                        msg: 'update_settings',
+                        settings: { [input.name]: val },
+                    });
                 }
             } catch (error_obj: any) {
                 show_err_ribbon(error_obj, 'aer_1053', { silent: true });
@@ -92,8 +91,7 @@ export class Val {
                             'all_tabs',
                             'ext_id',
                             'play_sound',
-                            'after_enable_delay',
-                            'full_reload_timeout',
+                            'after_reload_delay',
                         ];
                         const reload_obj_keys: string[] = Object.keys(reload_obj);
 
@@ -107,7 +105,7 @@ export class Val {
                             validate_bool_val({ val: reload_obj.hard }) &&
                             validate_bool_val({ val: reload_obj.all_tabs }) &&
                             validate_bool_val({ val: reload_obj.play_sound }) &&
-                            validate_number_val({ val: reload_obj.full_reload_timeout }) &&
+                            validate_number_val({ val: reload_obj.after_reload_delay }) &&
                             (!n(reload_obj.ext_id) ||
                                 (typeof reload_obj.ext_id === 'string' &&
                                     /^[a-z]+$/.test(reload_obj.ext_id)))
@@ -136,7 +134,7 @@ export class Val {
                     return true;
                 }
 
-                if (['full_reload_timeout', 'open_position_in_tab_strip'].includes(input.name)) {
+                if (['after_reload_delay', 'open_position_in_tab_strip'].includes(input.name)) {
                     return !/^\d+$/.test(raw_val as string);
                 }
 
@@ -157,15 +155,4 @@ export class Val {
 
     private check_if_json_input = ({ name }: { name: string }): boolean =>
         err(() => ['click_action', 'context_menu_actions'].includes(name), 'aer_1063');
-
-    private update_settings_debounce = _.debounce(
-        ({ input, val }: { input: i_inputs.Input; val: t.AnyUndefined }): void =>
-            err(() => {
-                ext.send_msg({
-                    msg: 'update_settings',
-                    settings: { [input.name]: val },
-                });
-            }, 'aer_1064'),
-        500,
-    );
 }

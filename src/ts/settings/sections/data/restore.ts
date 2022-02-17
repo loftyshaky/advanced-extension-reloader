@@ -31,16 +31,18 @@ export class Restore {
 
     public restore_back_up = ({ data_obj }: { data_obj: t.AnyRecord }): Promise<void> =>
         err_async(async () => {
-            const settings: i_data.Settings = {
+            let settings: i_data.Settings = {
                 ...data_obj,
                 ...this.get_unchanged_settings(),
             } as i_data.Settings;
 
-            await this.set({ settings });
+            settings = await this.set({ settings });
 
             ext.send_msg({
                 msg: 'update_settings',
                 settings,
+                transform: true,
+                rerun_actions: true,
             });
         }, 'aer_1050');
 
