@@ -64,16 +64,18 @@ export class ContextMenu {
                             const app_name: string = n(matched_ext_info)
                                 ? `${matched_ext_info.name} + `
                                 : '';
+                            const context_menu_item_title: string = `${app_name}${
+                                reload_actions_final.hard ? 'hard' : 'soft'
+                            } + ${reload_actions_final.all_tabs ? 'all tabs' : 'one tab'}`;
                             if (n(background_tab_tab.id)) {
-                                const context_menu_item_title: string = _.capitalize(
-                                    `${app_name}${reload_actions_final.hard ? 'hard' : 'soft'} + ${
-                                        reload_actions_final.all_tabs ? 'all tabs' : 'one tab'
-                                    }`,
-                                );
+                                const context_menu_item_title_final: string =
+                                    app_name === ''
+                                        ? _.upperFirst(context_menu_item_title)
+                                        : context_menu_item_title;
 
                                 await we.contextMenus.create({
                                     id: `${i}`,
-                                    title: context_menu_item_title,
+                                    title: context_menu_item_title_final,
                                     contexts: ['action'],
                                 });
                             }
