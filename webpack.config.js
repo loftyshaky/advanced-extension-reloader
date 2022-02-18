@@ -3,8 +3,7 @@ const path = require('path');
 const appRoot = require('app-root-path').path;
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const { Env } = require('@loftyshaky/shared/js/ext/env');
@@ -32,8 +31,7 @@ module.exports = (env, argv) => {
         argv,
         env,
         MiniCssExtractPlugin,
-        OptimizeCssAssetsPlugin,
-        FixStyleOnlyEntriesPlugin,
+        CssMinimizerPlugin,
         CopyWebpackPlugin,
         copy_patters: [path.join('src', 'audio', '330046__paulmorek__beep-03-positive.wav')],
         callback_begin: () => {
