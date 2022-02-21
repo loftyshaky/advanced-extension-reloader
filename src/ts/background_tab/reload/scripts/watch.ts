@@ -24,7 +24,13 @@ export class Watch {
 
             data.settings.ports.forEach((port: number): void =>
                 err(() => {
-                    const client = io(`http://localhost:${port}`);
+                    const client = io(`http://localhost:${port}`, {
+                        // eslint-disable-next-line @typescript-eslint/naming-convention
+                        reconnectionDelayMax: 500,
+                        // eslint-disable-next-line @typescript-eslint/naming-convention
+                        randomizationFactor: 0,
+                    });
+
                     this.clients.push(client);
 
                     client.on('reload_app', (options: i_options.Options): void => {
