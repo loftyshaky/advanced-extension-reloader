@@ -50,7 +50,7 @@
         "webpack-cli": "^4.9.2"
     },
     "dependencies": {
-        "@loftyshaky/shared": "0.0.39",
+        "@loftyshaky/shared": "0.0.40",
         "@simonwep/pickr": "^1.8.2",
         "confusing-browser-globals": "^1.0.11",
         "lodash": "^4.17.21",
