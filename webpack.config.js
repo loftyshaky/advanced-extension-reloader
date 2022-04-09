@@ -33,7 +33,11 @@ module.exports = (env, argv) => {
         MiniCssExtractPlugin,
         CssMinimizerPlugin,
         CopyWebpackPlugin,
-        copy_patters: [path.join('src', 'audio', '330046__paulmorek__beep-03-positive.wav')],
+        copy_patters: [
+            {
+                from: path.join('src', 'audio'),
+            },
+        ],
         callback_begin: () => {
             task_scheduler.unlock_dist({
                 package_name: 'Advanced Extension Reloader',

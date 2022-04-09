@@ -36,13 +36,29 @@ export class Watch {
                     client.on('reload_app', (options: i_options.Options): void => {
                         ext.send_msg({ msg: 'reload', options });
                     });
+
+                    client.on('play_error_notification', (): void => {
+                        this.play_sound({
+                            notification_type: 'error',
+                        });
+                    });
                 }, 'aer_1002'),
             );
         }, 'aer_1003');
 
-    public play_sound = ({ mute = false }: { mute?: boolean } = {}): void =>
+    public play_sound = ({
+        mute = false,
+        notification_type,
+    }: {
+        mute?: boolean;
+        notification_type: 'reload' | 'error';
+    }): void =>
         err(() => {
-            const audio = new Audio('330046__paulmorek__beep-03-positive.wav');
+            const sound_filename =
+                notification_type === 'reload'
+                    ? '330046__paulmorek__beep-03-positive.wav'
+                    : '330068__paulmorek__beep-06-low-2015-06-22.wav';
+            const audio = new Audio(sound_filename);
             audio.volume = mute ? 0 : data.settings.reload_notification_volume;
             audio.play();
         }, 'aer_1004');

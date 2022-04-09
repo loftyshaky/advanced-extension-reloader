@@ -8,8 +8,8 @@ we.runtime.onMessage.addListener(
 
             if (msg_str === 'connect_to_ext_servers') {
                 s_reload.Watch.i().connect();
-            } else if (msg_str === 'play_sound') {
-                s_reload.Watch.i().play_sound();
+            } else if (msg_str === 'play_reload_sound') {
+                s_reload.Watch.i().play_sound({ notification_type: 'reload' });
             } else {
                 await x.delay(10000);
             }

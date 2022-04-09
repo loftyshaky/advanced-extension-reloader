@@ -160,7 +160,7 @@ export class Watch {
             await s_badge.Main.i().show();
 
             if (options_final.play_sound) {
-                ext.send_msg({ msg: 'play_sound' });
+                ext.send_msg({ msg: 'play_reload_sound' });
             }
         }, 'aer_1039');
 
