@@ -80,6 +80,16 @@ export class Watch {
                 const re_enable_callers: t.CallbackVoid[] = [];
 
                 await Promise.all(
+                    new_tab_tabs.map(async (tab: Tabs.Tab) =>
+                        err_async(async () => {
+                            if (n(tab.id)) {
+                                await we.tabs.remove(tab.id);
+                            }
+                        }, 'aer_1090'),
+                    ),
+                );
+
+                await Promise.all(
                     exts.map(async (ext_info: Management.ExtensionInfo) =>
                         err_async(async () => {
                             const ext_tabs_final: (Tabs.Tab | undefined)[] = ext_tabs
@@ -139,16 +149,6 @@ export class Watch {
                     re_enable_callers.map(async (f: t.CallbackVoid) => {
                         await f();
                     }),
-                );
-
-                await Promise.all(
-                    new_tab_tabs.map(async (tab: Tabs.Tab) =>
-                        err_async(async () => {
-                            if (n(tab.id)) {
-                                await we.tabs.remove(tab.id);
-                            }
-                        }, 'aer_1090'),
-                    ),
                 );
 
                 await s_reload.Tabs.i().recreate_tabs({ ext_tabs: new_tab_tabs });
