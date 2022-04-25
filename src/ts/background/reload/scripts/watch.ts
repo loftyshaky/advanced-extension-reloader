@@ -15,39 +15,53 @@ export class Watch {
     // eslint-disable-next-line no-useless-constructor, @typescript-eslint/no-empty-function
     private constructor() {}
 
-    private cancel_reload: boolean = false;
-    private reload_canceled: boolean = false;
-    private cancel_reload_timer: number = 0;
+    private reloading: boolean = false;
+    private allow_fast_reload: boolean = true;
+    private debounce_reload_timer: number = 0;
+    private reload_cooldown_timer: number = 0;
     private full_reload_delay: number = 1000;
 
     public try_to_reload = ({ options }: { options: i_options.Options }): Promise<void> =>
         err_async(async () => {
-            const options_final: i_options.Options =
-                s_reload.DefaultValues.i().tranform_reload_action({
-                    reload_action: options,
-                });
+            self.clearTimeout(this.reload_cooldown_timer);
+            self.clearTimeout(this.debounce_reload_timer);
 
-            if (this.cancel_reload) {
-                this.reload_canceled = true;
-            } else {
-                this.reload(options_final);
-            }
+            if (!this.reloading) {
+                this.reloading = true;
 
-            if (n(options_final.after_reload_delay)) {
-                this.cancel_reload = true;
+                let done_fast_reload: boolean = false;
 
-                self.clearTimeout(this.cancel_reload_timer);
+                const options_final: i_options.Options =
+                    s_reload.DefaultValues.i().tranform_reload_action({
+                        reload_action: options,
+                    });
 
-                this.cancel_reload_timer = self.setTimeout(() => {
-                    err(() => {
-                        this.cancel_reload = false;
+                if (this.allow_fast_reload) {
+                    this.allow_fast_reload = false;
+                    done_fast_reload = true;
 
-                        if (this.reload_canceled) {
-                            this.reload_canceled = false;
-                            this.reload(options_final);
-                        }
-                    }, 'cnt_53566');
-                }, options_final.after_reload_delay + this.full_reload_delay + 500);
+                    await this.reload(options_final);
+                }
+
+                if (n(options_final.after_reload_delay)) {
+                    self.clearTimeout(this.reload_cooldown_timer);
+
+                    this.reload_cooldown_timer = self.setTimeout(() => {
+                        err(() => {
+                            this.allow_fast_reload = true;
+                        }, 'cnt_53566');
+                    }, (options_final.after_reload_delay + this.full_reload_delay) * 3);
+
+                    this.debounce_reload_timer = self.setTimeout(() => {
+                        err(() => {
+                            if (!done_fast_reload) {
+                                this.reload(options_final);
+                            }
+                        }, 'cnt_53566');
+                    }, options_final.after_reload_delay + this.full_reload_delay);
+
+                    this.reloading = false;
+                }
             }
         }, 'aer_1035');
 
