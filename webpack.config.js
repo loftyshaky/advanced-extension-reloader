@@ -38,6 +38,7 @@ module.exports = (env, argv) => {
                 from: path.join('src', 'audio'),
             },
         ],
+        enable_anouncement: false,
         callback_begin: () => {
             task_scheduler.unlock_dist({
                 package_name: 'Advanced Extension Reloader',
