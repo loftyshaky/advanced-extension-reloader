@@ -62,6 +62,7 @@ export class Watch {
                 const ext_id_option_specified = typeof options_final.ext_id === 'string';
                 const exts: Management.ExtensionInfo[] = await we.management.getAll();
                 const ext_tabs: Tabs.Tab[] = await s_reload.Tabs.i().get_ext_tabs();
+                const new_tab_tabs: Tabs.Tab[] = await s_reload.Tabs.i().get_new_tab_tabs();
                 const re_enable_callers: t.CallbackVoid[] = [];
 
                 await Promise.all(
@@ -70,34 +71,11 @@ export class Watch {
                             const ext_tabs_final: (Tabs.Tab | undefined)[] = ext_tabs
                                 .map((ext_tab: t.AnyRecord): Tabs.Tab | undefined =>
                                     err(() => {
-                                        const reg_exp_browser = new RegExp(
-                                            `${s_reload.Tabs.i().browser_protocol}newtab`,
-                                        );
                                         const reg_exp_extension = new RegExp(
                                             s_reload.Tabs.i().ext_protocol + ext_info.id,
                                         );
-                                        const browser_protocol_tab: boolean = reg_exp_browser.test(
-                                            ext_tab.url,
-                                        ); // for example new tab
 
-                                        const tab_belongs_to_this_extension: boolean =
-                                            n(ext_tab.favIconUrl) &&
-                                            ext_tab.favIconUrl.includes(ext_info.id);
-                                        const matched_new_tab_page_tab: boolean =
-                                            browser_protocol_tab && tab_belongs_to_this_extension;
-
-                                        if (
-                                            matched_new_tab_page_tab &&
-                                            ((n(options_final.ext_id) &&
-                                                ext_info.id === options_final.ext_id) ||
-                                                !n(options_final.ext_id))
-                                        ) {
-                                            we.tabs.remove(ext_tab.id);
-                                        }
-
-                                        const matched_tab =
-                                            matched_new_tab_page_tab ||
-                                            reg_exp_extension.test(ext_tab.url);
+                                        const matched_tab = reg_exp_extension.test(ext_tab.url);
 
                                         if (matched_tab) {
                                             ext_tab.ext_id = ext_info.id;
@@ -148,6 +126,18 @@ export class Watch {
                         await f();
                     }),
                 );
+
+                await Promise.all(
+                    new_tab_tabs.map(async (tab: Tabs.Tab) =>
+                        err_async(async () => {
+                            if (n(tab.id)) {
+                                await we.tabs.remove(tab.id);
+                            }
+                        }, 'aer_1090'),
+                    ),
+                );
+
+                await s_reload.Tabs.i().recreate_tabs({ ext_tabs: new_tab_tabs });
             }
 
             if (n(options_final.hard) && n(options_final.all_tabs)) {

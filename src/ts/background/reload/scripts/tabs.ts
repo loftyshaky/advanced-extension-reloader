@@ -57,6 +57,15 @@ export class Tabs {
             return tabs;
         }, 'aer_1024');
 
+    public get_new_tab_tabs = (): Promise<TabsExt.Tab[]> =>
+        err_async(async () => {
+            const tabs: TabsExt.Tab[] = await we.tabs.query({
+                url: [`${this.browser_protocol}newtab/`],
+            });
+
+            return tabs;
+        }, 'aer_1024');
+
     private check_if_excluded_tab = ({ url }: { url: string | undefined }): boolean =>
         err(
             () =>
