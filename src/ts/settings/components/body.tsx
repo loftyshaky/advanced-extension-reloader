@@ -3,10 +3,10 @@ import { observer } from 'mobx-react';
 
 import { c_settings } from '@loftyshaky/shared/settings';
 import { d_inputs, i_inputs } from '@loftyshaky/shared/inputs';
-import { d_sections, p_sections } from 'settings/internal';
+import { d_sections, p_settings } from 'settings/internal';
 import { d_settings } from 'shared/internal';
 
-export const Body: React.FunctionComponent<p_sections.Body> = observer((props) => {
+export const Body: React.FunctionComponent<p_settings.Body> = observer((props) => {
     const { on_render } = props;
 
     useEffect(() => {
