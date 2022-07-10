@@ -49,7 +49,7 @@ export class Watch {
                     this.reload_cooldown_timer = self.setTimeout(() => {
                         err(() => {
                             this.allow_fast_reload = true;
-                        }, 'cnt_53566');
+                        }, 'aer_1094');
                     }, (options_final.after_reload_delay + this.full_reload_delay) * 3);
 
                     this.debounce_reload_timer = self.setTimeout(() => {
@@ -57,7 +57,7 @@ export class Watch {
                             if (!done_fast_reload) {
                                 this.reload(options_final);
                             }
-                        }, 'cnt_53566');
+                        }, 'aer_1095');
                     }, options_final.after_reload_delay + this.full_reload_delay);
 
                     this.reloading = false;
