@@ -36,7 +36,7 @@ export class DefaultValues {
             }
 
             if (!n(reload_action.after_reload_delay)) {
-                transformed_reload_action.after_reload_delay = 0;
+                transformed_reload_action.after_reload_delay = 1000;
             }
 
             return transformed_reload_action;
