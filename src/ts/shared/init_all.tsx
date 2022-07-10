@@ -28,8 +28,33 @@ export class InitAll {
     // eslint-disable-next-line no-useless-constructor, @typescript-eslint/no-empty-function
     private constructor() {}
 
+    private settings_root: HTMLDivElement | undefined = undefined;
+    private background_tab_root: HTMLDivElement | undefined = undefined;
+
     public init = (): Promise<void> =>
         err_async(async () => {
+            const on_loading_screen_render = (): void =>
+                err(() => {
+                    const loading_screen_root_el = s<HTMLDivElement>(
+                        `.${new s_suffix.Main('loading_screen').result}`,
+                    );
+
+                    if (n(loading_screen_root_el) && n(loading_screen_root_el.shadowRoot)) {
+                        const loading_screen_css = x.css(
+                            'loading_screen',
+                            loading_screen_root_el.shadowRoot,
+                        );
+
+                        if (n(loading_screen_css)) {
+                            x.bind(loading_screen_css, 'load', (): void =>
+                                err(() => {
+                                    d_loading_screen.Main.i().show();
+                                }, 'aer_1072'),
+                            );
+                        }
+                    }
+                }, 'aer_1073');
+
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             __webpack_public_path__ = we.runtime.getURL('');
 
@@ -45,16 +70,13 @@ export class InitAll {
             const loading_screen_root: ShadowRoot = this.create_root({
                 prefix: 'loading_screen',
             }) as ShadowRoot;
-            let settings_root: HTMLDivElement;
-            let background_tab_root: HTMLDivElement;
-
             if (page === 'settings') {
-                settings_root = this.create_root({
+                this.settings_root = this.create_root({
                     prefix: 'settings',
                     shadow_root: false,
                 }) as HTMLDivElement;
             } else if (page === 'background_tab') {
-                background_tab_root = this.create_root({
+                this.background_tab_root = this.create_root({
                     prefix: 'background_tab',
                     shadow_root: false,
                 }) as HTMLDivElement;
@@ -74,101 +96,6 @@ export class InitAll {
                     }
                 />,
             );
-
-            const on_loading_screen_render = (): void =>
-                err(() => {
-                    const loading_screen_root_el = s<HTMLDivElement>(
-                        `.${new s_suffix.Main('loading_screen').result}`,
-                    );
-
-                    if (n(loading_screen_root_el) && n(loading_screen_root_el.shadowRoot)) {
-                        const loading_screen_css = x.css(
-                            'loading_screen',
-                            loading_screen_root_el.shadowRoot,
-                        );
-
-                        if (n(loading_screen_css)) {
-                            x.bind(loading_screen_css, 'load', (): void =>
-                                err(() => {
-                                    d_loading_screen.Main.i().show();
-
-                                    if (page === 'settings') {
-                                        render_settings();
-                                    } else if (page === 'background_tab') {
-                                        render_background_tab();
-                                    }
-                                }, 'aer_1072'),
-                            );
-                        }
-                    }
-                }, 'aer_1073');
-
-            const render_settings = (): Promise<void> =>
-                err_async(async () => {
-                    const { Body } = await import('settings/components/body');
-
-                    ReactDOM.createRoot(settings_root).render(
-                        <c_crash_handler.Body>
-                            <Body on_render={on_settings_tab_render} />
-                        </c_crash_handler.Body>,
-                    );
-                }, 'aer_1068');
-
-            const on_settings_tab_render = (): void =>
-                err(() => {
-                    const on_css_load = (): Promise<void> =>
-                        err_async(async () => {
-                            const { d_sections } = await import('settings/internal');
-
-                            d_inputs.InputWidth.i().calculate_for_all_sections({
-                                sections: d_sections.Main.i().sections as i_inputs.Sections,
-                            });
-                            d_inputs.InputWidth.i().set_max_width();
-
-                            d_loading_screen.Main.i().hide();
-
-                            s_tab_index.Main.i().bind_set_input_type_f();
-                        }, 'aer_1066');
-
-                    const settings_css = x.css('settings_css', document.head);
-
-                    s_theme.Main.i().set({
-                        name: data.settings.options_page_theme,
-                    });
-
-                    if (n(settings_css)) {
-                        x.bind(settings_css, 'load', on_css_load);
-                    }
-                }, 'aer_1067');
-
-            const render_background_tab = (): Promise<void> =>
-                err_async(async () => {
-                    const { Body } = await import('background_tab/components/body');
-
-                    ReactDOM.createRoot(background_tab_root).render(
-                        <c_crash_handler.Body>
-                            <Body on_render={on_background_tab_render} />
-                        </c_crash_handler.Body>,
-                    );
-                }, 'aer_1071');
-
-            const on_background_tab_render = (): void =>
-                err(() => {
-                    const on_css_load = (): Promise<void> =>
-                        err_async(async () => {
-                            d_loading_screen.Main.i().hide();
-                        }, 'aer_1069');
-
-                    const settings_css = x.css('background_tab_css', document.head);
-
-                    s_theme.Main.i().set({
-                        name: data.settings.options_page_theme,
-                    });
-
-                    if (n(settings_css)) {
-                        x.bind(settings_css, 'load', on_css_load);
-                    }
-                }, 'aer_1091');
         }, 'aer_1074');
 
     private create_root = ({
@@ -201,4 +128,77 @@ export class InitAll {
                 title_el.textContent = ext.msg(`${page}_title_text`);
             }
         }, 'aer_1076');
+
+    public render_settings = (): Promise<void> =>
+        err_async(async () => {
+            const { Body } = await import('settings/components/body');
+
+            const on_css_load = (): Promise<void> =>
+                err_async(async () => {
+                    const { d_sections } = await import('settings/internal');
+
+                    d_inputs.InputWidth.i().calculate_for_all_sections({
+                        sections: d_sections.Main.i().sections as i_inputs.Sections,
+                    });
+                    d_inputs.InputWidth.i().set_max_width();
+
+                    d_loading_screen.Main.i().hide();
+
+                    s_tab_index.Main.i().bind_set_input_type_f();
+                }, 'aer_1066');
+
+            if (n(this.settings_root)) {
+                ReactDOM.createRoot(this.settings_root).render(
+                    <c_crash_handler.Body>
+                        <Body
+                            on_render={(): void =>
+                                err(() => {
+                                    const settings_css = x.css('settings_css', document.head);
+
+                                    s_theme.Main.i().set({
+                                        name: data.settings.options_page_theme,
+                                    });
+
+                                    if (n(settings_css)) {
+                                        x.bind(settings_css, 'load', on_css_load);
+                                    }
+                                }, 'aer_1067')
+                            }
+                        />
+                    </c_crash_handler.Body>,
+                );
+            }
+        }, 'aer_1068');
+
+    public render_background_tab = (): Promise<void> =>
+        err_async(async () => {
+            const { Body } = await import('background_tab/components/body');
+
+            const on_css_load = (): Promise<void> =>
+                err_async(async () => {
+                    d_loading_screen.Main.i().hide();
+                }, 'aer_1069');
+
+            if (n(this.background_tab_root)) {
+                ReactDOM.createRoot(this.background_tab_root).render(
+                    <c_crash_handler.Body>
+                        <Body
+                            on_render={(): void =>
+                                err(() => {
+                                    const settings_css = x.css('background_tab_css', document.head);
+
+                                    s_theme.Main.i().set({
+                                        name: data.settings.options_page_theme,
+                                    });
+
+                                    if (n(settings_css)) {
+                                        x.bind(settings_css, 'load', on_css_load);
+                                    }
+                                }, 'aer_1091')
+                            }
+                        />
+                    </c_crash_handler.Body>,
+                );
+            }
+        }, 'aer_1071');
 }
