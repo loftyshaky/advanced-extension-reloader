@@ -6,7 +6,9 @@ we.runtime.onMessage.addListener(
         err_async(async () => {
             const msg_str: string = msg.msg;
 
-            if (msg_str === 'update_settings') {
+            if (msg_str === 'reload_ext') {
+                we.runtime.reload();
+            } else if (msg_str === 'update_settings') {
                 s_data.Main.i().update_settings_debounce(
                     msg.settings,
                     n(msg.rerun_actions) ? msg.rerun_actions : false,
