@@ -2,6 +2,7 @@ const path = require('path');
 
 const appRoot = require('app-root-path').path;
 const webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -26,10 +27,12 @@ module.exports = (env, argv) => {
     };
 
     const config = shared_config({
+        app_type: 'ext',
         app_root,
         webpack,
         argv,
         env,
+        TerserPlugin,
         MiniCssExtractPlugin,
         CssMinimizerPlugin,
         CopyWebpackPlugin,
