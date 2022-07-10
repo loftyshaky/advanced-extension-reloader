@@ -1,5 +1,6 @@
 import React from 'react';
-import { render } from 'react-dom';
+
+import ReactDOM from 'react-dom/client';
 
 import '@loftyshaky/shared/ext';
 import {
@@ -59,10 +60,63 @@ export class InitAll {
                 }) as HTMLDivElement;
             }
 
+            ReactDOM.createRoot(error_root).render(
+                <c_error.Body
+                    app_id={s_suffix.app_id}
+                    on_render={(): void =>
+                        err(() => {
+                            ReactDOM.createRoot(loading_screen_root).render(
+                                <c_crash_handler.Body>
+                                    <c_loading_screen.Body on_render={on_loading_screen_render} />
+                                </c_crash_handler.Body>,
+                            );
+                        }, 'aer_1073')
+                    }
+                />,
+            );
+
+            const on_loading_screen_render = (): void =>
+                err(() => {
+                    const loading_screen_root_el = s<HTMLDivElement>(
+                        `.${new s_suffix.Main('loading_screen').result}`,
+                    );
+
+                    if (n(loading_screen_root_el) && n(loading_screen_root_el.shadowRoot)) {
+                        const loading_screen_css = x.css(
+                            'loading_screen',
+                            loading_screen_root_el.shadowRoot,
+                        );
+
+                        if (n(loading_screen_css)) {
+                            x.bind(loading_screen_css, 'load', (): void =>
+                                err(() => {
+                                    d_loading_screen.Main.i().show();
+
+                                    if (page === 'settings') {
+                                        render_settings();
+                                    } else if (page === 'background_tab') {
+                                        render_background_tab();
+                                    }
+                                }, 'aer_1072'),
+                            );
+                        }
+                    }
+                }, 'aer_1073');
+
             const render_settings = (): Promise<void> =>
                 err_async(async () => {
                     const { Body } = await import('settings/components/body');
-                    const on_render = (): Promise<void> =>
+
+                    ReactDOM.createRoot(settings_root).render(
+                        <c_crash_handler.Body>
+                            <Body on_render={on_settings_tab_render} />
+                        </c_crash_handler.Body>,
+                    );
+                }, 'aer_1068');
+
+            const on_settings_tab_render = (): void =>
+                err(() => {
+                    const on_css_load = (): Promise<void> =>
                         err_async(async () => {
                             const { d_sections } = await import('settings/internal');
 
@@ -76,89 +130,45 @@ export class InitAll {
                             s_tab_index.Main.i().bind_set_input_type_f();
                         }, 'aer_1066');
 
-                    render(
-                        <c_crash_handler.Body>
-                            <Body />
-                        </c_crash_handler.Body>,
-                        settings_root,
-                        (): void =>
-                            err(() => {
-                                const settings_css = x.css('settings_css', document.head);
+                    const settings_css = x.css('settings_css', document.head);
 
-                                s_theme.Main.i().set({
-                                    name: data.settings.options_page_theme,
-                                });
+                    s_theme.Main.i().set({
+                        name: data.settings.options_page_theme,
+                    });
 
-                                if (n(settings_css)) {
-                                    x.bind(settings_css, 'load', on_render);
-                                }
-                            }, 'aer_1067'),
-                    );
-                }, 'aer_1068');
+                    if (n(settings_css)) {
+                        x.bind(settings_css, 'load', on_css_load);
+                    }
+                }, 'aer_1067');
 
             const render_background_tab = (): Promise<void> =>
                 err_async(async () => {
                     const { Body } = await import('background_tab/components/body');
-                    const on_render = (): Promise<void> =>
+
+                    ReactDOM.createRoot(background_tab_root).render(
+                        <c_crash_handler.Body>
+                            <Body on_render={on_background_tab_render} />
+                        </c_crash_handler.Body>,
+                    );
+                }, 'aer_1071');
+
+            const on_background_tab_render = (): void =>
+                err(() => {
+                    const on_css_load = (): Promise<void> =>
                         err_async(async () => {
                             d_loading_screen.Main.i().hide();
                         }, 'aer_1069');
 
-                    render(
-                        <c_crash_handler.Body>
-                            <Body />
-                        </c_crash_handler.Body>,
-                        background_tab_root,
-                        (): void =>
-                            err(() => {
-                                const settings_css = x.css('background_tab_css', document.head);
+                    const settings_css = x.css('background_tab_css', document.head);
 
-                                s_theme.Main.i().set({
-                                    name: data.settings.options_page_theme,
-                                });
+                    s_theme.Main.i().set({
+                        name: data.settings.options_page_theme,
+                    });
 
-                                if (n(settings_css)) {
-                                    x.bind(settings_css, 'load', on_render);
-                                }
-                            }, 'aer_1070'),
-                    );
-                }, 'aer_1071');
-
-            render(<c_error.Body app_id={s_suffix.app_id} />, error_root, (): void => {
-                render(
-                    <c_crash_handler.Body>
-                        <c_loading_screen.Body />
-                    </c_crash_handler.Body>,
-                    loading_screen_root,
-                    (): void =>
-                        err(() => {
-                            const loading_screen_root_el = s<HTMLDivElement>(
-                                `.${new s_suffix.Main('loading_screen').result}`,
-                            );
-
-                            if (n(loading_screen_root_el) && n(loading_screen_root_el.shadowRoot)) {
-                                const loading_screen_css = x.css(
-                                    'loading_screen',
-                                    loading_screen_root_el.shadowRoot,
-                                );
-
-                                if (n(loading_screen_css)) {
-                                    x.bind(loading_screen_css, 'load', (): void =>
-                                        err(() => {
-                                            d_loading_screen.Main.i().show();
-
-                                            if (page === 'settings') {
-                                                render_settings();
-                                            } else if (page === 'background_tab') {
-                                                render_background_tab();
-                                            }
-                                        }, 'aer_1072'),
-                                    );
-                                }
-                            }
-                        }, 'aer_1073'),
-                );
-            });
+                    if (n(settings_css)) {
+                        x.bind(settings_css, 'load', on_css_load);
+                    }
+                }, 'aer_1091');
         }, 'aer_1074');
 
     private create_root = ({

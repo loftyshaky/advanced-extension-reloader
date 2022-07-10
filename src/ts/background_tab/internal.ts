@@ -9,3 +9,5 @@ export * from 'background_tab/init';
 export * as c_background_tab from 'background_tab/components';
 
 export * as s_reload from 'background_tab/reload/scripts';
+
+export * as p_background_tab from 'background_tab/components/prop_types';
