@@ -31,71 +31,79 @@ export class InitAll {
     private background_tab_root: HTMLDivElement | undefined = undefined;
 
     public init = (): Promise<void> =>
-        err_async(async () => {
-            const on_loading_screen_render = (): void =>
-                err(() => {
-                    const loading_screen_root_el = s<HTMLDivElement>(
-                        `.${new s_suffix.Main('loading_screen').result}`,
-                    );
-
-                    if (n(loading_screen_root_el) && n(loading_screen_root_el.shadowRoot)) {
-                        const loading_screen_css = x.css(
-                            'loading_screen',
-                            loading_screen_root_el.shadowRoot,
+        new Promise((reslove) => {
+            err_async(async () => {
+                const on_loading_screen_render = (): void =>
+                    err(() => {
+                        const loading_screen_root_el = s<HTMLDivElement>(
+                            `.${new s_suffix.Main('loading_screen').result}`,
                         );
 
-                        if (n(loading_screen_css)) {
-                            x.bind(loading_screen_css, 'load', (): void =>
-                                err(() => {
-                                    d_loading_screen.Main.i().show();
-                                }, 'aer_1072'),
+                        if (n(loading_screen_root_el) && n(loading_screen_root_el.shadowRoot)) {
+                            const loading_screen_css = x.css(
+                                'loading_screen',
+                                loading_screen_root_el.shadowRoot,
                             );
+
+                            if (n(loading_screen_css)) {
+                                x.bind(loading_screen_css, 'load', (): void =>
+                                    err(() => {
+                                        d_loading_screen.Main.i().show();
+                                    }, 'aer_1072'),
+                                );
+                            }
                         }
-                    }
-                }, 'aer_1073');
+                    }, 'aer_1073');
 
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            __webpack_public_path__ = we.runtime.getURL('');
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                __webpack_public_path__ = we.runtime.getURL('');
 
-            if (page === 'settings') {
-                await d_settings.Transform.i().set_transformed_from_storage();
-            }
+                if (page === 'settings') {
+                    await d_settings.Transform.i().set_transformed_from_storage();
+                }
 
-            this.set_page_title();
+                this.set_page_title();
 
-            s_css_vars.Main.i().set();
+                s_css_vars.Main.i().set();
 
-            const error_root: ShadowRoot = this.create_root({ prefix: 'error' }) as ShadowRoot;
-            const loading_screen_root: ShadowRoot = this.create_root({
-                prefix: 'loading_screen',
-            }) as ShadowRoot;
-            if (page === 'settings') {
-                this.settings_root = this.create_root({
-                    prefix: 'settings',
-                    shadow_root: false,
-                }) as HTMLDivElement;
-            } else if (page === 'background_tab') {
-                this.background_tab_root = this.create_root({
-                    prefix: 'background_tab',
-                    shadow_root: false,
-                }) as HTMLDivElement;
-            }
+                const error_root: ShadowRoot = this.create_root({ prefix: 'error' }) as ShadowRoot;
+                const loading_screen_root: ShadowRoot = this.create_root({
+                    prefix: 'loading_screen',
+                }) as ShadowRoot;
+                if (page === 'settings') {
+                    this.settings_root = this.create_root({
+                        prefix: 'settings',
+                        shadow_root: false,
+                    }) as HTMLDivElement;
+                } else if (page === 'background_tab') {
+                    this.background_tab_root = this.create_root({
+                        prefix: 'background_tab',
+                        shadow_root: false,
+                    }) as HTMLDivElement;
+                }
 
-            ReactDOM.createRoot(error_root).render(
-                <c_error.Body
-                    app_id={s_suffix.app_id}
-                    on_render={(): void =>
-                        err(() => {
-                            ReactDOM.createRoot(loading_screen_root).render(
-                                <c_crash_handler.Body>
-                                    <c_loading_screen.Body on_render={on_loading_screen_render} />
-                                </c_crash_handler.Body>,
-                            );
-                        }, 'aer_1073')
-                    }
-                />,
-            );
-        }, 'aer_1074');
+                ReactDOM.createRoot(error_root).render(
+                    <c_error.Body
+                        app_id={s_suffix.app_id}
+                        on_render={(): void =>
+                            err(() => {
+                                ReactDOM.createRoot(loading_screen_root).render(
+                                    <c_crash_handler.Body>
+                                        <c_loading_screen.Body
+                                            on_render={(): void => {
+                                                reslove();
+
+                                                on_loading_screen_render();
+                                            }}
+                                        />
+                                    </c_crash_handler.Body>,
+                                );
+                            }, 'aer_1073')
+                        }
+                    />,
+                );
+            }, 'aer_1074');
+        });
 
     private create_root = ({
         prefix,

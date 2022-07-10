@@ -6,5 +6,5 @@ import { init } from 'settings/internal';
     await d_settings.Transform.i().set_transformed_from_storage();
 
     init_shared();
-    init();
+    await init();
 })();
