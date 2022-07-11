@@ -20,6 +20,8 @@ export class Watch {
     private debounce_reload_timer: number = 0;
     private reload_cooldown_timer: number = 0;
     private full_reload_delay: number = 1000;
+    public last_cooldown_time = 0;
+    public reload_cooldown_timer_start_timestamp = 0;
 
     public try_to_reload = ({ options }: { options: i_options.Options }): Promise<void> =>
         err_async(async () => {
@@ -36,6 +38,17 @@ export class Watch {
                         reload_action: options,
                     });
 
+                if (n(options_final.after_reload_delay)) {
+                    this.last_cooldown_time =
+                        (options_final.after_reload_delay + this.full_reload_delay) * 3;
+
+                    if (!this.allow_fast_reload) {
+                        s_badge.Main.i().show_timer_badge({
+                            time: options_final.after_reload_delay + this.full_reload_delay,
+                        });
+                    }
+                }
+
                 if (this.allow_fast_reload) {
                     this.allow_fast_reload = false;
                     done_fast_reload = true;
@@ -46,11 +59,14 @@ export class Watch {
                 if (n(options_final.after_reload_delay)) {
                     self.clearTimeout(this.reload_cooldown_timer);
 
+                    this.reload_cooldown_timer_start_timestamp = Date.now();
+
                     this.reload_cooldown_timer = self.setTimeout(() => {
                         err(() => {
+                            this.reload_cooldown_timer_start_timestamp = 0;
                             this.allow_fast_reload = true;
                         }, 'aer_1094');
-                    }, (options_final.after_reload_delay + this.full_reload_delay) * 3);
+                    }, this.last_cooldown_time);
 
                     this.debounce_reload_timer = self.setTimeout(() => {
                         err(() => {
@@ -161,7 +177,7 @@ export class Watch {
                 });
             }
 
-            await s_badge.Main.i().show();
+            await s_badge.Main.i().show_ok_badge();
 
             if (options_final.play_sound) {
                 ext.send_msg({ msg: 'play_reload_sound' });
