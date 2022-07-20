@@ -192,21 +192,17 @@ export class Watch {
         err_async(async () => {
             let reload_triggered = false;
 
-            try {
-                const reload_ext = (): Promise<void> =>
-                    err(async () => {
-                        await we.runtime.sendMessage(ext_info.id, {
-                            msg: new s_suffix.Main('reload_extension').result,
-                        });
+            const reload_ext = (): Promise<void> =>
+                err(async () => {
+                    await we.runtime.sendMessage(ext_info.id, {
+                        msg: new s_suffix.Main('reload_extension').result,
+                    });
 
-                        reload_triggered = true;
-                    }, 'aer_1088');
+                    reload_triggered = true;
+                }, 'aer_1088');
 
-                await Promise.race([reload_ext(), x.delay(this.full_reload_delay)]); // if target extension service worker is broken (if background js is in incorrect state) the extension can not be reloaded with chrome.runtime.reload(); and the response of the "reload_extension" message will not be recieved. In this case if 1000 ms elapsed and no response from extension recieved forcefully reload extension with chrome.management.setEnabled(ext_info.id, false); chrome.management.setEnabled(ext_info.id, true);. Include 1000 ms delay in "try_to_reload" function.
-                await we.management.setEnabled(ext_info.id, true);
-            } catch (error_obj: any) {
-                show_err_ribbon(error_obj, 'aer_1084', { silent: true });
-            }
+            await Promise.race([reload_ext(), x.delay(this.full_reload_delay)]); // if target extension service worker is broken (if background js is in incorrect state) the extension can not be reloaded with chrome.runtime.reload(); and the response of the "reload_extension" message will not be recieved. In this case if 1000 ms elapsed and no response from extension recieved forcefully reload extension with chrome.management.setEnabled(ext_info.id, false); chrome.management.setEnabled(ext_info.id, true);. Include 1000 ms delay in "try_to_reload" function.
+            await we.management.setEnabled(ext_info.id, true);
 
             return reload_triggered;
         }, 'aer_1040');

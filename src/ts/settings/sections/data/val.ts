@@ -17,8 +17,8 @@ export class Val {
     private constructor() {}
 
     public change = ({ input }: { input: i_inputs.Input }): void =>
-        err(() => {
-            try {
+        err(
+            () => {
                 const raw_val = d_inputs.Val.i().access({ input });
                 let val: t.AnyUndefined;
 
@@ -52,10 +52,10 @@ export class Val {
                         settings: { [input.name]: val },
                     });
                 }
-            } catch (error_obj: any) {
-                show_err_ribbon(error_obj, 'aer_1053', { silent: true });
-            }
-        }, 'aer_1054');
+            },
+            'aer_1054',
+            { silent: true },
+        );
 
     public validate_input = ({ input }: { input: i_inputs.Input }): boolean =>
         err(() => {
@@ -142,6 +142,7 @@ export class Val {
                     return d_inputs.Val.i().validate_input({ input });
                 }
             } catch (error_obj: any) {
+                // needed to display input warn state when provided incorrect JSON in click_action and context_menu_actions inputs
                 show_err_ribbon(error_obj, 'aer_1060', { silent: true });
             }
 
