@@ -25,8 +25,8 @@ export class Watch {
 
     public try_to_reload = ({ options }: { options: i_options.Options }): Promise<void> =>
         err_async(async () => {
-            self.clearTimeout(this.reload_cooldown_timer);
-            self.clearTimeout(this.debounce_reload_timer);
+            globalThis.clearTimeout(this.reload_cooldown_timer);
+            globalThis.clearTimeout(this.debounce_reload_timer);
 
             if (!this.reloading) {
                 this.reloading = true;
@@ -57,7 +57,7 @@ export class Watch {
                 }
 
                 if (n(options_final.after_reload_delay)) {
-                    self.clearTimeout(this.reload_cooldown_timer);
+                    globalThis.clearTimeout(this.reload_cooldown_timer);
 
                     this.reload_cooldown_timer_start_timestamp = Date.now();
 

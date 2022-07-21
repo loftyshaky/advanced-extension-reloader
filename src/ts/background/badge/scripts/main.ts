@@ -67,7 +67,7 @@ export class Main {
 
             const step = 100;
 
-            self.clearInterval(this.timer_badge_interval);
+            globalThis.clearInterval(this.timer_badge_interval);
 
             this.timer_badge_interval = self.setInterval(async () => {
                 err_async(async () => {
@@ -86,7 +86,7 @@ export class Main {
         err(() => {
             this.timer_badge_time_left = 0;
 
-            self.clearInterval(this.timer_badge_interval);
+            globalThis.clearInterval(this.timer_badge_interval);
 
             this.time_badge_text = '';
 

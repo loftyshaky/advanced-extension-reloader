@@ -17,7 +17,9 @@ export class Restore {
     public restore_confirm = ({ settings }: { settings?: i_data.Settings } = {}): Promise<void> =>
         err_async(async () => {
             // eslint-disable-next-line no-alert
-            const confirmed_restore: boolean = self.confirm(ext.msg('restore_defaults_confirm'));
+            const confirmed_restore: boolean = globalThis.confirm(
+                ext.msg('restore_defaults_confirm'),
+            );
 
             if (confirmed_restore) {
                 const settings_final: i_data.Settings = await this.set({ settings });
