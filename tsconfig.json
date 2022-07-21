@@ -9,7 +9,6 @@
         "strict": true,
         "esModuleInterop": true,
         "sourceMap": true,
-        "experimentalDecorators": true,
         "typeRoots": ["node_modules/@types", "node_modules/web-ext-types"],
         "paths": {
             "shared/*": ["./ts/shared/*"],
