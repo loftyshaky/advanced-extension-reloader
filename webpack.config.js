@@ -49,13 +49,15 @@ module.exports = (env, argv) => {
             });
         },
         callback_done: () => {
+            const env_2 = 'ext';
+
             manifest.generate({
                 mode: argv.mode,
                 test: env.test,
                 browser: env.browser,
             });
-            env_instance.generate({ browser: env.browser });
-            locales.merge();
+            env_instance.generate({ browser: env.browser, mode: argv.mode, env: env_2 });
+            locales.merge({ env: env_2 });
         },
     });
 
