@@ -31,16 +31,18 @@ export const Body: React.FunctionComponent<p_settings.Body> = observer((props) =
     );
 
     return (
-        <c_settings.Body
-            sections={d_sections.Main.i().sections as i_inputs.Sections}
-            initial_section={d_sections.Main.i().current_section}
-            change_section_callback={(): void => {
-                d_inputs.NestedInput.i().set_all_parents_disbled_vals({
-                    sections: d_sections.Main.i().sections as i_inputs.Sections,
-                });
+        <div className='main'>
+            <c_settings.Body
+                sections={d_sections.Main.i().sections as i_inputs.Sections}
+                initial_section={d_sections.Main.i().current_section}
+                change_section_callback={(): void => {
+                    d_inputs.NestedInput.i().set_all_parents_disbled_vals({
+                        sections: d_sections.Main.i().sections as i_inputs.Sections,
+                    });
 
-                d_sections.Main.i().change_section_val();
-            }}
-        />
+                    d_sections.Main.i().change_section_val();
+                }}
+            />
+        </div>
     );
 });
