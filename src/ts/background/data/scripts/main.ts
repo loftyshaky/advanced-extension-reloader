@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
-import { t } from '@loftyshaky/shared';
-import { o_schema, d_schema } from '@loftyshaky/shared/settings';
+import { t, o_schema, d_schema } from '@loftyshaky/shared';
 import { i_data } from 'shared/internal';
 import { s_reload } from 'background/internal';
 
