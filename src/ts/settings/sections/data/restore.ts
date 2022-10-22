@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
-import { t } from '@loftyshaky/shared';
-import { d_settings, i_data } from 'shared/internal';
+import { t, s_theme } from '@loftyshaky/shared';
+import { d_settings, s_css_vars, i_data } from 'shared/internal';
 
 export class Restore {
     private static i0: Restore;
@@ -28,6 +28,11 @@ export class Restore {
                     msg: 'update_settings',
                     settings: settings_final,
                 });
+
+                s_theme.Main.i().set({
+                    name: data.settings.options_page_theme,
+                });
+                s_css_vars.Main.i().set();
             }
         }, 'aer_1049');
 
@@ -46,6 +51,11 @@ export class Restore {
                 transform: true,
                 rerun_actions: true,
             });
+
+            s_theme.Main.i().set({
+                name: data.settings.options_page_theme,
+            });
+            s_css_vars.Main.i().set();
         }, 'aer_1050');
 
     private set = ({ settings }: { settings?: i_data.Settings } = {}): Promise<i_data.Settings> =>
