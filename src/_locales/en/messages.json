@@ -1,4 +1,7 @@
 {
+    "name": {
+        "message": "Advanced Extension Reloader"
+    },
     "description": {
         "message": "Reload an unpacked extension with one click, hotkey or automatically."
     },
