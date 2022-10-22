@@ -96,13 +96,19 @@ export class Tabs {
                     return hard ? is_extension_tab : false;
                 }, 'aer_1026');
 
+            const tab_is_idle = ({ tab }: { tab: TabsExt.Tab }): boolean =>
+                err(() => tab.status !== 'loading', 'aer_1098'); // without this refresh button in browser will not work in extension pages after hard reload
+
             const tabs: TabsExt.Tab[] = await this.get_tabs();
 
             if (all_tabs) {
                 await Promise.all(
                     tabs.map(async (ext_tab: TabsExt.Tab) =>
                         err_async(async () => {
-                            if (!check_if_excluded_tab_hard({ url: ext_tab.url })) {
+                            if (
+                                !check_if_excluded_tab_hard({ url: ext_tab.url }) &&
+                                tab_is_idle({ tab: ext_tab })
+                            ) {
                                 await we.tabs.reload(ext_tab.id);
                             }
                         }, 'aer_1027'),
@@ -114,7 +120,8 @@ export class Tabs {
                 if (
                     n(current_tab) &&
                     !this.check_if_excluded_tab({ url: current_tab.url }) &&
-                    !check_if_excluded_tab_hard({ url: current_tab.url })
+                    !check_if_excluded_tab_hard({ url: current_tab.url }) &&
+                    tab_is_idle({ tab: current_tab })
                 ) {
                     await we.tabs.reload(current_tab.id);
                 }
