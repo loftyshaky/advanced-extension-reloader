@@ -23,7 +23,7 @@ export class ContextMenu {
 
             await we.contextMenus.create({
                 id: 'open_background_tab',
-                title: 'Open background tab',
+                title: ext.msg('open_background_tab_context_menu_item'),
                 contexts: ['action'],
             });
 
