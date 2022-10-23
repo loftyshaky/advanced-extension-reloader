@@ -21,7 +21,7 @@ export class Main {
         err(() => {
             this.defaults = {
                 current_section: 'reload',
-                options_page_theme: 'light',
+                options_page_theme: 'lavender',
                 transition_duration: 200,
                 show_color_help: true,
                 enable_cut_features: false,
