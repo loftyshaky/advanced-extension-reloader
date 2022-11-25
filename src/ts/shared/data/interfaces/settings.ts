@@ -8,6 +8,7 @@ export interface Settings {
     enable_cut_features: boolean;
     ports: string[];
     reload_notification_volume: string;
+    allow_theme_reload: boolean;
     open_background_tab_automatically: boolean;
     open_position_in_tab_strip: number;
     click_action: i_options.Options;

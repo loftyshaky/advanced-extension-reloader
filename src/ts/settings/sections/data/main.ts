@@ -57,6 +57,10 @@ export class Main {
                                 step: 0.01,
                                 event_callback: d_sections.Val.i().change,
                             }),
+                            new o_inputs.Checkbox({
+                                name: 'allow_theme_reload',
+                                event_callback: d_sections.Val.i().change,
+                            }),
                         ],
                     }),
                     new o_inputs.Section({

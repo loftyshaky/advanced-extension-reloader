@@ -44,6 +44,9 @@
     "reload_notification_volume_label_text": {
         "message": "Громкость уведомления перезагрузки"
     },
+    "allow_theme_reload_label_text": {
+        "message": "Позволить перезагружать тему"
+    },
     "open_background_tab_automatically_label_text": {
         "message": "Автоматически открывать фоновую вкладку"
     },

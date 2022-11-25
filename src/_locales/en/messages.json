@@ -47,6 +47,9 @@
     "reload_notification_volume_label_text": {
         "message": "Reload notification volume"
     },
+    "allow_theme_reload_label_text": {
+        "message": "Allow theme reload"
+    },
     "open_background_tab_automatically_label_text": {
         "message": "Open background tab automatically"
     },

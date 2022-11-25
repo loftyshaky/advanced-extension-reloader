@@ -27,6 +27,7 @@ export class Main {
                 enable_cut_features: false,
                 ports: ['7220'],
                 reload_notification_volume: '1',
+                allow_theme_reload: true,
                 open_background_tab_automatically: true,
                 open_position_in_tab_strip: 0,
                 click_action: {
@@ -107,7 +108,14 @@ export class Main {
         err_async(async () => {
             const settings_copy: any = settings;
 
-            const transform_items: o_schema.TransformItem[] = [
+            const settings_transform_items: o_schema.TransformItem[] = [
+                new o_schema.TransformItem({
+                    new_key: 'allow_theme_reload',
+                    new_val: true,
+                }),
+            ];
+
+            const click_action_transform_items: o_schema.TransformItem[] = [
                 new o_schema.TransformItem({
                     old_key: 'after_enable_delay',
                     new_key: 'after_reload_delay',
@@ -119,19 +127,25 @@ export class Main {
                 }),
             ];
 
-            const click_action: any = await d_schema.Main.i().transform({
-                data: settings_copy.click_action,
-                transform_items,
+            const settings_copy_final: i_data.Settings = await d_schema.Main.i().transform({
+                data: settings_copy,
+                transform_items: settings_transform_items,
+                remove_from_storage: false,
             });
 
-            settings_copy.click_action = click_action;
+            const click_action: any = await d_schema.Main.i().transform({
+                data: settings_copy_final.click_action,
+                transform_items: click_action_transform_items,
+            });
 
-            settings_copy.context_menu_actions = await Promise.all(
-                settings_copy.context_menu_actions.map((action: any): any =>
+            settings_copy_final.click_action = click_action;
+
+            settings_copy_final.context_menu_actions = await Promise.all(
+                settings_copy_final.context_menu_actions.map((action: any): any =>
                     err_async(async () => {
                         const new_action: any = await d_schema.Main.i().transform({
                             data: action,
-                            transform_items,
+                            transform_items: click_action_transform_items,
                         });
 
                         return new_action;
@@ -139,6 +153,6 @@ export class Main {
                 ),
             );
 
-            return settings_copy;
+            return settings_copy_final;
         }, 'aer_1085');
 }

@@ -83,6 +83,7 @@ export class Watch {
 
     public reload = (options: i_options.Options): Promise<void> =>
         err_async(async () => {
+            const settings = await ext.storage_get();
             const options_final: i_options.Options =
                 s_reload.DefaultValues.i().tranform_reload_action({
                     reload_action: options,
@@ -137,6 +138,8 @@ export class Watch {
                                 ext_info.id !== we.runtime.id &&
                                 ext_info.enabled &&
                                 ext_info.installType === 'development' &&
+                                ((ext_info.type === 'theme' && settings.allow_theme_reload) ||
+                                    ext_info.type !== 'theme') &&
                                 (!ext_id_option_specified || matched_ext_id_from_options)
                             ) {
                                 if (n(options_final.after_reload_delay)) {
