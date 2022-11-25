@@ -120,7 +120,7 @@ export class Main {
             ];
 
             const click_action: any = await d_schema.Main.i().transform({
-                settings: settings_copy.click_action,
+                data: settings_copy.click_action,
                 transform_items,
             });
 
@@ -130,7 +130,7 @@ export class Main {
                 settings_copy.context_menu_actions.map((action: any): any =>
                     err_async(async () => {
                         const new_action: any = await d_schema.Main.i().transform({
-                            settings: action,
+                            data: action,
                             transform_items,
                         });
 
