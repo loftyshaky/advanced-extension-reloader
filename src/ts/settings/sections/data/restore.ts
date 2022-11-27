@@ -36,10 +36,10 @@ export class Restore {
             }
         }, 'aer_1049');
 
-    public restore_back_up = ({ data_obj }: { data_obj: t.AnyRecord }): Promise<void> =>
+    public restore_back_up = ({ data_objs }: { data_objs: t.AnyRecord[] }): Promise<void> =>
         err_async(async () => {
             let settings: i_data.Settings = {
-                ...data_obj,
+                ...data_objs[0],
                 ...this.get_unchanged_settings(),
             } as i_data.Settings;
 
