@@ -19,7 +19,7 @@ export class Transform {
             let settings_final: any;
 
             if (_.isEmpty(settings)) {
-                const default_settings = await ext.send_msg_resp({ msg: 'get_default_settings' });
+                const default_settings = await ext.send_msg_resp({ msg: 'get_defaults' });
 
                 settings_final = default_settings;
             } else {
@@ -51,10 +51,9 @@ export class Transform {
             const settings_are_corrupt: boolean = !n(settings.enable_cut_features);
 
             if (_.isEmpty(settings) || settings_are_corrupt) {
-                const default_settings = await ext.send_msg_resp({ msg: 'get_default_settings' });
+                const default_settings = await ext.send_msg_resp({ msg: 'get_defaults' });
 
                 await ext.storage_set(default_settings);
-
                 await d_settings.Main.i().set({ settings: default_settings, settings_are_corrupt });
             }
 

@@ -15,7 +15,7 @@ we.runtime.onMessage.addListener(
                     n(msg.transform) ? msg.transform : false,
                 );
             } else if (msg_str === 'get_defaults') {
-                return Promise.resolve(s_data.Main.i().defaults);
+                return s_data.Main.i().defaults;
             } else if (msg_str === 'reload') {
                 s_reload.Watch.i().try_to_reload({
                     options: msg.options,
