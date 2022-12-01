@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import { runInAction } from 'mobx';
 
+import { d_settings } from '@loftyshaky/shared';
+
 export class Transform {
     private static i0: Transform;
 
@@ -15,6 +17,7 @@ export class Transform {
     public set_transformed = ({ settings = undefined }: { settings?: any } = {}): Promise<void> =>
         err_async(async () => {
             let settings_final: any;
+
             if (_.isEmpty(settings)) {
                 const default_settings = await ext.send_msg_resp({ msg: 'get_default_settings' });
 
@@ -45,13 +48,18 @@ export class Transform {
     public set_transformed_from_storage = (): Promise<void> =>
         err_async(async () => {
             const settings = await ext.storage_get();
+            const settings_are_corrupt: boolean = !n(settings.enable_cut_features);
 
-            if (_.isEmpty(settings)) {
+            if (_.isEmpty(settings) || settings_are_corrupt) {
                 const default_settings = await ext.send_msg_resp({ msg: 'get_default_settings' });
 
                 await ext.storage_set(default_settings);
+
+                await d_settings.Main.i().set({ settings: default_settings, settings_are_corrupt });
             }
 
-            this.set_transformed({ settings });
+            if (!settings_are_corrupt) {
+                this.set_transformed({ settings });
+            }
         }, 'aer_1083');
 }
