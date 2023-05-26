@@ -156,4 +156,13 @@ export class Val {
 
     private check_if_json_input = ({ name }: { name: string }): boolean =>
         err(() => ['click_action', 'context_menu_actions'].includes(name), 'aer_1063');
+
+    public enable_developer_mode_save_callback = (): Promise<void> =>
+        err_async(async () => {
+            await ext.send_msg_resp({
+                msg: 'update_settings',
+                settings: { developer_mode: data.settings.developer_mode },
+                rerun_actions: true,
+            });
+        }, 'ges_1210');
 }

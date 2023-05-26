@@ -42,6 +42,9 @@ export const Body: React.FunctionComponent<p_settings.Body> = observer((props) =
 
                     d_sections.Main.i().change_section_val();
                 }}
+                enable_developer_mode_save_callback={
+                    d_sections.Val.i().enable_developer_mode_save_callback
+                }
             />
         </div>
     );

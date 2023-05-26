@@ -24,7 +24,9 @@ export class Main {
                 options_page_theme: 'lavender',
                 transition_duration: 200,
                 show_color_help: true,
+                developer_mode: false,
                 enable_cut_features: false,
+                offers_are_visible: true,
                 ports: ['7220'],
                 reload_notification_volume: '1',
                 allow_theme_reload: true,
@@ -111,6 +113,14 @@ export class Main {
             const settings_transform_items: o_schema.TransformItem[] = [
                 new o_schema.TransformItem({
                     new_key: 'allow_theme_reload',
+                    new_val: true,
+                }),
+                new o_schema.TransformItem({
+                    new_key: 'developer_mode',
+                    new_val: false,
+                }),
+                new o_schema.TransformItem({
+                    new_key: 'offers_are_visible',
                     new_val: true,
                 }),
             ];

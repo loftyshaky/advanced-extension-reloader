@@ -5,7 +5,9 @@ export interface Settings {
     options_page_theme: string;
     transition_duration: number;
     show_color_help: boolean;
+    developer_mode: boolean;
     enable_cut_features: boolean;
+    offers_are_visible: boolean;
     ports: string[];
     reload_notification_volume: string;
     allow_theme_reload: boolean;
