@@ -7,6 +7,7 @@ export interface Settings {
     show_color_help: boolean;
     developer_mode: boolean;
     enable_cut_features: boolean;
+    persistent_service_worker: boolean;
     offers_are_visible: boolean;
     offer_banner_type: 'horizontal' | 'vertical';
     ports: string[];

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { t, o_schema, d_schema } from '@loftyshaky/shared';
+import { t, o_schema, d_schema, s_service_worker } from '@loftyshaky/shared';
 import { i_data } from 'shared/internal';
 import { s_reload } from 'background/internal';
 
@@ -26,6 +26,7 @@ export class Main {
                 show_color_help: true,
                 developer_mode: false,
                 enable_cut_features: false,
+                persistent_service_worker: true,
                 offers_are_visible: true,
                 offer_banner_type: 'horizontal',
                 ports: ['7220'],
@@ -77,6 +78,8 @@ export class Main {
             }
 
             await ext.storage_set(settings_final);
+
+            s_service_worker.ServiceWorker.i().make_persistent();
         }, 'aer_1008');
 
     public update_settings_debounce = _.debounce(
@@ -127,6 +130,10 @@ export class Main {
                 new o_schema.TransformItem({
                     new_key: 'offer_banner_type',
                     new_val: 'horizontal',
+                }),
+                new o_schema.TransformItem({
+                    new_key: 'persistent_service_worker',
+                    new_val: true,
                 }),
             ];
 
