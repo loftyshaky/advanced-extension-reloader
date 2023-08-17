@@ -63,22 +63,6 @@ export class Main {
                             }),
                         ],
                     }),
-                    new o_inputs.Section({
-                        name: 'background_tab',
-                        inputs: [
-                            new o_inputs.Checkbox({
-                                name: 'open_background_tab_automatically',
-                                include_help: true,
-                                event_callback: d_sections.Val.i().change,
-                            }),
-                            new o_inputs.Text({
-                                name: 'open_position_in_tab_strip',
-                                text_type: 'number',
-                                event_callback: d_sections.Val.i().change,
-                                warn_state_checker: d_sections.Val.i().validate_input,
-                            }),
-                        ],
-                    }),
                 ],
                 ...d_settings.Sections.i().make_shared_sections({
                     download_back_up_callback: ext.storage_get,
@@ -139,10 +123,6 @@ export class Main {
             this.sections.reload.inputs = s_utils.Main.i().to_object({
                 arr: this.sections.reload.inputs as o_inputs.Section[],
                 section: 'reload',
-            });
-            this.sections.background_tab.inputs = s_utils.Main.i().to_object({
-                arr: this.sections.background_tab.inputs as o_inputs.Section[],
-                section: 'background_tab',
             });
             this.sections.links.inputs = s_utils.Main.i().to_object({
                 arr: this.sections.links.inputs as o_inputs.Section[],

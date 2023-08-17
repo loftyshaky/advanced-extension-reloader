@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import { t, o_schema, d_schema, s_service_worker } from '@loftyshaky/shared';
 import { i_data } from 'shared/internal';
-import { s_reload } from 'background/internal';
+import { s_side_effects } from 'background/internal';
 
 export class Main {
     private static i0: Main;
@@ -26,14 +26,12 @@ export class Main {
                 show_color_help: true,
                 developer_mode: false,
                 enable_cut_features: false,
-                persistent_service_worker: true,
+                persistent_service_worker: false,
                 offers_are_visible: true,
                 offer_banner_type: 'horizontal',
                 ports: ['7220'],
                 reload_notification_volume: '1',
                 allow_theme_reload: true,
-                open_background_tab_automatically: true,
-                open_position_in_tab_strip: 0,
                 click_action: {
                     all_tabs: false,
                     hard: true,
@@ -79,6 +77,8 @@ export class Main {
 
             await ext.storage_set(settings_final);
 
+            await s_side_effects.Main.i().react_to_change();
+
             s_service_worker.ServiceWorker.i().make_persistent();
         }, 'aer_1008');
 
@@ -90,9 +90,6 @@ export class Main {
                 if (rerun_actions) {
                     ext.send_msg_to_all_tabs({ msg: 'rerun_actions' });
                 }
-
-                s_reload.Tabs.i().reload_background_tab_page_tab();
-                s_reload.Tabs.i().open_background_tab();
             }, 'ges_1177'),
         500,
     );
@@ -133,7 +130,7 @@ export class Main {
                 }),
                 new o_schema.TransformItem({
                     new_key: 'persistent_service_worker',
-                    new_val: true,
+                    new_val: false,
                 }),
             ];
 
@@ -153,6 +150,7 @@ export class Main {
                 data: settings_copy,
                 transform_items: settings_transform_items,
                 remove_from_storage: false,
+                keys_to_remove: ['open_background_tab_automatically', 'open_position_in_tab_strip'],
             });
 
             const click_action: any = await d_schema.Main.i().transform({

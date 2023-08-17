@@ -64,7 +64,7 @@ module.exports = (env, argv) => {
     config.resolve.alias = {
         ...config.resolve.alias,
         ...{
-            background_tab: path.join(paths.ts, 'background_tab'),
+            offscreen: path.join(paths.ts, 'offscreen'),
         },
     };
 
@@ -72,8 +72,7 @@ module.exports = (env, argv) => {
         ...config.entry,
         ...{
             background: path.join(paths.ts, 'background', 'background.ts'),
-            background_tab: path.join(paths.ts, 'background_tab', 'background_tab.ts'),
-            background_tab_css: path.join(app_root, 'src', 'scss', 'background_tab', 'index.scss'),
+            offscreen: path.join(paths.ts, 'offscreen', 'offscreen.ts'),
             settings: path.join(paths.ts, 'settings', 'settings.ts'),
             settings_css: path.join(app_root, 'src', 'scss', 'settings', 'index.scss'),
         },

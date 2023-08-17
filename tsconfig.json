@@ -13,7 +13,7 @@
         "paths": {
             "shared/*": ["./ts/shared/*"],
             "background/*": ["./ts/background/*"],
-            "background_tab/*": ["./ts/background_tab/*"],
+            "offscreen/*": ["./ts/offscreen/*"],
             "settings/*": ["./ts/settings/*"]
         }
     },

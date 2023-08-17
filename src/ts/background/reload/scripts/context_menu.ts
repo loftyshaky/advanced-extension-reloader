@@ -21,18 +21,7 @@ export class ContextMenu {
 
             await we.contextMenus.removeAll();
 
-            await we.contextMenus.create({
-                id: 'open_background_tab',
-                title: ext.msg('open_background_tab_context_menu_item'),
-                contexts: ['action'],
-            });
-
-            const background_tab_tab = await s_reload.Tabs.i().get_page_tab({
-                page: 'background_tab',
-            });
-            const found_background_tab = n(background_tab_tab);
-
-            if (found_background_tab && n(settings.context_menu_actions)) {
+            if (n(settings.context_menu_actions)) {
                 const apps_info: Management.ExtensionInfo[] = await we.management.getAll();
 
                 const get_ext_info_with_id = ({
@@ -67,18 +56,17 @@ export class ContextMenu {
                             const context_menu_item_title: string = `${app_name}${
                                 reload_actions_final.hard ? 'hard' : 'soft'
                             } + ${reload_actions_final.all_tabs ? 'all tabs' : 'one tab'}`;
-                            if (n(background_tab_tab.id)) {
-                                const context_menu_item_title_final: string =
-                                    app_name === ''
-                                        ? _.upperFirst(context_menu_item_title)
-                                        : context_menu_item_title;
 
-                                await we.contextMenus.create({
-                                    id: `${i}`,
-                                    title: context_menu_item_title_final,
-                                    contexts: ['action'],
-                                });
-                            }
+                            const context_menu_item_title_final: string =
+                                app_name === ''
+                                    ? _.upperFirst(context_menu_item_title)
+                                    : context_menu_item_title;
+
+                            await we.contextMenus.create({
+                                id: `${i}`,
+                                title: context_menu_item_title_final,
+                                contexts: ['action'],
+                            });
                         }, 'aer_1016'),
                 );
             }
@@ -88,14 +76,10 @@ export class ContextMenu {
 we.contextMenus.onClicked.addListener(
     (info): Promise<void> =>
         err_async(async () => {
-            if (info.menuItemId === 'open_background_tab') {
-                s_reload.Tabs.i().open_background_tab({ force: true });
-            } else {
-                const settings = await ext.storage_get(['click_action', 'context_menu_actions']);
+            const settings = await ext.storage_get(['click_action', 'context_menu_actions']);
 
-                s_reload.Watch.i().try_to_reload({
-                    options: settings.context_menu_actions[info.menuItemId],
-                });
-            }
+            s_reload.Watch.i().try_to_reload({
+                options: settings.context_menu_actions[info.menuItemId],
+            });
         }, 'aer_1018'),
 );

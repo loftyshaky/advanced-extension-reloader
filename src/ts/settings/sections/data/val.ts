@@ -27,9 +27,7 @@ export class Val {
                 } else if (this.check_if_json_input({ name: input.name })) {
                     val = JSON.parse(raw_val as string);
                 } else if (n(raw_val)) {
-                    val = ['transition_duration', 'open_position_in_tab_strip'].includes(input.name)
-                        ? +raw_val
-                        : raw_val;
+                    val = input.name === 'transition_duration' ? +raw_val : raw_val;
 
                     s_settings.Theme.i().change({
                         input,
@@ -134,7 +132,7 @@ export class Val {
                     return true;
                 }
 
-                if (['after_reload_delay', 'open_position_in_tab_strip'].includes(input.name)) {
+                if (input.name === 'after_reload_delay') {
                     return !/^\d+$/.test(raw_val as string);
                 }
 

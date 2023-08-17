@@ -17,7 +17,7 @@ class Manifest {
                 page: 'settings.html',
                 open_in_tab: true,
             },
-            permissions: ['storage', 'tabs', 'management', 'contextMenus'],
+            permissions: ['storage', 'tabs', 'management', 'offscreen', 'contextMenus'],
             commands: {
                 reload_main: {
                     description: '__MSG_reload_main_hotkey__',

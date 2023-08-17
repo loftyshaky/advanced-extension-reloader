@@ -5,20 +5,8 @@
     "description": {
         "message": "Reload an unpacked extension with one click, hotkey or automatically."
     },
-    "background_tab_title_text": {
-        "message": "Background tab"
-    },
-    "background_tab_manifest_3_msg_text": {
-        "message": "This is the background tab. This tab is required for automatic reload to work properly. If you only reload an extension by clicking on the Advanced Extension Reloader's browser action icon, this tab is not required. You can disable the automatic opening of the background tab in the settings."
-    },
-    "open_background_tab_context_menu_item": {
-        "message": "Open background tab"
-    },
     "reload_section_text": {
         "message": "Reload"
-    },
-    "background_tab_section_text": {
-        "message": "Background tab"
     },
     "ports_help_text": {
         "message": "Ports separated by commas that should expect messages to reload extensions. You will need multiple ports if you develop multiple extensions."
@@ -31,9 +19,6 @@
     },
     "context_menu_actions_help_text": {
         "message": "An array of objects with the same schema as seen in \"Extension's icon click action\" that define additional reload actions that appear in the browser action context menu. Keep in mind that there is a limit on how many items can appear there. You can also use reload actions defined here by hitting one of the \"Reload extension X\" hotkeys, where X is a position in the array."
-    },
-    "open_background_tab_automatically_help_text": {
-        "message": "Always keep one background tab open, reopening it if it's closed."
     },
     "ports_label_text": {
         "message": "Ports"
@@ -49,12 +34,6 @@
     },
     "allow_theme_reload_label_text": {
         "message": "Allow theme reload"
-    },
-    "open_background_tab_automatically_label_text": {
-        "message": "Open background tab automatically"
-    },
-    "open_position_in_tab_strip_label_text": {
-        "message": "Open position in the tab strip"
     },
     "advanced_extension_reloader_for_chrome_link_text": {
         "message": "⚗️ Advanced Extension Reloader for Chrome"

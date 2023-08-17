@@ -14,7 +14,13 @@ export class Watch {
     private constructor() {}
     private clients: any[] = [];
 
-    public connect = (): Promise<void> =>
+    public connect = async ({
+        ports,
+        reload_notification_volume,
+    }: {
+        ports: string[];
+        reload_notification_volume: number;
+    }): Promise<void> =>
         err_async(async () => {
             this.clients.forEach((client: any): void => {
                 client.close();
@@ -22,7 +28,7 @@ export class Watch {
 
             this.clients = [];
 
-            data.settings.ports.forEach((port: number): void =>
+            ports.forEach((port: string): void =>
                 err(() => {
                     const client = io(`http://localhost:${port}`, {
                         // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -40,6 +46,7 @@ export class Watch {
                     client.on('play_error_notification', (): void => {
                         this.play_sound({
                             notification_type: 'error',
+                            reload_notification_volume,
                         });
                     });
                 }, 'aer_1002'),
@@ -47,10 +54,10 @@ export class Watch {
         }, 'aer_1003');
 
     public play_sound = ({
-        mute = false,
+        reload_notification_volume,
         notification_type,
     }: {
-        mute?: boolean;
+        reload_notification_volume: number;
         notification_type: 'reload' | 'error';
     }): void =>
         err(() => {
@@ -59,7 +66,7 @@ export class Watch {
                     ? '330046__paulmorek__beep-03-positive.wav'
                     : '330068__paulmorek__beep-06-low-2015-06-22.wav';
             const audio = new Audio(sound_filename);
-            audio.volume = mute ? 0 : data.settings.reload_notification_volume;
+            audio.volume = reload_notification_volume;
             audio.play();
         }, 'aer_1004');
 }

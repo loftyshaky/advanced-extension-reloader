@@ -23,7 +23,7 @@ we.runtime.onMessage.addListener(
             } else if (msg_str === 'show_badge') {
                 s_badge.Main.i().show_ok_badge();
             } else if (msg_str === 'react_to_change') {
-                s_side_effects.Main.i().react_to_change();
+                await s_side_effects.Main.i().react_to_change();
             } else {
                 await x.delay(10000);
             }

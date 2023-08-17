@@ -28,7 +28,6 @@ export class InitAll {
     private constructor() {}
 
     private settings_root: HTMLDivElement | undefined = undefined;
-    private background_tab_root: HTMLDivElement | undefined = undefined;
 
     public init = (): Promise<void> =>
         new Promise((reslove) => {
@@ -75,11 +74,6 @@ export class InitAll {
                 if (page === 'settings') {
                     this.settings_root = this.create_root({
                         prefix: 'settings',
-                        shadow_root: false,
-                    }) as HTMLDivElement;
-                } else if (page === 'background_tab') {
-                    this.background_tab_root = this.create_root({
-                        prefix: 'background_tab',
                         shadow_root: false,
                     }) as HTMLDivElement;
                 }
@@ -177,36 +171,4 @@ export class InitAll {
                 );
             }
         }, 'aer_1068');
-
-    public render_background_tab = (): Promise<void> =>
-        err_async(async () => {
-            const { Body } = await import('background_tab/components/body');
-
-            const on_css_load = (): Promise<void> =>
-                err_async(async () => {
-                    d_loading_screen.Main.i().hide({ app_id: s_suffix.app_id });
-                }, 'aer_1069');
-
-            if (n(this.background_tab_root)) {
-                ReactDOM.createRoot(this.background_tab_root).render(
-                    <c_crash_handler.Body>
-                        <Body
-                            on_render={(): void =>
-                                err(() => {
-                                    const settings_css = x.css('background_tab_css', document.head);
-
-                                    s_theme.Main.i().set({
-                                        name: data.settings.options_page_theme,
-                                    });
-
-                                    if (n(settings_css)) {
-                                        x.bind(settings_css, 'load', on_css_load);
-                                    }
-                                }, 'aer_1091')
-                            }
-                        />
-                    </c_crash_handler.Body>,
-                );
-            }
-        }, 'aer_1071');
 }

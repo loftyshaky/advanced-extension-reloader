@@ -183,7 +183,10 @@ export class Watch {
             await s_badge.Main.i().show_ok_badge();
 
             if (options_final.play_sound) {
-                ext.send_msg({ msg: 'play_reload_sound' });
+                ext.send_msg({
+                    msg: 'play_reload_sound',
+                    reload_notification_volume: settings.reload_notification_volume,
+                });
             }
         }, 'aer_1039');
 

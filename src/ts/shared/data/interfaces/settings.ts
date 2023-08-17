@@ -13,8 +13,6 @@ export interface Settings {
     ports: string[];
     reload_notification_volume: string;
     allow_theme_reload: boolean;
-    open_background_tab_automatically: boolean;
-    open_position_in_tab_strip: number;
     click_action: i_options.Options;
     context_menu_actions: i_options.Options[];
 }
