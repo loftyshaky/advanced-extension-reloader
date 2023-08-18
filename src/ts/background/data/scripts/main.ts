@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import { t, o_schema, d_schema, s_service_worker } from '@loftyshaky/shared';
 import { i_data } from 'shared/internal';
-import { s_side_effects } from 'background/internal';
+import { s_reload, s_side_effects } from 'background/internal';
 
 export class Main {
     private static i0: Main;
@@ -16,6 +16,7 @@ export class Main {
     private constructor() {}
 
     public defaults: i_data.Settings | t.EmptyRecord = {};
+    public set_from_storage_run_prevented: boolean = false;
 
     public init_defaults = (): void =>
         err(() => {
@@ -77,7 +78,6 @@ export class Main {
             }
 
             await ext.storage_set(settings_final);
-
             await s_side_effects.Main.i().react_to_change();
 
             s_service_worker.ServiceWorker.i().make_persistent();
@@ -101,7 +101,9 @@ export class Main {
         err_async(async () => {
             const settings: i_data.Settings = await ext.storage_get();
 
-            if (_.isEmpty(settings)) {
+            if (s_reload.Watch.i().running_suspend_or_resume_automatic_reload_f) {
+                this.set_from_storage_run_prevented = true;
+            } else if (_.isEmpty(settings)) {
                 await this.update_settings({ transform });
             } else if (transform) {
                 await this.update_settings({ settings, transform });

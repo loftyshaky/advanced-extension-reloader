@@ -18,7 +18,6 @@ export class ContextMenu {
     public create = (): Promise<void> =>
         err_async(async () => {
             const settings = await ext.storage_get();
-
             await we.contextMenus.removeAll();
 
             await we.contextMenus.create({

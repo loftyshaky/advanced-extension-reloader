@@ -22,6 +22,7 @@ export class Watch {
     private full_reload_delay: number = 1000;
     public last_cooldown_time = 0;
     public reload_cooldown_timer_start_timestamp = 0;
+    public running_suspend_or_resume_automatic_reload_f: boolean = false;
 
     public try_to_reload = ({
         options,
@@ -248,12 +249,19 @@ export class Watch {
 
     public suspend_or_resume_automatic_reload = (): Promise<void> =>
         err_async(async () => {
-            const settings = await ext.storage_get();
+            this.running_suspend_or_resume_automatic_reload_f = true;
 
+            const settings = await ext.storage_get();
             settings.suspend_automatic_reload = !settings.suspend_automatic_reload;
 
             await s_data.Main.i().update_settings({ settings });
 
             s_badge.Main.i().show_reload_suspended_badge();
+
+            this.running_suspend_or_resume_automatic_reload_f = false;
+
+            if (s_data.Main.i().set_from_storage_run_prevented) {
+                await s_data.Main.i().set_from_storage({ transform: true });
+            }
         }, 'aer_1101');
 }
