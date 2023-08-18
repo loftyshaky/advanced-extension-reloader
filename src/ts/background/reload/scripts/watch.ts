@@ -2,7 +2,7 @@ import { Tabs, Management } from 'webextension-polyfill-ts';
 
 import { t } from '@loftyshaky/shared';
 import { s_suffix, i_options } from 'shared/internal';
-import { s_badge, s_reload } from 'background/internal';
+import { s_badge, s_data, s_reload } from 'background/internal';
 
 export class Watch {
     private static i0: Watch;
@@ -245,4 +245,13 @@ export class Watch {
 
             await s_reload.Tabs.i().recreate_tabs({ ext_tabs });
         }, 'aer_1089');
+
+    public suspend_or_resume_automatic_reload = (): Promise<void> =>
+        err_async(async () => {
+            const settings = await ext.storage_get();
+
+            settings.suspend_automatic_reload = !settings.suspend_automatic_reload;
+
+            await s_data.Main.i().update_settings({ settings });
+        }, 'aer_1101');
 }

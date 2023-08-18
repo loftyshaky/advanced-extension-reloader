@@ -56,6 +56,9 @@
     "reload_main_hotkey": {
         "message": "Перезагрузить расширение (основное действие)"
     },
+    "suspend_or_resume_automatic_reload_hotkey": {
+        "message": "Приостановить/возобновить автоматическую перезагрузку"
+    },
     "reload_1_hotkey": {
         "message": "Перезагрузить расширение 1"
     },

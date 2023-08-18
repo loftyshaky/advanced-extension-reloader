@@ -22,6 +22,9 @@ class Manifest {
                 reload_main: {
                     description: '__MSG_reload_main_hotkey__',
                 },
+                suspend_or_resume_automatic_reload: {
+                    description: '__MSG_suspend_or_resume_automatic_reload_hotkey__',
+                },
                 reload_1: {
                     description: '__MSG_reload_1_hotkey__',
                 },

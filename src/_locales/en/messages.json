@@ -62,6 +62,9 @@
     "reload_main_hotkey": {
         "message": "Reload extension main"
     },
+    "suspend_or_resume_automatic_reload_hotkey": {
+        "message": "Suspend/resume automatic reload"
+    },
     "reload_1_hotkey": {
         "message": "Reload extension 1"
     },
