@@ -253,5 +253,7 @@ export class Watch {
             settings.suspend_automatic_reload = !settings.suspend_automatic_reload;
 
             await s_data.Main.i().update_settings({ settings });
+
+            s_badge.Main.i().show_reload_suspended_badge();
         }, 'aer_1101');
 }

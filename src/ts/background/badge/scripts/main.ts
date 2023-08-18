@@ -16,6 +16,7 @@ export class Main {
     private constructor() {}
 
     public ok_badge_text: string = '';
+    private reload_suspended_badge: string = '';
     public time_badge_text: string = '';
     private timer_badge_time_left: number = 0;
     private timer_badge_interval: number = 0;
@@ -42,6 +43,15 @@ export class Main {
     public hide_ok_badge = (): void =>
         err(() => {
             this.ok_badge_text = '';
+
+            this.set_badge_text();
+        }, 'aer_1006');
+
+    public show_reload_suspended_badge = (): Promise<void> =>
+        err_async(async () => {
+            const settings = await ext.storage_get();
+
+            this.reload_suspended_badge = settings.suspend_automatic_reload ? 'Off' : 'On';
 
             this.set_badge_text();
         }, 'aer_1006');
@@ -90,11 +100,19 @@ export class Main {
 
             this.time_badge_text = '';
 
-            this.set_badge_text();
+            this.show_reload_suspended_badge();
         }, 'aer_1006');
 
     private set_badge_text = (): void =>
         err(() => {
-            we.action.setBadgeText({ text: this.ok_badge_text + this.time_badge_text });
+            let prefix: string = '';
+
+            if (this.ok_badge_text !== '') {
+                prefix = this.ok_badge_text;
+            } else if (this.time_badge_text === '') {
+                prefix = this.reload_suspended_badge;
+            }
+
+            we.action.setBadgeText({ text: prefix + this.time_badge_text });
         }, 'aer_1096');
 }
