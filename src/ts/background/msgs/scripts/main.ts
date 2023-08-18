@@ -19,6 +19,7 @@ we.runtime.onMessage.addListener(
             } else if (msg_str === 'reload') {
                 s_reload.Watch.i().try_to_reload({
                     options: msg.options,
+                    automatic_reload: true,
                 });
             } else if (msg_str === 'show_badge') {
                 s_badge.Main.i().show_ok_badge();

@@ -47,6 +47,12 @@
     "advanced_extension_reloader_for_edge_link_href": {
         "message": "https://bit.ly/advanced-extension-reloader-edge-ru"
     },
+    "suspend_automatic_reload_context_menu_item": {
+        "message": "Приостановить автоматическую перезагрузку"
+    },
+    "resume_automatic_reload_context_menu_item": {
+        "message": "Возобновить автоматическую перезагрузку"
+    },
     "reload_main_hotkey": {
         "message": "Перезагрузить расширение (основное действие)"
     },

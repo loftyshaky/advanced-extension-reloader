@@ -23,67 +23,78 @@ export class Watch {
     public last_cooldown_time = 0;
     public reload_cooldown_timer_start_timestamp = 0;
 
-    public try_to_reload = ({ options }: { options: i_options.Options }): Promise<void> =>
+    public try_to_reload = ({
+        options,
+        automatic_reload = false,
+    }: {
+        options: i_options.Options;
+        automatic_reload?: boolean;
+    }): Promise<void> =>
         err_async(async () => {
-            globalThis.clearTimeout(this.reload_cooldown_timer);
-            globalThis.clearTimeout(this.debounce_reload_timer);
+            const settings = await ext.storage_get();
 
-            if (!this.reloading) {
-                this.reloading = true;
+            if (!automatic_reload || (automatic_reload && !settings.suspend_automatic_reload)) {
+                globalThis.clearTimeout(this.reload_cooldown_timer);
+                globalThis.clearTimeout(this.debounce_reload_timer);
 
-                let done_fast_reload: boolean = false;
+                if (!this.reloading) {
+                    this.reloading = true;
 
-                const options_final: i_options.Options =
-                    s_reload.DefaultValues.i().tranform_reload_action({
-                        reload_action: options,
-                    });
+                    let done_fast_reload: boolean = false;
 
-                if (n(options_final.after_reload_delay)) {
-                    this.last_cooldown_time =
-                        (options_final.after_reload_delay + this.full_reload_delay) * 3;
-
-                    if (!this.allow_fast_reload) {
-                        s_badge.Main.i().show_timer_badge({
-                            time: options_final.after_reload_delay + this.full_reload_delay,
+                    const options_final: i_options.Options =
+                        s_reload.DefaultValues.i().tranform_reload_action({
+                            reload_action: options,
                         });
+
+                    if (n(options_final.after_reload_delay)) {
+                        this.last_cooldown_time =
+                            (options_final.after_reload_delay + this.full_reload_delay) * 3;
+
+                        if (!this.allow_fast_reload) {
+                            s_badge.Main.i().show_timer_badge({
+                                time: options_final.after_reload_delay + this.full_reload_delay,
+                            });
+                        }
                     }
-                }
 
-                if (this.allow_fast_reload) {
-                    this.allow_fast_reload = false;
-                    done_fast_reload = true;
+                    if (this.allow_fast_reload) {
+                        this.allow_fast_reload = false;
+                        done_fast_reload = true;
 
-                    await this.reload(options_final);
-                }
+                        await this.reload(options_final);
+                    }
 
-                if (n(options_final.after_reload_delay)) {
-                    globalThis.clearTimeout(this.reload_cooldown_timer);
+                    if (n(options_final.after_reload_delay)) {
+                        globalThis.clearTimeout(this.reload_cooldown_timer);
 
-                    this.reload_cooldown_timer_start_timestamp = Date.now();
+                        this.reload_cooldown_timer_start_timestamp = Date.now();
 
-                    this.reload_cooldown_timer = self.setTimeout(() => {
-                        err(() => {
-                            this.reload_cooldown_timer_start_timestamp = 0;
-                            this.allow_fast_reload = true;
-                        }, 'aer_1094');
-                    }, this.last_cooldown_time);
+                        this.reload_cooldown_timer = self.setTimeout(() => {
+                            err(() => {
+                                this.reload_cooldown_timer_start_timestamp = 0;
+                                this.allow_fast_reload = true;
+                            }, 'aer_1094');
+                        }, this.last_cooldown_time);
 
-                    this.debounce_reload_timer = self.setTimeout(() => {
-                        err(() => {
-                            if (!done_fast_reload) {
-                                this.reload(options_final);
-                            }
-                        }, 'aer_1095');
-                    }, options_final.after_reload_delay + this.full_reload_delay);
+                        this.debounce_reload_timer = self.setTimeout(() => {
+                            err(() => {
+                                if (!done_fast_reload) {
+                                    this.reload(options_final);
+                                }
+                            }, 'aer_1095');
+                        }, options_final.after_reload_delay + this.full_reload_delay);
 
-                    this.reloading = false;
+                        this.reloading = false;
+                    }
                 }
             }
         }, 'aer_1035');
 
-    public reload = (options: i_options.Options): Promise<void> =>
+    private reload = (options: i_options.Options): Promise<void> =>
         err_async(async () => {
             const settings = await ext.storage_get();
+
             const options_final: i_options.Options =
                 s_reload.DefaultValues.i().tranform_reload_action({
                     reload_action: options,

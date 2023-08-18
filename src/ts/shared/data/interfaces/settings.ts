@@ -13,6 +13,7 @@ export interface Settings {
     ports: string[];
     reload_notification_volume: string;
     allow_theme_reload: boolean;
+    suspend_automatic_reload: boolean;
     click_action: i_options.Options;
     context_menu_actions: i_options.Options[];
 }

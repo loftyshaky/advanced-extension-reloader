@@ -32,6 +32,7 @@ export class Main {
                 ports: ['7220'],
                 reload_notification_volume: '1',
                 allow_theme_reload: true,
+                suspend_automatic_reload: false,
                 click_action: {
                     all_tabs: false,
                     hard: true,
@@ -130,6 +131,10 @@ export class Main {
                 }),
                 new o_schema.TransformItem({
                     new_key: 'persistent_service_worker',
+                    new_val: false,
+                }),
+                new o_schema.TransformItem({
+                    new_key: 'suspend_automatic_reload',
                     new_val: false,
                 }),
             ];

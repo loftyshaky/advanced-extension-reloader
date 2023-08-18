@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Management } from 'webextension-polyfill-ts';
 
 import { i_options } from 'shared/internal';
-import { s_reload } from 'background/internal';
+import { s_data, s_reload } from 'background/internal';
 
 export class ContextMenu {
     private static i0: ContextMenu;
@@ -17,9 +17,21 @@ export class ContextMenu {
 
     public create = (): Promise<void> =>
         err_async(async () => {
-            const settings = await ext.storage_get('context_menu_actions');
+            const settings = await ext.storage_get();
 
             await we.contextMenus.removeAll();
+
+            await we.contextMenus.create({
+                id: 'suspend_automatic_reload',
+                title: ext.msg(
+                    `${
+                        settings.suspend_automatic_reload
+                            ? 'resume_automatic_reload'
+                            : 'suspend_automatic_reload'
+                    }_context_menu_item`,
+                ),
+                contexts: ['action'],
+            });
 
             if (n(settings.context_menu_actions)) {
                 const apps_info: Management.ExtensionInfo[] = await we.management.getAll();
@@ -76,10 +88,16 @@ export class ContextMenu {
 we.contextMenus.onClicked.addListener(
     (info): Promise<void> =>
         err_async(async () => {
-            const settings = await ext.storage_get(['click_action', 'context_menu_actions']);
+            const settings = await ext.storage_get();
 
-            s_reload.Watch.i().try_to_reload({
-                options: settings.context_menu_actions[info.menuItemId],
-            });
+            if (info.menuItemId === 'suspend_automatic_reload') {
+                settings.suspend_automatic_reload = !settings.suspend_automatic_reload;
+
+                await s_data.Main.i().update_settings({ settings });
+            } else {
+                s_reload.Watch.i().try_to_reload({
+                    options: settings.context_menu_actions[info.menuItemId],
+                });
+            }
         }, 'aer_1018'),
 );

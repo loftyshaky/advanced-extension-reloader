@@ -53,6 +53,12 @@
     "advanced_extension_reloader_for_edge_link_href": {
         "message": "https://bit.ly/advanced-extension-reloader-edge"
     },
+    "suspend_automatic_reload_context_menu_item": {
+        "message": "Suspend automatic reload"
+    },
+    "resume_automatic_reload_context_menu_item": {
+        "message": "Resume automatic reload"
+    },
     "reload_main_hotkey": {
         "message": "Reload extension main"
     },
