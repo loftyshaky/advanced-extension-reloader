@@ -11,10 +11,16 @@ export class Main {
 
     public create_document = (): Promise<void> =>
         err_async(async () => {
-            await (chrome as any).offscreen.createDocument({
-                url: 'offscreen.html',
-                reasons: ['DOM_PARSER'],
-                justification: 'Listen to messages to reload extensions.',
-            });
+            const offscreen_document_already_exists: boolean = await (
+                chrome as any
+            ).offscreen.hasDocument();
+
+            if (!offscreen_document_already_exists) {
+                await (chrome as any).offscreen.createDocument({
+                    url: 'offscreen.html',
+                    reasons: ['DOM_PARSER'],
+                    justification: 'Listen to messages to reload extensions.',
+                });
+            }
         }, 'aer_1100');
 }
