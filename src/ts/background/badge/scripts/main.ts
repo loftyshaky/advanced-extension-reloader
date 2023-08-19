@@ -51,7 +51,7 @@ export class Main {
         err_async(async () => {
             const settings = await ext.storage_get();
 
-            this.reload_suspended_badge = settings.suspend_automatic_reload ? 'Off' : 'On';
+            this.reload_suspended_badge = settings.suspend_automatic_reload ? 'off' : 'on';
 
             this.set_badge_text();
         }, 'aer_1006');
