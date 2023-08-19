@@ -2,8 +2,6 @@ import _ from 'lodash';
 
 import { s_reload } from 'background/internal';
 
-we.action.setBadgeBackgroundColor({ color: '#785FD9' }); // '#8b6fff'
-
 export class Main {
     private static i0: Main;
 
@@ -27,7 +25,7 @@ export class Main {
 
             this.ok_badge_text = '✓';
 
-            this.set_badge_text();
+            await this.set_badge_text();
 
             this.show_timer_badge({
                 time:
@@ -40,11 +38,11 @@ export class Main {
             this.hide_debounce();
         }, 'aer_1005');
 
-    public hide_ok_badge = (): void =>
-        err(() => {
+    public hide_ok_badge = (): Promise<void> =>
+        err_async(async () => {
             this.ok_badge_text = '';
 
-            this.set_badge_text();
+            await this.set_badge_text();
         }, 'aer_1006');
 
     public show_reload_suspended_badge = (): Promise<void> =>
@@ -53,7 +51,8 @@ export class Main {
 
             this.reload_suspended_badge = settings.suspend_automatic_reload ? 'off' : 'on';
 
-            this.set_badge_text();
+            await this.set_badge_text();
+            await this.set_badge_background_color();
         }, 'aer_1006');
 
     private hide_debounce = _.debounce(this.hide_ok_badge, 2000);
@@ -62,15 +61,15 @@ export class Main {
         err_async(async () => {
             this.timer_badge_time_left = time;
 
-            const set_badge_time = (): void =>
-                err(() => {
+            const set_badge_time = (): Promise<void> =>
+                err_async(async () => {
                     const seconds = (this.timer_badge_time_left / 1000.0).toFixed(1); // May be decimal
 
                     this.time_badge_text = (
                         _.isInteger(seconds) ? `${seconds}.0` : seconds
                     ).toString();
 
-                    this.set_badge_text();
+                    await this.set_badge_text();
                 }, 'aer_1097');
 
             set_badge_time();
@@ -81,7 +80,7 @@ export class Main {
 
             this.timer_badge_interval = self.setInterval(async () => {
                 err_async(async () => {
-                    set_badge_time();
+                    await set_badge_time();
 
                     this.timer_badge_time_left -= step;
 
@@ -103,8 +102,8 @@ export class Main {
             this.show_reload_suspended_badge();
         }, 'aer_1006');
 
-    private set_badge_text = (): void =>
-        err(() => {
+    private set_badge_text = (): Promise<void> =>
+        err_async(async () => {
             let prefix: string = '';
 
             if (this.ok_badge_text !== '') {
@@ -113,6 +112,21 @@ export class Main {
                 prefix = this.reload_suspended_badge;
             }
 
-            we.action.setBadgeText({ text: prefix + this.time_badge_text });
+            await we.action.setBadgeText({ text: prefix + this.time_badge_text });
         }, 'aer_1096');
+
+    private set_badge_background_color = (): Promise<void> =>
+        err_async(async () => {
+            const settings = await ext.storage_get();
+            const background_color: string = settings.suspend_automatic_reload
+                ? '#d92d2d'
+                : '#28b045'; // off/on
+
+            await we.action.setBadgeBackgroundColor({ color: background_color });
+        }, 'aer_1102');
+
+    public set_badge_text_color = (): Promise<void> =>
+        err_async(async () => {
+            await we.action.setBadgeTextColor({ color: 'white' });
+        }, 'aer_1103');
 }
