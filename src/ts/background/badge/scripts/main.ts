@@ -119,8 +119,8 @@ export class Main {
         err_async(async () => {
             const settings = await ext.storage_get();
             const background_color: string = settings.suspend_automatic_reload
-                ? '#d92d2d'
-                : '#28b045'; // off/on
+                ? '#cc2b2b'
+                : '#249c3e'; // off/on
 
             await we.action.setBadgeBackgroundColor({ color: background_color });
         }, 'aer_1102');
