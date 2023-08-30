@@ -9,7 +9,6 @@ export interface Settings {
     enable_cut_features: boolean;
     persistent_service_worker: boolean;
     offers_are_visible: boolean;
-    offer_banner_type: 'horizontal' | 'vertical';
     ports: string[];
     reload_notification_volume: string;
     allow_theme_reload: boolean;

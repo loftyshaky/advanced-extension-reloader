@@ -1,4 +1,5 @@
 import 'background/msgs/scripts';
+import 'background/on_startup/scripts';
 
 misplaced_dependency('background');
 

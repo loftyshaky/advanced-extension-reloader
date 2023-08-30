@@ -50,7 +50,7 @@ export class Main {
             const settings = await ext.storage_get();
 
             this.reload_suspended_badge = settings.suspend_automatic_reload ? 'off' : 'on';
-
+            l(this.reload_suspended_badge, settings);
             await this.set_badge_text();
             await this.set_badge_background_color();
         }, 'aer_1006');
