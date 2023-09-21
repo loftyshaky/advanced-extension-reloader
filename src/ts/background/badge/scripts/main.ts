@@ -23,7 +23,7 @@ export class Main {
         err_async(async () => {
             this.hide_timer_badge();
 
-            this.ok_badge_text = '✓';
+            this.ok_badge_text = '\u2713';
 
             await this.set_badge_text();
 
