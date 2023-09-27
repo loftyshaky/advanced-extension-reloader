@@ -1,17 +1,17 @@
 import { t } from '@loftyshaky/shared';
 import { d_settings } from 'shared/internal';
 
-we.runtime.onMessage.addListener(
-    (msg: t.Msg): Promise<any> =>
-        err_async(async () => {
-            const msg_str: string = msg.msg;
+we.runtime.onMessage.addListener((msg: t.Msg): any =>
+    err(() => {
+        const msg_str: string = msg.msg;
 
-            if (msg_str === 'rerun_actions') {
-                await d_settings.Transform.i().set_transformed_from_storage();
-            } else {
-                await x.delay(10000);
-            }
+        if (msg_str === 'react_to_change') {
+            return d_settings.Transform.i()
+                .set_transformed_from_storage()
+                .then((response) => response)
+                .catch((error_obj: any) => show_err_ribbon(error_obj, 'aer_1106'));
+        }
 
-            return false;
-        }, 'ges_1126'),
+        return false;
+    }, 'ges_1126'),
 );
