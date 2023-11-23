@@ -29,23 +29,11 @@
     "allow_theme_reload_label_text": {
         "message": "Позволить перезагружать тему"
     },
-    "advanced_extension_reloader_for_chrome_link_text": {
+    "advanced_extension_reloader_chrome_link_text": {
         "message": "⚗️ Advanced Extension Reloader для Chrome"
     },
-    "advanced_extension_reloader_for_edge_link_text": {
+    "advanced_extension_reloader_edge_link_text": {
         "message": "⚗️ Advanced Extension Reloader для Edge"
-    },
-    "rate_chrome_link_href": {
-        "message": "https://bit.ly/advanced-extension-reloader-rate-ru"
-    },
-    "rate_edge_link_href": {
-        "message": "https://bit.ly/advanced-extension-reloader-edge-ru"
-    },
-    "advanced_extension_reloader_for_chrome_link_href": {
-        "message": "https://bit.ly/advanced-extension-reloader-ru"
-    },
-    "advanced_extension_reloader_for_edge_link_href": {
-        "message": "https://bit.ly/advanced-extension-reloader-edge-ru"
     },
     "suspend_automatic_reload_context_menu_item": {
         "message": "Приостановить автоматическую перезагрузку"

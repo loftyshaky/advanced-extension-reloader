@@ -35,23 +35,17 @@
     "allow_theme_reload_label_text": {
         "message": "Allow theme reload"
     },
-    "advanced_extension_reloader_for_chrome_link_text": {
+    "advanced_extension_reloader_chrome_link_text": {
         "message": "⚗️ Advanced Extension Reloader for Chrome"
     },
-    "advanced_extension_reloader_for_edge_link_text": {
+    "advanced_extension_reloader_edge_link_text": {
         "message": "⚗️ Advanced Extension Reloader for Edge"
     },
     "rate_chrome_link_href": {
-        "message": "https://bit.ly/advanced-extension-reloader-rate"
+        "message": "https://chromewebstore.google.com/detail/hagknokdofkmojolcpbddjfdjhnjdkae/reviews"
     },
     "rate_edge_link_href": {
-        "message": "https://bit.ly/advanced-extension-reloader-edge"
-    },
-    "advanced_extension_reloader_for_chrome_link_href": {
-        "message": "https://bit.ly/advanced-extension-reloader"
-    },
-    "advanced_extension_reloader_for_edge_link_href": {
-        "message": "https://bit.ly/advanced-extension-reloader-edge"
+        "message": "https://microsoftedge.microsoft.com/addons/detail/bcpgohifjmmcoiemghdamamlkbcbgifg"
     },
     "suspend_automatic_reload_context_menu_item": {
         "message": "Suspend automatic reload"

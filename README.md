@@ -2,8 +2,8 @@ A browser extension that lets you reload an unpacked extension with one click, h
 
 ## Links
 
-[Chrome Web Store](https://bit.ly/advanced-extension-reloader)<br>
-[Edge Add-ons](https://bit.ly/advanced-extension-reloader-edge)
+[Chrome Web Store](https://chromewebstore.google.com/detail/hagknokdofkmojolcpbddjfdjhnjdkae)<br>
+[Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/bcpgohifjmmcoiemghdamamlkbcbgifg)
 
 ## Build steps
 
