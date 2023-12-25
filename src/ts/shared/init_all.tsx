@@ -28,6 +28,7 @@ export class InitAll {
     private constructor() {}
 
     private settings_root: HTMLDivElement | undefined = undefined;
+    private dependencies_root: HTMLDivElement | undefined = undefined;
 
     public init = (): Promise<void> =>
         new Promise((reslove) => {
@@ -47,6 +48,12 @@ export class InitAll {
                             if (n(loading_screen_css)) {
                                 x.bind(loading_screen_css, 'load', (): void =>
                                     err(() => {
+                                        if (page === 'dependencies') {
+                                            s_theme.Main.i().set({
+                                                name: data.settings.options_page_theme,
+                                            });
+                                        }
+
                                         d_loading_screen.Main.i().show();
 
                                         reslove();
@@ -71,9 +78,15 @@ export class InitAll {
                 const loading_screen_root: ShadowRoot = this.create_root({
                     prefix: 'loading_screen',
                 }) as ShadowRoot;
+
                 if (page === 'settings') {
                     this.settings_root = this.create_root({
                         prefix: 'settings',
+                        shadow_root: false,
+                    }) as HTMLDivElement;
+                } else if (page === 'dependencies') {
+                    this.dependencies_root = this.create_root({
+                        prefix: 'dependencies',
                         shadow_root: false,
                     }) as HTMLDivElement;
                 }
@@ -171,4 +184,40 @@ export class InitAll {
                 );
             }
         }, 'aer_1068');
+
+    public render_dependencies = (): Promise<void> =>
+        err_async(async () => {
+            const { Body } = await import('dependencies/components/body');
+
+            const on_css_load = (): Promise<void> =>
+                err_async(async () => {
+                    d_loading_screen.Main.i().hide({ app_id: s_suffix.app_id });
+                }, 'aer_1107');
+
+            if (n(this.dependencies_root)) {
+                ReactDOM.createRoot(this.dependencies_root).render(
+                    <c_crash_handler.Body>
+                        <Body
+                            on_render={(): void =>
+                                err(() => {
+                                    const dependencies_css = x.css(
+                                        'dependencies_css',
+                                        document.head,
+                                    );
+
+                                    s_theme.Main.i().set({
+                                        name: data.settings.options_page_theme,
+                                        additional_theme_callback: s_theme.Main.i().set,
+                                    });
+
+                                    if (n(dependencies_css)) {
+                                        x.bind(dependencies_css, 'load', on_css_load);
+                                    }
+                                }, 'aer_1109')
+                            }
+                        />
+                    </c_crash_handler.Body>,
+                );
+            }
+        }, 'aer_1108');
 }

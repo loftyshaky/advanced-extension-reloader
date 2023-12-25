@@ -6,20 +6,25 @@ const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const LicensePlugin = require('webpack-license-plugin');
 
 const { Env } = require('@loftyshaky/shared/js/env');
 const { Locales } = require('@loftyshaky/shared/js/locales');
 const { shared_config } = require('@loftyshaky/shared/js/webpack.config');
 const { TaskScheduler } = require('@loftyshaky/shared/js/task_scheduler');
+const { Dependencies: DependenciesShared } = require('@loftyshaky/shared/js/dependencies');
 const { Manifest } = require('./js/manifest');
-
-const task_scheduler = new TaskScheduler();
+const { Dependencies } = require('./js/dependencies');
 
 const app_root = appRoot;
+
+const task_scheduler = new TaskScheduler();
+const dependencies_shared = new DependenciesShared({ app_root });
 
 const manifest = new Manifest({ app_root });
 const env_instance = new Env({ app_root });
 const locales = new Locales({ app_root });
+const dependencies = new Dependencies();
 
 module.exports = (env, argv) => {
     const paths = {
@@ -36,6 +41,7 @@ module.exports = (env, argv) => {
         MiniCssExtractPlugin,
         CssMinimizerPlugin,
         CopyWebpackPlugin,
+        LicensePlugin,
         copy_patters: [
             {
                 from: path.join('src', 'audio'),
@@ -58,6 +64,9 @@ module.exports = (env, argv) => {
             });
             env_instance.generate({ browser: env.browser, mode: argv.mode, env: env_2 });
             locales.merge({ env: env_2 });
+            dependencies_shared.add_missing_dependesies({
+                extension_specific_missing_dependencies: dependencies.missing_dependencies,
+            });
         },
     });
 

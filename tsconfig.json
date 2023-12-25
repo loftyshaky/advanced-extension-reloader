@@ -14,7 +14,8 @@
             "shared/*": ["./ts/shared/*"],
             "background/*": ["./ts/background/*"],
             "offscreen/*": ["./ts/offscreen/*"],
-            "settings/*": ["./ts/settings/*"]
+            "settings/*": ["./ts/settings/*"],
+            "dependencies/*": ["./ts/dependencies/*"]
         }
     },
     "include": ["src"],
