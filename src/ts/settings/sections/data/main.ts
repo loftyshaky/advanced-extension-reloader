@@ -107,6 +107,9 @@ export class Main {
                                       }),
                                   ]),
                             new o_inputs.Link({
+                                name: 'github',
+                            }),
+                            new o_inputs.Link({
                                 name: 'facebook_page',
                                 href: ext.msg('facebook_page_link_href'),
                             }),

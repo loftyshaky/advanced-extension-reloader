@@ -44,6 +44,9 @@
     "advanced_extension_reloader_edge_link_text": {
         "message": "⚗️ Advanced Extension Reloader для Edge"
     },
+    "github_link_text": {
+        "message": "😼 Advanced Extension Reloader на Github"
+    },
     "suspend_automatic_reload_context_menu_item": {
         "message": "Приостановить автоматическую перезагрузку"
     },

@@ -47,6 +47,9 @@
     "advanced_extension_reloader_edge_link_text": {
         "message": "⚗️ Advanced Extension Reloader for Edge"
     },
+    "github_link_text": {
+        "message": "😼 Advanced Extension Reloader on Github"
+    },
     "docs_link_href": {
         "message": "https://github.com/loftyshaky/advanced-extension-reloader/blob/master/README.md"
     },
@@ -55,6 +58,9 @@
     },
     "rate_edge_link_href": {
         "message": "https://microsoftedge.microsoft.com/addons/detail/bcpgohifjmmcoiemghdamamlkbcbgifg"
+    },
+    "github_link_href": {
+        "message": "https://github.com/loftyshaky/advanced-extension-reloader"
     },
     "suspend_automatic_reload_context_menu_item": {
         "message": "Suspend automatic reload"
