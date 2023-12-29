@@ -63,6 +63,14 @@ export class Main {
                             }),
                         ],
                     }),
+                    new o_inputs.Section({
+                        name: 'docs',
+                        inputs: [
+                            new o_inputs.Link({
+                                name: 'docs',
+                            }),
+                        ],
+                    }),
                 ],
                 ...d_settings.Sections.i().make_shared_sections({
                     download_back_up_callback: ext.storage_get,
@@ -74,6 +82,9 @@ export class Main {
                     new o_inputs.Section({
                         name: 'links',
                         inputs: [
+                            new o_inputs.Link({
+                                name: 'docs',
+                            }),
                             new o_inputs.Link({
                                 name: 'privacy_policy',
                                 href: ext.msg('privacy_policy_link_href'),

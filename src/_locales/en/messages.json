@@ -8,6 +8,9 @@
     "reload_section_text": {
         "message": "Reload"
     },
+    "docs_section_text": {
+        "message": "Docs"
+    },
     "ports_help_text": {
         "message": "Ports separated by commas that should expect messages to reload extensions. You will need multiple ports if you develop multiple extensions."
     },
@@ -35,11 +38,17 @@
     "allow_theme_reload_label_text": {
         "message": "Allow theme reload"
     },
+    "docs_link_text": {
+        "message": "📄 Documentation"
+    },
     "advanced_extension_reloader_chrome_link_text": {
         "message": "⚗️ Advanced Extension Reloader for Chrome"
     },
     "advanced_extension_reloader_edge_link_text": {
         "message": "⚗️ Advanced Extension Reloader for Edge"
+    },
+    "docs_link_href": {
+        "message": "https://github.com/loftyshaky/advanced-extension-reloader/blob/master/README.md"
     },
     "rate_chrome_link_href": {
         "message": "https://chromewebstore.google.com/detail/hagknokdofkmojolcpbddjfdjhnjdkae/reviews"
