@@ -50,6 +50,9 @@
     "github_link_text": {
         "message": "😼 Advanced Extension Reloader на Github"
     },
+    "docs_link_href": {
+        "message": "https://github.com/loftyshaky/advanced-extension-reloader/blob/master/README-RU.md#content"
+    },
     "suspend_automatic_reload_context_menu_item": {
         "message": "Приостановить автоматическую перезагрузку"
     },
