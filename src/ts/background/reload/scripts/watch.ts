@@ -1,4 +1,4 @@
-import { Tabs, Management } from 'webextension-polyfill-ts';
+import { Tabs, Management } from 'webextension-polyfill';
 
 import { t } from '@loftyshaky/shared';
 import { s_suffix, i_options } from 'shared/internal';
@@ -12,7 +12,7 @@ export class Watch {
         return this.i0 || (this.i0 = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, @typescript-eslint/no-empty-function
+    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
     private reloading: boolean = false;
@@ -219,7 +219,7 @@ export class Watch {
                     reload_triggered = true;
                 }, 'aer_1088');
 
-            await Promise.race([reload_ext(), x.delay(this.full_reload_delay)]); // if target extension service worker is broken (if background js is in incorrect state) the extension can not be reloaded with chrome.runtime.reload(); and the response of the "reload_extension" message will not be recieved. In this case if 1000 ms elapsed and no response from extension recieved forcefully reload extension with chrome.management.setEnabled(ext_info.id, false); chrome.management.setEnabled(ext_info.id, true);. Include 1000 ms delay in "try_to_reload" function.
+            await Promise.race([reload_ext(), x.delay(this.full_reload_delay)]); // if target extension service worker is broken (if background js is in incorrect state) the extension can not be reloaded with we.runtime.reload(); and the response of the "reload_extension" message will not be recieved. In this case if 1000 ms elapsed and no response from extension recieved forcefully reload extension with we.management.setEnabled(ext_info.id, false); we.management.setEnabled(ext_info.id, true);. Include 1000 ms delay in "try_to_reload" function.
             await we.management.setEnabled(ext_info.id, true);
 
             return reload_triggered;

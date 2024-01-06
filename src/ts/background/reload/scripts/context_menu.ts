@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Management } from 'webextension-polyfill-ts';
+import { Management, Menus } from 'webextension-polyfill';
 
 import { i_options } from 'shared/internal';
 import { s_reload } from 'background/internal';
@@ -12,7 +12,7 @@ export class ContextMenu {
         return this.i0 || (this.i0 = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, @typescript-eslint/no-empty-function
+    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
     private creating_context_menu: boolean = false; // prevent "Suspend/resume automatic reload at the bottom"
@@ -97,7 +97,7 @@ export class ContextMenu {
 }
 
 we.contextMenus.onClicked.addListener(
-    (info): Promise<void> =>
+    (info: Menus.OnClickData): Promise<void> =>
         err_async(async () => {
             if (info.menuItemId === 'suspend_or_resume_automatic_reload') {
                 s_reload.Watch.i().suspend_or_resume_automatic_reload();
