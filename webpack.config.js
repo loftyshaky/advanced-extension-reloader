@@ -38,6 +38,7 @@ const ext_id = 'hmhmmmajoblhmohkmfjeoamhdpodihlg';
 module.exports = (env, argv) => {
     const paths = {
         ts: path.join(app_root, 'src', 'ts'),
+        scss: path.join(app_root, 'src', 'scss'),
     };
 
     const config = shared_config({
