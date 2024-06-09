@@ -20,7 +20,7 @@ export class Main {
     }
 
     public get current_section() {
-        return n(data.settings.current_section) ? data.settings.current_section : 'кудщфв';
+        return n(data.settings.current_section) ? data.settings.current_section : 'reload';
     }
 
     public sections: o_inputs.Section[] | i_inputs.Sections = [];
