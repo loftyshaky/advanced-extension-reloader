@@ -111,13 +111,21 @@ export class Tabs {
             await Promise.all(
                 ext_tabs.map(async (text_tab: TabsExt.Tab) =>
                     err_async(async () => {
-                        await we.tabs.create({
+                        const tab: TabsExt.Tab = await we.tabs.create({
                             windowId: text_tab.windowId,
                             index: text_tab.index,
                             url: text_tab.url,
-                            active: text_tab.active,
+                            active: false, // prevent focus stealing on Ubuntu when extension's tab is reopened
                             pinned: text_tab.pinned,
                         });
+
+                        //> prevent focus stealing on Ubuntu when extension's tab is reopened
+                        if (text_tab.active) {
+                            await we.tabs.update(tab.id, {
+                                active: true,
+                            });
+                        }
+                        //< prevent focus stealing on Ubuntu when extension's tab is reopened
                     }, 'aer_1029'),
                 ),
             );
