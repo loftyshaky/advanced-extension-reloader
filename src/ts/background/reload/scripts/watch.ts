@@ -1,7 +1,7 @@
 import { Tabs, Management } from 'webextension-polyfill';
 
 import { t } from '@loftyshaky/shared';
-import { s_suffix, i_options } from 'shared/internal';
+import { s_reload as s_reload_shared, s_suffix, i_options } from 'shared/internal';
 import { s_badge, s_data, s_reload } from 'background/internal';
 
 export class Watch {
@@ -101,8 +101,9 @@ export class Watch {
                     reload_action: options,
                 });
 
+            let at_least_one_extension_reloaded: boolean = false;
+
             if (options_final.hard) {
-                const ext_id_option_specified = typeof options_final.ext_id === 'string';
                 const exts: Management.ExtensionInfo[] = await we.management.getAll();
                 const ext_tabs: Tabs.Tab[] = await s_reload.Tabs.i().get_ext_tabs();
                 const new_tab_tabs: Tabs.Tab[] = await s_reload.Tabs.i().get_new_tab_tabs();
@@ -143,17 +144,14 @@ export class Watch {
                                     err(() => n(ext_tab), 'aer_1037'),
                                 );
 
-                            const matched_ext_id_from_options =
-                                ext_info.id === options_final.ext_id;
+                            const extension_is_eligible_for_reload: boolean =
+                                await s_reload_shared.Watch.i().extension_is_eligible_for_reload({
+                                    ext_id: options_final.ext_id,
+                                    ext_info,
+                                    settings,
+                                });
 
-                            if (
-                                ext_info.id !== we.runtime.id &&
-                                ext_info.enabled &&
-                                ext_info.installType === 'development' &&
-                                ((ext_info.type === 'theme' && settings.allow_theme_reload) ||
-                                    ext_info.type !== 'theme') &&
-                                (!ext_id_option_specified || matched_ext_id_from_options)
-                            ) {
+                            if (extension_is_eligible_for_reload) {
                                 if (n(options_final.after_reload_delay)) {
                                     const reload_triggered = await this.trigger_reload({
                                         ext_info,
@@ -171,6 +169,8 @@ export class Watch {
                                         }
                                     });
                                 }
+
+                                at_least_one_extension_reloaded = true;
                             }
                         }, 'aer_1038'),
                     ),
@@ -185,20 +185,22 @@ export class Watch {
                 await s_reload.Tabs.i().recreate_tabs({ ext_tabs: new_tab_tabs });
             }
 
-            if (n(options_final.hard) && n(options_final.all_tabs)) {
-                await s_reload.Tabs.i().reload_tabs({
-                    hard: options_final.hard,
-                    all_tabs: options_final.all_tabs,
-                });
-            }
+            if (at_least_one_extension_reloaded) {
+                if (n(options_final.hard) && n(options_final.all_tabs)) {
+                    await s_reload.Tabs.i().reload_tabs({
+                        hard: options_final.hard,
+                        all_tabs: options_final.all_tabs,
+                    });
+                }
 
-            await s_badge.Main.i().show_ok_badge();
+                await s_badge.Main.i().show_ok_badge();
 
-            if (options_final.play_sound) {
-                ext.send_msg({
-                    msg: 'play_reload_sound',
-                    reload_notification_volume: settings.reload_notification_volume,
-                });
+                if (options_final.play_sound) {
+                    ext.send_msg({
+                        msg: 'play_reload_sound',
+                        reload_notification_volume: settings.reload_notification_volume,
+                    });
+                }
             }
         }, 'aer_1039');
 

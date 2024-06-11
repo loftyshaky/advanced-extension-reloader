@@ -18,6 +18,7 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
             s_reload.Watch.i().play_sound({
                 notification_type: 'reload',
                 reload_notification_volume: msg.reload_notification_volume,
+                ext_id: msg.ext_id,
             });
 
             return Promise.resolve(true);

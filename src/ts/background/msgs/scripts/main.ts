@@ -1,3 +1,5 @@
+import { Management } from 'webextension-polyfill';
+
 import { t } from '@loftyshaky/shared';
 import { s_badge, s_data, s_reload, s_side_effects } from 'background/internal';
 
@@ -9,6 +11,20 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
             we.runtime.reload();
 
             return Promise.resolve(true);
+        }
+
+        if (msg_str === 'get_all_extensions') {
+            return we.management
+                .getAll()
+                .then((response: Management.ExtensionInfo[]) => response)
+                .catch((error_obj: any) => show_err_ribbon(error_obj, 'aer_1115'));
+        }
+
+        if (msg_str === 'get_settings') {
+            return ext
+                .storage_get()
+                .then((response) => response)
+                .catch((error_obj: any) => show_err_ribbon(error_obj, 'aer_1114'));
         }
 
         if (msg_str === 'update_settings') {

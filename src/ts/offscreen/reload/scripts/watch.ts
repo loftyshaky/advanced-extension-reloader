@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-import { i_options } from 'shared/internal';
+import { s_reload, i_options } from 'shared/internal';
 
 export class Watch {
     private static i0: Watch;
@@ -43,12 +43,16 @@ export class Watch {
                         ext.send_msg({ msg: 'reload', options });
                     });
 
-                    client.on('play_error_notification', (): void => {
-                        this.play_sound({
-                            notification_type: 'error',
-                            reload_notification_volume,
-                        });
-                    });
+                    client.on(
+                        'play_error_notification',
+                        ({ ext_id }: { ext_id?: string } = {}): void => {
+                            this.play_sound({
+                                notification_type: 'error',
+                                reload_notification_volume,
+                                ext_id,
+                            });
+                        },
+                    );
                 }, 'aer_1002'),
             );
         }, 'aer_1003');
@@ -56,17 +60,33 @@ export class Watch {
     public play_sound = ({
         reload_notification_volume,
         notification_type,
+        ext_id,
     }: {
         reload_notification_volume: number;
         notification_type: 'reload' | 'error';
-    }): void =>
-        err(() => {
-            const sound_filename =
-                notification_type === 'reload'
-                    ? '330046__paulmorek__beep-03-positive.wav'
-                    : '330068__paulmorek__beep-06-low-2015-06-22.wav';
-            const audio = new Audio(sound_filename);
-            audio.volume = reload_notification_volume;
-            audio.play();
+        ext_id?: string;
+    }): Promise<void> =>
+        err_async(async () => {
+            const play_sound_inner = (): void =>
+                err(() => {
+                    const sound_filename =
+                        notification_type === 'reload'
+                            ? '330046__paulmorek__beep-03-positive.wav'
+                            : '330068__paulmorek__beep-06-low-2015-06-22.wav';
+                    const audio = new Audio(sound_filename);
+                    audio.volume = reload_notification_volume;
+                    audio.play();
+                }, 'aer_1113');
+
+            if (n(ext_id)) {
+                const extension_is_eligible_for_reload: boolean =
+                    await s_reload.Watch.i().extension_is_eligible_for_reload({ ext_id });
+
+                if (extension_is_eligible_for_reload) {
+                    play_sound_inner();
+                }
+            } else {
+                play_sound_inner();
+            }
         }, 'aer_1004');
 }
