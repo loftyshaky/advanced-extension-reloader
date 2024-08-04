@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-import { s_reload, i_options } from 'shared/internal';
+import { s_reload, i_options } from 'shared_clean/internal';
 
 export class Watch {
     private static i0: Watch;

@@ -1,6 +1,6 @@
 import { makeObservable, computed } from 'mobx';
 
-import { s_utils } from '@loftyshaky/shared';
+import { s_utils } from '@loftyshaky/shared/shared';
 import { o_inputs, i_inputs } from '@loftyshaky/shared/inputs';
 import { d_settings } from '@loftyshaky/shared/settings';
 import { d_sections } from 'settings/internal';

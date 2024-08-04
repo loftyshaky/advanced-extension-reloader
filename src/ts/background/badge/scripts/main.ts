@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import debounce from 'lodash/debounce';
+import isInteger from 'lodash/isInteger';
 
 import { s_reload } from 'background/internal';
 
@@ -55,7 +56,7 @@ export class Main {
             await this.set_badge_background_color();
         }, 'aer_1006');
 
-    private hide_debounce = _.debounce(this.hide_ok_badge, 2000);
+    private hide_debounce = debounce(this.hide_ok_badge, 2000);
 
     public show_timer_badge = ({ time }: { time: number }): Promise<void> =>
         err_async(async () => {
@@ -66,7 +67,7 @@ export class Main {
                     const seconds = (this.timer_badge_time_left / 1000.0).toFixed(1); // May be decimal
 
                     this.time_badge_text = (
-                        _.isInteger(seconds) ? `${seconds}.0` : seconds
+                        isInteger(seconds) ? `${seconds}.0` : seconds
                     ).toString();
 
                     await this.set_badge_text();

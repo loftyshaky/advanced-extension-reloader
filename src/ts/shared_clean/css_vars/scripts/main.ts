@@ -1,4 +1,4 @@
-import { s_css_vars } from '@loftyshaky/shared';
+import { s_css_vars } from '@loftyshaky/shared/shared_clean';
 
 export class Main {
     private static i0: Main;

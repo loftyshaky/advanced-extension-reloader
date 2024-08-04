@@ -1,4 +1,4 @@
-import { i_options } from 'shared/internal';
+import { i_options } from 'shared_clean/internal';
 
 export class DefaultValues {
     private static i0: DefaultValues;

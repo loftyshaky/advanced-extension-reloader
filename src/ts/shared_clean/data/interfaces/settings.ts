@@ -1,4 +1,4 @@
-import { i_options } from 'shared/internal';
+import { i_options } from 'shared_clean/internal';
 
 export interface Settings {
     current_section: string;

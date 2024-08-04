@@ -1,9 +1,11 @@
-import _ from 'lodash';
+import map from 'lodash/map';
+import trim from 'lodash/trim';
+import isArray from 'lodash/isArray';
 
-import { t } from '@loftyshaky/shared';
+import { t } from '@loftyshaky/shared/shared';
 import { d_inputs, i_inputs } from '@loftyshaky/shared/inputs';
 import { s_settings } from '@loftyshaky/shared/settings';
-import { s_css_vars, i_options } from 'shared/internal';
+import { s_css_vars, i_options } from 'shared_clean/internal';
 
 export class Val {
     private static i0: Val;
@@ -23,7 +25,7 @@ export class Val {
                 let val: t.AnyUndefined;
 
                 if (input.name === 'ports') {
-                    val = _.map((raw_val as string).split(','), _.trim);
+                    val = map((raw_val as string).split(','), trim);
                 } else if (this.check_if_json_input({ name: input.name })) {
                     val = JSON.parse(raw_val as string);
                 } else if (n(raw_val)) {
@@ -123,7 +125,7 @@ export class Val {
                 if (input.name === 'context_menu_actions') {
                     const val = JSON.parse(raw_val as string);
 
-                    if (_.isArray(val)) {
+                    if (isArray(val)) {
                         return val.some((reload_obj: i_options.Options): boolean =>
                             err(() => validate_inner({ reload_obj }), 'aer_1059'),
                         );
@@ -162,5 +164,5 @@ export class Val {
                 settings: { developer_mode: data.settings.developer_mode },
                 rerun_actions: true,
             });
-        }, 'ges_1210');
+        }, 'aer_1210');
 }

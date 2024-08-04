@@ -1,4 +1,4 @@
-import { t } from '@loftyshaky/shared';
+import { t } from '@loftyshaky/shared/shared';
 import { d_settings } from 'shared/internal';
 
 we.runtime.onMessage.addListener((msg: t.Msg): any =>
@@ -13,5 +13,5 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
         }
 
         return false;
-    }, 'ges_1126'),
+    }, 'aer_1126'),
 );

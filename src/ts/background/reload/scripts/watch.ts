@@ -1,7 +1,7 @@
 import { Tabs, Management } from 'webextension-polyfill';
 
-import { t } from '@loftyshaky/shared';
-import { s_reload as s_reload_shared, s_suffix, i_options } from 'shared/internal';
+import { t } from '@loftyshaky/shared/shared_clean';
+import { s_reload as s_reload_shared, s_suffix, i_options } from 'shared_clean/internal';
 import { s_badge, s_data, s_reload } from 'background/internal';
 
 export class Watch {
@@ -185,7 +185,7 @@ export class Watch {
                 await s_reload.Tabs.i().recreate_tabs({ ext_tabs: new_tab_tabs });
             }
 
-            if (at_least_one_extension_reloaded) {
+            if (at_least_one_extension_reloaded || !options_final.hard) {
                 if (n(options_final.hard) && n(options_final.all_tabs)) {
                     await s_reload.Tabs.i().reload_tabs({
                         hard: options_final.hard,

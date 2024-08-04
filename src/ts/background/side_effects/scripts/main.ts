@@ -1,4 +1,4 @@
-import { i_data } from 'shared/internal';
+import { i_data } from 'shared_clean/internal';
 import { s_reload } from 'background/internal';
 
 export class Main {

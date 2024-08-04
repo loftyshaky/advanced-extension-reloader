@@ -1,7 +1,8 @@
-import _ from 'lodash';
+import debounce from 'lodash/debounce';
+import isEmpty from 'lodash/isEmpty';
 
-import { t, o_schema, d_schema, s_service_worker } from '@loftyshaky/shared';
-import { i_data } from 'shared/internal';
+import { t, o_schema, d_schema, s_service_worker } from '@loftyshaky/shared/shared_clean';
+import { i_data } from 'shared_clean/internal';
 import { s_reload, s_side_effects } from 'background/internal';
 
 export class Main {
@@ -82,7 +83,7 @@ export class Main {
             s_service_worker.ServiceWorker.i().make_persistent();
         }, 'aer_1008');
 
-    public update_settings_debounce = _.debounce(
+    public update_settings_debounce = debounce(
         (settings: i_data.Settings, rerun_actions: boolean = false, transform: boolean = false) =>
             err_async(async () => {
                 await this.update_settings({ settings, transform });
@@ -90,7 +91,7 @@ export class Main {
                 if (rerun_actions) {
                     ext.send_msg_to_all_tabs({ msg: 'rerun_actions' });
                 }
-            }, 'ges_1177'),
+            }, 'aer_1177'),
         500,
     );
 
@@ -102,7 +103,7 @@ export class Main {
 
             if (s_reload.Watch.i().running_suspend_or_resume_automatic_reload_f) {
                 this.set_from_storage_run_prevented = true;
-            } else if (_.isEmpty(settings)) {
+            } else if (isEmpty(settings)) {
                 await this.update_settings({ transform });
             } else if (transform) {
                 await this.update_settings({ settings, transform });

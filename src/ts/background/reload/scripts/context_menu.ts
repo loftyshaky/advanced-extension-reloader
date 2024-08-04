@@ -1,7 +1,7 @@
-import _ from 'lodash';
+import upperFirst from 'lodash/upperFirst';
 import { Management, Menus } from 'webextension-polyfill';
 
-import { i_options } from 'shared/internal';
+import { i_options } from 'shared_clean/internal';
 import { s_reload } from 'background/internal';
 
 export class ContextMenu {
@@ -79,7 +79,7 @@ export class ContextMenu {
 
                                 const context_menu_item_title_final: string =
                                     app_name === ''
-                                        ? _.upperFirst(context_menu_item_title)
+                                        ? upperFirst(context_menu_item_title)
                                         : context_menu_item_title;
 
                                 await we.contextMenus.create({

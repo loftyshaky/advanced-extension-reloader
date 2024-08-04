@@ -1,6 +1,6 @@
 import { Management } from 'webextension-polyfill';
 
-import { t } from '@loftyshaky/shared';
+import { t } from '@loftyshaky/shared/shared_clean';
 import { s_badge, s_data, s_reload, s_side_effects } from 'background/internal';
 
 we.runtime.onMessage.addListener((msg: t.Msg): any =>

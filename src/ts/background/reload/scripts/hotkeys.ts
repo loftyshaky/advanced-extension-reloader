@@ -1,4 +1,4 @@
-import { i_options } from 'shared/internal';
+import { i_options } from 'shared_clean/internal';
 import { s_reload } from 'background/internal';
 
 we.commands.onCommand.addListener(

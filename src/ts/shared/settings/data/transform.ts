@@ -1,7 +1,7 @@
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { runInAction } from 'mobx';
 
-import { d_settings } from '@loftyshaky/shared';
+import { d_settings } from '@loftyshaky/shared/shared';
 
 export class Transform {
     private static i0: Transform;
@@ -18,7 +18,7 @@ export class Transform {
         err_async(async () => {
             let settings_final: any;
 
-            if (_.isEmpty(settings)) {
+            if (isEmpty(settings)) {
                 const default_settings = await ext.send_msg_resp({ msg: 'get_defaults' });
 
                 settings_final = default_settings;
@@ -38,9 +38,11 @@ export class Transform {
                 }, 'aer_1081'),
             );
 
-            runInAction((): void => {
-                data.settings = settings_final;
-            });
+            runInAction(() =>
+                err(() => {
+                    data.settings = settings_final;
+                }, 'aer_1116'),
+            );
 
             ext.send_msg({ msg: 'react_to_change' });
         }, 'aer_1082');
@@ -50,7 +52,7 @@ export class Transform {
             const settings = await ext.storage_get();
             const settings_are_corrupt: boolean = !n(settings.enable_cut_features);
 
-            if (_.isEmpty(settings) || settings_are_corrupt) {
+            if (isEmpty(settings) || settings_are_corrupt) {
                 const default_settings = await ext.send_msg_resp({ msg: 'get_defaults' });
 
                 await ext.storage_set(default_settings);

@@ -1,4 +1,4 @@
-import { t } from '@loftyshaky/shared';
+import { t } from '@loftyshaky/shared/shared_clean';
 import { s_reload } from 'offscreen/internal';
 
 we.runtime.onMessage.addListener((msg: t.Msg): any =>
