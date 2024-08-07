@@ -1,4 +1,5 @@
 import { Tabs as TabsExt } from 'webextension-polyfill';
+import { Windows, Tabs as TabsExt } from 'webextension-polyfill';
 
 export class Tabs {
     private static i0: Tabs;
@@ -12,8 +13,11 @@ export class Tabs {
     private constructor() {}
 
     public opened_ext_tabs: TabsExt.Tab[] = [];
+    public ext_tabs: TabsExt.Tab[] = [];
     public browser_protocol: string = 'chrome://';
     public ext_protocol: string = 'chrome-extension://';
+    public temporary_tabs: TabsExt.Tab[] = [];
+    private new_tab_link: string = `${this.browser_protocol}newtab/`;
 
     public get_tabs = (): Promise<TabsExt.Tab[]> =>
         err_async(async () => {
@@ -38,7 +42,7 @@ export class Tabs {
     public get_new_tab_tabs = (): Promise<TabsExt.Tab[]> =>
         err_async(async () => {
             const tabs: TabsExt.Tab[] = await we.tabs.query({
-                url: [`${this.browser_protocol}newtab/`],
+                url: [this.new_tab_link],
             });
 
             return tabs;
@@ -111,9 +115,13 @@ export class Tabs {
             await Promise.all(
                 ext_tabs.map(async (text_tab: TabsExt.Tab) =>
                     err_async(async () => {
+                        const window_has_temporary_tab = this.temporary_tabs.some(
+                            (temporary_tab: TabsExt.Tab): boolean =>
+                                err(() => temporary_tab.windowId === text_tab.windowId, 'aer_1123'),
+                        );
                         const tab: TabsExt.Tab = await we.tabs.create({
                             windowId: text_tab.windowId,
-                            index: text_tab.index,
+                            index: window_has_temporary_tab ? text_tab.index + 1 : text_tab.index,
                             url: text_tab.url,
                             active: false, // prevent focus stealing on Ubuntu when extension's tab is reopened
                             pinned: text_tab.pinned,
@@ -139,4 +147,57 @@ export class Tabs {
 
             return n(tabs[0]) ? tabs[0] : { id: 0 };
         }, 'aer_1031');
+
+    public create_temporary_tabs = (): Promise<void> =>
+        err_async(async () => {
+            const windows: Windows.Window[] = await we.windows.getAll();
+
+            windows.forEach(
+                (window: Windows.Window): Promise<void> =>
+                    err_async(async () => {
+                        this.temporary_tabs = [];
+
+                        const tabs: TabsExt.Tab[] = await we.tabs.query({ windowId: window.id });
+
+                        const tabs_that_wont_reload: TabsExt.Tab[] = tabs.filter(
+                            (tab: TabsExt.Tab): boolean =>
+                                err(() => {
+                                    const is_new_tab_tab: boolean = tab.url === this.new_tab_link;
+                                    const is_ext_to_reaload_tab: boolean = this.ext_tabs.some(
+                                        (ext_tab: TabsExt.Tab): boolean =>
+                                            err(() => tab.url === ext_tab.url, 'aer_1122'),
+                                    );
+
+                                    return !is_new_tab_tab && !is_ext_to_reaload_tab;
+                                }, 'aer_1121'),
+                        );
+
+                        if (tabs_that_wont_reload.length === 0) {
+                            const created_tab: TabsExt.Tab = await we.tabs.create({
+                                url: 'about:blank',
+                                windowId: window.id,
+                                index: 0,
+                                active: false,
+                                pinned: true,
+                            });
+
+                            if (n(created_tab.id)) {
+                                this.temporary_tabs.push(created_tab);
+                            }
+                        }
+                    }, 'aer_1118'),
+            );
+        }, 'aer_1117');
+
+    public remove_temporary_tabs = (): Promise<void> =>
+        err_async(async () => {
+            await Promise.all(
+                this.temporary_tabs.map(
+                    async (tab: TabsExt.Tab): Promise<void> =>
+                        err_async(async () => {
+                            await we.tabs.remove(tab.id);
+                        }, 'aer_1120'),
+                ),
+            );
+        }, 'aer_1119');
 }

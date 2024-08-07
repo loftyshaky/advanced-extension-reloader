@@ -108,22 +108,13 @@ export class Watch {
                 const ext_tabs: Tabs.Tab[] = await s_reload.Tabs.i().get_ext_tabs();
                 const new_tab_tabs: Tabs.Tab[] = await s_reload.Tabs.i().get_new_tab_tabs();
                 const re_enable_callers: t.CallbackVoid[] = [];
-
-                await Promise.all(
-                    new_tab_tabs.map(async (tab: Tabs.Tab) =>
-                        err_async(async () => {
-                            if (n(tab.id)) {
-                                await we.tabs.remove(tab.id);
-                            }
-                        }, 'aer_1090'),
-                    ),
-                );
+                s_reload.Tabs.ext_tabs = [];
 
                 await Promise.all(
                     exts.map(async (ext_info: Management.ExtensionInfo) =>
                         err_async(async () => {
-                            const ext_tabs_final: (Tabs.Tab | undefined)[] = ext_tabs
-                                .map((ext_tab: t.AnyRecord): Tabs.Tab | undefined =>
+                            const ext_tabs_final: Tabs.Tab[] = ext_tabs.flatMap(
+                                (ext_tab: t.AnyRecord): Tabs.Tab[] =>
                                     err(() => {
                                         const reg_exp_extension = new RegExp(
                                             s_reload.Tabs.i().ext_protocol + ext_info.id,
@@ -135,17 +126,14 @@ export class Watch {
                                             ext_tab.ext_id = ext_info.id;
 
                                             return ext_tab as Tabs.Tab;
+                                            return [ext_tab as Tabs.Tab];
                                         }
 
-                                        return undefined;
+                                        return [];
                                     }, 'aer_1036'),
-                                )
-                                .filter((ext_tab: Tabs.Tab | undefined): boolean =>
-                                    err(() => n(ext_tab), 'aer_1037'),
-                                );
+                            );
 
                             const extension_is_eligible_for_reload: boolean =
-                                await s_reload_shared.Watch.i().extension_is_eligible_for_reload({
                                     ext_id: options_final.ext_id,
                                     ext_info,
                                     settings,
@@ -156,9 +144,15 @@ export class Watch {
                                     const reload_triggered = await this.trigger_reload({
                                         ext_info,
                                     });
+                                s_reload.Tabs.ext_tabs.push(...ext_tabs_final);
 
+                                if (n(options_final.after_reload_delay)) {
                                     re_enable_callers.push(async (): Promise<void> => {
                                         if (n(options_final.after_reload_delay)) {
+                                            const reload_triggered = await this.trigger_reload({
+                                                ext_info,
+                                            });
+
                                             await this.re_enable({
                                                 ext_info,
                                                 ext_tabs: ext_tabs_final as Tabs.Tab[],
@@ -176,6 +170,18 @@ export class Watch {
                     ),
                 );
 
+                await s_reload.Tabs.create_temporary_tabs();
+
+                await Promise.all(
+                    new_tab_tabs.map(async (tab: Tabs.Tab) =>
+                        err_async(async () => {
+                            if (n(tab.id)) {
+                                await we.tabs.remove(tab.id);
+                            }
+                        }, 'aer_1090'),
+                    ),
+                );
+
                 await Promise.all(
                     re_enable_callers.map(async (f: t.CallbackVoid) => {
                         await f();
@@ -183,6 +189,7 @@ export class Watch {
                 );
 
                 await s_reload.Tabs.i().recreate_tabs({ ext_tabs: new_tab_tabs });
+                await s_reload.Tabs.remove_temporary_tabs();
             }
 
             if (at_least_one_extension_reloaded || !options_final.hard) {
