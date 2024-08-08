@@ -6,8 +6,7 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
         const msg_str: string = msg.msg;
 
         if (msg_str === 'react_to_change') {
-            return d_settings.Transform.i()
-                .set_transformed_from_storage()
+            return d_settings.Transform.set_transformed_from_storage()
                 .then((response) => response)
                 .catch((error_obj: any) => show_err_ribbon(error_obj, 'aer_1106'));
         }

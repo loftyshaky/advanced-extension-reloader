@@ -1,1 +1,1 @@
-export * from 'background/on_startup/scripts/main';
+export * from 'background/on_startup/scripts/events';

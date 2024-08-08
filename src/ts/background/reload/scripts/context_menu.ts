@@ -1,15 +1,14 @@
 import upperFirst from 'lodash/upperFirst';
-import { Management, Menus } from 'webextension-polyfill';
+import { Management } from 'webextension-polyfill';
 
 import { i_options } from 'shared_clean/internal';
 import { s_reload } from 'background/internal';
 
-export class ContextMenu {
-    private static i0: ContextMenu;
+class Class {
+    private static instance: Class;
 
-    public static i(): ContextMenu {
-        // eslint-disable-next-line no-return-assign
-        return this.i0 || (this.i0 = new this());
+    public static get_instance(): Class {
+        return this.instance || (this.instance = new this());
     }
 
     // eslint-disable-next-line no-useless-constructor, no-empty-function
@@ -63,7 +62,7 @@ export class ContextMenu {
                         (reload_action: i_options.Options, i: number): Promise<void> =>
                             err_async(async () => {
                                 const reload_actions_final: i_options.Options =
-                                    s_reload.DefaultValues.i().tranform_reload_action({
+                                    s_reload.DefaultValues.tranform_reload_action({
                                         reload_action,
                                     });
 
@@ -95,18 +94,4 @@ export class ContextMenu {
             }
         }, 'aer_1017');
 }
-
-we.contextMenus.onClicked.addListener(
-    (info: Menus.OnClickData): Promise<void> =>
-        err_async(async () => {
-            if (info.menuItemId === 'suspend_or_resume_automatic_reload') {
-                s_reload.Watch.i().suspend_or_resume_automatic_reload();
-            } else {
-                const settings = await ext.storage_get();
-
-                s_reload.Watch.i().try_to_reload({
-                    options: settings.context_menu_actions[info.menuItemId],
-                });
-            }
-        }, 'aer_1018'),
-);
+export const ContextMenu = Class.get_instance();

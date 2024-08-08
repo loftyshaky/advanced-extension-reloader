@@ -3,12 +3,11 @@ import isInteger from 'lodash/isInteger';
 
 import { s_reload } from 'background/internal';
 
-export class Main {
-    private static i0: Main;
+class Class {
+    private static instance: Class;
 
-    public static i(): Main {
-        // eslint-disable-next-line no-return-assign
-        return this.i0 || (this.i0 = new this());
+    public static get_instance(): Class {
+        return this.instance || (this.instance = new this());
     }
 
     // eslint-disable-next-line no-useless-constructor, no-empty-function
@@ -30,10 +29,10 @@ export class Main {
 
             this.show_timer_badge({
                 time:
-                    s_reload.Watch.i().reload_cooldown_timer_start_timestamp === 0
-                        ? s_reload.Watch.i().last_cooldown_time
-                        : s_reload.Watch.i().last_cooldown_time -
-                          (Date.now() - s_reload.Watch.i().reload_cooldown_timer_start_timestamp),
+                    s_reload.Watch.reload_cooldown_timer_start_timestamp === 0
+                        ? s_reload.Watch.last_cooldown_time
+                        : s_reload.Watch.last_cooldown_time -
+                          (Date.now() - s_reload.Watch.reload_cooldown_timer_start_timestamp),
             });
 
             this.hide_debounce();
@@ -131,3 +130,5 @@ export class Main {
             await we.action.setBadgeTextColor({ color: 'white' });
         }, 'aer_1103');
 }
+
+export const Badge = Class.get_instance();

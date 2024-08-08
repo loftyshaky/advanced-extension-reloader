@@ -5,12 +5,11 @@ import { t, o_schema, d_schema, s_service_worker } from '@loftyshaky/shared/shar
 import { i_data } from 'shared_clean/internal';
 import { s_reload, s_side_effects } from 'background/internal';
 
-export class Main {
-    private static i0: Main;
+class Class {
+    private static instance: Class;
 
-    public static i(): Main {
-        // eslint-disable-next-line no-return-assign
-        return this.i0 || (this.i0 = new this());
+    public static get_instance(): Class {
+        return this.instance || (this.instance = new this());
     }
 
     // eslint-disable-next-line no-useless-constructor, no-empty-function
@@ -78,9 +77,9 @@ export class Main {
             }
 
             await ext.storage_set(settings_final);
-            await s_side_effects.Main.i().react_to_change();
+            await s_side_effects.SideEffects.react_to_change();
 
-            s_service_worker.ServiceWorker.i().make_persistent();
+            s_service_worker.ServiceWorker.make_persistent();
         }, 'aer_1008');
 
     public update_settings_debounce = debounce(
@@ -101,7 +100,7 @@ export class Main {
         err_async(async () => {
             const settings: i_data.Settings = await ext.storage_get();
 
-            if (s_reload.Watch.i().running_suspend_or_resume_automatic_reload_f) {
+            if (s_reload.Watch.running_suspend_or_resume_automatic_reload_f) {
                 this.set_from_storage_run_prevented = true;
             } else if (isEmpty(settings)) {
                 await this.update_settings({ transform });
@@ -149,14 +148,14 @@ export class Main {
                 }),
             ];
 
-            const settings_copy_final: i_data.Settings = await d_schema.Main.i().transform({
+            const settings_copy_final: i_data.Settings = await d_schema.Schema.transform({
                 data: settings_copy,
                 transform_items: settings_transform_items,
                 remove_from_storage: false,
                 keys_to_remove: ['open_background_tab_automatically', 'open_position_in_tab_strip'],
             });
 
-            const click_action: any = await d_schema.Main.i().transform({
+            const click_action: any = await d_schema.Schema.transform({
                 data: settings_copy_final.click_action,
                 transform_items: click_action_transform_items,
             });
@@ -166,7 +165,7 @@ export class Main {
             settings_copy_final.context_menu_actions = await Promise.all(
                 settings_copy_final.context_menu_actions.map((action: any): any =>
                     err_async(async () => {
-                        const new_action: any = await d_schema.Main.i().transform({
+                        const new_action: any = await d_schema.Schema.transform({
                             data: action,
                             transform_items: click_action_transform_items,
                         });
@@ -179,3 +178,5 @@ export class Main {
             return settings_copy_final;
         }, 'aer_1085');
 }
+
+export const Data = Class.get_instance();

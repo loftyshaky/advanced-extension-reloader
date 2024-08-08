@@ -3,12 +3,11 @@ import { runInAction } from 'mobx';
 
 import { d_settings } from '@loftyshaky/shared/shared';
 
-export class Transform {
-    private static i0: Transform;
+class Class {
+    private static instance: Class;
 
-    public static i(): Transform {
-        // eslint-disable-next-line no-return-assign
-        return this.i0 || (this.i0 = new this());
+    public static get_instance(): Class {
+        return this.instance || (this.instance = new this());
     }
 
     // eslint-disable-next-line no-useless-constructor, no-empty-function
@@ -56,7 +55,7 @@ export class Transform {
                 const default_settings = await ext.send_msg_resp({ msg: 'get_defaults' });
 
                 await ext.storage_set(default_settings);
-                await d_settings.Main.i().set({ settings: default_settings, settings_are_corrupt });
+                await d_settings.Settings.set({ settings: default_settings, settings_are_corrupt });
             }
 
             if (!settings_are_corrupt) {
@@ -64,3 +63,5 @@ export class Transform {
             }
         }, 'aer_1083');
 }
+
+export const Transform = Class.get_instance();

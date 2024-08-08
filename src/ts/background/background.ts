@@ -5,5 +5,4 @@ import 'shared_clean/internal';
 import { init } from 'background/internal';
 
 importScripts('/env.js');
-
 init();

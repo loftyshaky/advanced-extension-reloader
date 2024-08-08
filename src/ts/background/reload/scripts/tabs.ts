@@ -1,18 +1,15 @@
-import { Tabs as TabsExt } from 'webextension-polyfill';
 import { Windows, Tabs as TabsExt } from 'webextension-polyfill';
 
-export class Tabs {
-    private static i0: Tabs;
+class Class {
+    private static instance: Class;
 
-    public static i(): Tabs {
-        // eslint-disable-next-line no-return-assign
-        return this.i0 || (this.i0 = new this());
+    public static get_instance(): Class {
+        return this.instance || (this.instance = new this());
     }
 
     // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
-    public opened_ext_tabs: TabsExt.Tab[] = [];
     public ext_tabs: TabsExt.Tab[] = [];
     public browser_protocol: string = 'chrome://';
     public ext_protocol: string = 'chrome-extension://';
@@ -201,3 +198,5 @@ export class Tabs {
             );
         }, 'aer_1119');
 }
+
+export const Tabs = Class.get_instance();
