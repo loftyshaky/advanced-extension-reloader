@@ -23,12 +23,12 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
         if (msg_str === 'get_settings') {
             return ext
                 .storage_get()
-                .then((response) => response)
+                .then((response: any) => response)
                 .catch((error_obj: any) => show_err_ribbon(error_obj, 'aer_1114'));
         }
 
         if (msg_str === 'update_settings') {
-            s_data.Main.i().update_settings_debounce(
+            s_data.Data.update_settings_debounce(
                 msg.settings,
                 n(msg.rerun_actions) ? msg.rerun_actions : false,
                 n(msg.transform) ? msg.transform : false,
@@ -38,11 +38,11 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
         }
 
         if (msg_str === 'get_defaults') {
-            return Promise.resolve(s_data.Main.i().defaults);
+            return Promise.resolve(s_data.Data.defaults);
         }
 
         if (msg_str === 'reload') {
-            s_reload.Watch.i().try_to_reload({
+            s_reload.Watch.try_to_reload({
                 options: msg.options,
                 automatic_reload: true,
             });
@@ -51,15 +51,14 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
         }
 
         if (msg_str === 'show_badge') {
-            s_badge.Main.i().show_ok_badge();
+            s_badge.Badge.show_ok_badge();
 
             return Promise.resolve(true);
         }
 
         if (msg_str === 'react_to_change') {
-            return s_side_effects.Main.i()
-                .react_to_change()
-                .then((response) => response)
+            return s_side_effects.SideEffects.react_to_change()
+                .then((response: any) => response)
                 .catch((error_obj: any) => show_err_ribbon(error_obj, 'aer_1105'));
         }
 

@@ -1,12 +1,11 @@
 import { i_data } from 'shared_clean/internal';
 import { s_reload } from 'background/internal';
 
-export class Main {
-    private static i0: Main;
+class Class {
+    private static instance: Class;
 
-    public static i(): Main {
-        // eslint-disable-next-line no-return-assign
-        return this.i0 || (this.i0 = new this());
+    public static get_instance(): Class {
+        return this.instance || (this.instance = new this());
     }
 
     // eslint-disable-next-line no-useless-constructor, no-empty-function
@@ -18,7 +17,7 @@ export class Main {
 
             const settings: i_data.Settings = await ext.storage_get();
 
-            s_reload.ContextMenu.i().create();
+            s_reload.ContextMenu.create();
 
             ext.send_msg({
                 msg: 'connect_to_ext_servers',
@@ -28,16 +27,4 @@ export class Main {
         }, 'aer_1041');
 }
 
-we.management.onUninstalled.addListener(
-    (): Promise<void> =>
-        err_async(async () => {
-            await Main.i().react_to_change();
-        }, 'aer_1042'),
-);
-
-we.management.onInstalled.addListener(
-    (): Promise<void> =>
-        err_async(async () => {
-            await Main.i().react_to_change();
-        }, 'aer_1043'),
-);
+export const SideEffects = Class.get_instance();

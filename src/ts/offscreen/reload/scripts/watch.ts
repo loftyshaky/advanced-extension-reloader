@@ -2,12 +2,11 @@ import io from 'socket.io-client';
 
 import { s_reload, i_options } from 'shared_clean/internal';
 
-export class Watch {
-    private static i0: Watch;
+class Class {
+    private static instance: Class;
 
-    public static i(): Watch {
-        // eslint-disable-next-line no-return-assign
-        return this.i0 || (this.i0 = new this());
+    public static get_instance(): Class {
+        return this.instance || (this.instance = new this());
     }
 
     // eslint-disable-next-line no-useless-constructor, no-empty-function
@@ -80,7 +79,7 @@ export class Watch {
 
             if (n(ext_id)) {
                 const extension_is_eligible_for_reload: boolean =
-                    await s_reload.Watch.i().extension_is_eligible_for_reload({ ext_id });
+                    await s_reload.Watch.extension_is_eligible_for_reload({ ext_id });
 
                 if (extension_is_eligible_for_reload) {
                     play_sound_inner();
@@ -90,3 +89,5 @@ export class Watch {
             }
         }, 'aer_1004');
 }
+
+export const Watch = Class.get_instance();

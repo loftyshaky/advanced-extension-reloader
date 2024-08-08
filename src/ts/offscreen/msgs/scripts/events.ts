@@ -6,7 +6,7 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
         const msg_str: string = msg.msg;
 
         if (msg_str === 'connect_to_ext_servers') {
-            s_reload.Watch.i().connect({
+            s_reload.Watch.connect({
                 ports: msg.ports,
                 reload_notification_volume: msg.reload_notification_volume,
             });
@@ -15,7 +15,7 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
         }
 
         if (msg_str === 'play_reload_sound') {
-            s_reload.Watch.i().play_sound({
+            s_reload.Watch.play_sound({
                 notification_type: 'reload',
                 reload_notification_volume: msg.reload_notification_volume,
                 ext_id: msg.ext_id,

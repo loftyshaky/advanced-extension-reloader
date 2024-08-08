@@ -1,1 +1,1 @@
-export * from 'background/data/scripts/main';
+export * from 'background/data/scripts/data';

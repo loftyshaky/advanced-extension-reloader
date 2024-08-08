@@ -4,12 +4,11 @@ import { t } from '@loftyshaky/shared/shared_clean';
 import { s_reload as s_reload_shared, s_suffix, i_options } from 'shared_clean/internal';
 import { s_badge, s_data, s_reload } from 'background/internal';
 
-export class Watch {
-    private static i0: Watch;
+class Class {
+    private static instance: Class;
 
-    public static i(): Watch {
-        // eslint-disable-next-line no-return-assign
-        return this.i0 || (this.i0 = new this());
+    public static get_instance(): Class {
+        return this.instance || (this.instance = new this());
     }
 
     // eslint-disable-next-line no-useless-constructor, no-empty-function
@@ -44,7 +43,7 @@ export class Watch {
                     let done_fast_reload: boolean = false;
 
                     const options_final: i_options.Options =
-                        s_reload.DefaultValues.i().tranform_reload_action({
+                        s_reload.DefaultValues.tranform_reload_action({
                             reload_action: options,
                         });
 
@@ -53,7 +52,7 @@ export class Watch {
                             (options_final.after_reload_delay + this.full_reload_delay) * 3;
 
                         if (!this.allow_fast_reload) {
-                            s_badge.Main.i().show_timer_badge({
+                            s_badge.Badge.show_timer_badge({
                                 time: options_final.after_reload_delay + this.full_reload_delay,
                             });
                         }
@@ -96,17 +95,16 @@ export class Watch {
         err_async(async () => {
             const settings = await ext.storage_get();
 
-            const options_final: i_options.Options =
-                s_reload.DefaultValues.i().tranform_reload_action({
-                    reload_action: options,
-                });
+            const options_final: i_options.Options = s_reload.DefaultValues.tranform_reload_action({
+                reload_action: options,
+            });
 
             let at_least_one_extension_reloaded: boolean = false;
 
             if (options_final.hard) {
                 const exts: Management.ExtensionInfo[] = await we.management.getAll();
-                const ext_tabs: Tabs.Tab[] = await s_reload.Tabs.i().get_ext_tabs();
-                const new_tab_tabs: Tabs.Tab[] = await s_reload.Tabs.i().get_new_tab_tabs();
+                const ext_tabs: Tabs.Tab[] = await s_reload.Tabs.get_ext_tabs();
+                const new_tab_tabs: Tabs.Tab[] = await s_reload.Tabs.get_new_tab_tabs();
                 const re_enable_callers: t.CallbackVoid[] = [];
                 s_reload.Tabs.ext_tabs = [];
 
@@ -117,7 +115,7 @@ export class Watch {
                                 (ext_tab: t.AnyRecord): Tabs.Tab[] =>
                                     err(() => {
                                         const reg_exp_extension = new RegExp(
-                                            s_reload.Tabs.i().ext_protocol + ext_info.id,
+                                            s_reload.Tabs.ext_protocol + ext_info.id,
                                         );
 
                                         const matched_tab = reg_exp_extension.test(ext_tab.url);
@@ -125,7 +123,6 @@ export class Watch {
                                         if (matched_tab) {
                                             ext_tab.ext_id = ext_info.id;
 
-                                            return ext_tab as Tabs.Tab;
                                             return [ext_tab as Tabs.Tab];
                                         }
 
@@ -134,16 +131,13 @@ export class Watch {
                             );
 
                             const extension_is_eligible_for_reload: boolean =
+                                await s_reload_shared.Watch.extension_is_eligible_for_reload({
                                     ext_id: options_final.ext_id,
                                     ext_info,
                                     settings,
                                 });
 
                             if (extension_is_eligible_for_reload) {
-                                if (n(options_final.after_reload_delay)) {
-                                    const reload_triggered = await this.trigger_reload({
-                                        ext_info,
-                                    });
                                 s_reload.Tabs.ext_tabs.push(...ext_tabs_final);
 
                                 if (n(options_final.after_reload_delay)) {
@@ -188,19 +182,19 @@ export class Watch {
                     }),
                 );
 
-                await s_reload.Tabs.i().recreate_tabs({ ext_tabs: new_tab_tabs });
+                await s_reload.Tabs.recreate_tabs({ ext_tabs: new_tab_tabs });
                 await s_reload.Tabs.remove_temporary_tabs();
             }
 
             if (at_least_one_extension_reloaded || !options_final.hard) {
                 if (n(options_final.hard) && n(options_final.all_tabs)) {
-                    await s_reload.Tabs.i().reload_tabs({
+                    await s_reload.Tabs.reload_tabs({
                         hard: options_final.hard,
                         all_tabs: options_final.all_tabs,
                     });
                 }
 
-                await s_badge.Main.i().show_ok_badge();
+                await s_badge.Badge.show_ok_badge();
 
                 if (options_final.play_sound) {
                     ext.send_msg({
@@ -222,7 +216,7 @@ export class Watch {
             const reload_ext = (): Promise<void> =>
                 err(async () => {
                     await we.runtime.sendMessage(ext_info.id, {
-                        msg: new s_suffix.Main('reload_extension').result,
+                        msg: new s_suffix.Suffix('reload_extension').result,
                     });
 
                     reload_triggered = true;
@@ -253,7 +247,7 @@ export class Watch {
 
             await x.delay(after_reload_delay);
 
-            await s_reload.Tabs.i().recreate_tabs({ ext_tabs });
+            await s_reload.Tabs.recreate_tabs({ ext_tabs });
         }, 'aer_1089');
 
     public suspend_or_resume_automatic_reload = (): Promise<void> =>
@@ -263,14 +257,16 @@ export class Watch {
             const settings = await ext.storage_get();
             settings.suspend_automatic_reload = !settings.suspend_automatic_reload;
 
-            await s_data.Main.i().update_settings({ settings });
+            await s_data.Data.update_settings({ settings });
 
-            s_badge.Main.i().show_reload_suspended_badge();
+            s_badge.Badge.show_reload_suspended_badge();
 
             this.running_suspend_or_resume_automatic_reload_f = false;
 
-            if (s_data.Main.i().set_from_storage_run_prevented) {
-                await s_data.Main.i().set_from_storage({ transform: true });
+            if (s_data.Data.set_from_storage_run_prevented) {
+                await s_data.Data.set_from_storage({ transform: true });
             }
         }, 'aer_1101');
 }
+
+export const Watch = Class.get_instance();

@@ -1,11 +1,10 @@
 import { Management } from 'webextension-polyfill';
 
-export class Watch {
-    private static i0: Watch;
+class Class {
+    private static instance: Class;
 
-    public static i(): Watch {
-        // eslint-disable-next-line no-return-assign
-        return this.i0 || (this.i0 = new this());
+    public static get_instance(): Class {
+        return this.instance || (this.instance = new this());
     }
 
     // eslint-disable-next-line no-useless-constructor, no-empty-function
@@ -72,3 +71,5 @@ export class Watch {
             return extension_is_eligible_for_reload;
         }, 'aer_1110');
 }
+
+export const Watch = Class.get_instance();

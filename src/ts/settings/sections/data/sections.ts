@@ -5,12 +5,11 @@ import { o_inputs, i_inputs } from '@loftyshaky/shared/inputs';
 import { d_settings } from '@loftyshaky/shared/settings';
 import { d_sections } from 'settings/internal';
 
-export class Main {
-    private static i0: Main;
+class Class {
+    private static instance: Class;
 
-    public static i(): Main {
-        // eslint-disable-next-line no-return-assign
-        return this.i0 || (this.i0 = new this());
+    public static get_instance(): Class {
+        return this.instance || (this.instance = new this());
     }
 
     private constructor() {
@@ -25,7 +24,7 @@ export class Main {
 
     public sections: o_inputs.Section[] | i_inputs.Sections = [];
 
-    public init_sections = (): void =>
+    public init = (): void =>
         err(() => {
             this.sections = [
                 ...[
@@ -35,33 +34,33 @@ export class Main {
                             new o_inputs.Text({
                                 name: 'ports',
                                 include_help: true,
-                                event_callback: d_sections.Val.i().change,
-                                warn_state_checker: d_sections.Val.i().validate_input,
+                                event_callback: d_sections.Val.change,
+                                warn_state_checker: d_sections.Validation.validate_input,
                             }),
                             new o_inputs.Textarea({
                                 name: 'click_action',
                                 include_help: true,
                                 alt_help_msg: ext.msg(`click_action_help_text_${env.browser}`),
                                 input_errors: ['invalid_reload_action'],
-                                event_callback: d_sections.Val.i().change,
-                                warn_state_checker: d_sections.Val.i().validate_input,
+                                event_callback: d_sections.Val.change,
+                                warn_state_checker: d_sections.Validation.validate_input,
                             }),
                             new o_inputs.Textarea({
                                 name: 'context_menu_actions',
                                 include_help: true,
                                 input_errors: ['invalid_reload_action'],
-                                event_callback: d_sections.Val.i().change,
-                                warn_state_checker: d_sections.Val.i().validate_input,
+                                event_callback: d_sections.Val.change,
+                                warn_state_checker: d_sections.Validation.validate_input,
                             }),
                             new o_inputs.Range({
                                 name: 'reload_notification_volume',
                                 max: 1,
                                 step: 0.01,
-                                event_callback: d_sections.Val.i().change,
+                                event_callback: d_sections.Val.change,
                             }),
                             new o_inputs.Checkbox({
                                 name: 'allow_theme_reload',
-                                event_callback: d_sections.Val.i().change,
+                                event_callback: d_sections.Val.change,
                             }),
                         ],
                     }),
@@ -74,11 +73,11 @@ export class Main {
                         ],
                     }),
                 ],
-                ...d_settings.Sections.i().make_shared_sections({
+                ...d_settings.Sections.make_shared_sections({
                     download_back_up_callback: ext.storage_get,
-                    upload_back_up_callback: d_sections.Restore.i().restore_back_up,
-                    restore_defaults_callback: () => d_sections.Restore.i().restore_confirm(),
-                    input_change_val_callback: d_sections.Val.i().change,
+                    upload_back_up_callback: d_sections.Restore.restore_back_up,
+                    restore_defaults_callback: () => d_sections.Restore.restore_confirm(),
+                    input_change_val_callback: d_sections.Val.change,
                 }),
                 ...[
                     new o_inputs.Section({
@@ -132,35 +131,37 @@ export class Main {
                 ],
             ];
 
-            this.sections = s_utils.Main.i().to_object({
+            this.sections = s_utils.Utils.to_object({
                 arr: this.sections as o_inputs.Section[],
             });
-            this.sections.back_up.inputs = s_utils.Main.i().to_object({
+            this.sections.back_up.inputs = s_utils.Utils.to_object({
                 arr: this.sections.back_up.inputs as o_inputs.Section[],
             });
-            this.sections.restore.inputs = s_utils.Main.i().to_object({
+            this.sections.restore.inputs = s_utils.Utils.to_object({
                 arr: this.sections.restore.inputs as o_inputs.Section[],
             });
-            this.sections.admin.inputs = s_utils.Main.i().to_object({
+            this.sections.admin.inputs = s_utils.Utils.to_object({
                 arr: this.sections.admin.inputs as o_inputs.Section[],
             });
-            this.sections.reload.inputs = s_utils.Main.i().to_object({
+            this.sections.reload.inputs = s_utils.Utils.to_object({
                 arr: this.sections.reload.inputs as o_inputs.Section[],
                 section: 'reload',
             });
-            this.sections.links.inputs = s_utils.Main.i().to_object({
+            this.sections.links.inputs = s_utils.Utils.to_object({
                 arr: this.sections.links.inputs as o_inputs.Section[],
                 section: 'links',
             });
         }, 'aer_1047');
 
-    public change_section_val = (): void =>
+    public change_current_section_val = (): void =>
         err(() => {
-            data.settings.current_section = d_settings.Sections.i().current_section;
+            data.settings.current_section = d_settings.Sections.current_section;
 
             ext.send_msg({
                 msg: 'update_settings',
-                settings: { current_section: d_settings.Sections.i().current_section },
+                settings: { current_section: d_settings.Sections.current_section },
             });
         }, 'aer_1048');
 }
+
+export const Sections = Class.get_instance();
