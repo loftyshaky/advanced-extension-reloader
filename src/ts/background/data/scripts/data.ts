@@ -21,6 +21,7 @@ class Class {
     public init_defaults = (): void =>
         err(() => {
             this.defaults = {
+                version: ext.get_app_version(),
                 current_section: 'reload',
                 options_page_theme: 'lavender',
                 transition_duration: 200,
@@ -61,9 +62,11 @@ class Class {
     public update_settings = ({
         settings,
         transform = false,
+        transform_force = false,
     }: {
         settings?: i_data.Settings;
         transform?: boolean;
+        transform_force?: boolean;
     } = {}): Promise<void> =>
         err_async(async () => {
             const settings_2: i_data.Settings = n(settings)
@@ -73,19 +76,29 @@ class Class {
             let settings_final: i_data.Settings = settings_2;
 
             if (transform) {
-                settings_final = await this.transform({ settings: settings_2 });
+                settings_final = await this.transform({
+                    settings: settings_2,
+                    force: transform_force,
+                });
             }
 
             await ext.storage_set(settings_final);
             await s_side_effects.SideEffects.react_to_change();
 
+            ext.send_msg({ msg: 'react_to_change' });
+
             s_service_worker.ServiceWorker.make_persistent();
         }, 'aer_1008');
 
     public update_settings_debounce = debounce(
-        (settings: i_data.Settings, rerun_actions: boolean = false, transform: boolean = false) =>
+        (
+            settings: i_data.Settings,
+            rerun_actions: boolean = false,
+            transform: boolean = false,
+            transform_force: boolean = false,
+        ) =>
             err_async(async () => {
-                await this.update_settings({ settings, transform });
+                await this.update_settings({ settings, transform, transform_force });
 
                 if (rerun_actions) {
                     ext.send_msg_to_all_tabs({ msg: 'rerun_actions' });
@@ -109,7 +122,13 @@ class Class {
             }
         }, 'aer_1009');
 
-    private transform = ({ settings }: { settings: i_data.Settings }): Promise<i_data.Settings> =>
+    private transform = ({
+        settings,
+        force = false,
+    }: {
+        settings: i_data.Settings;
+        force?: boolean;
+    }): Promise<i_data.Settings> =>
         err_async(async () => {
             const settings_copy: any = settings;
 
@@ -151,13 +170,14 @@ class Class {
             const settings_copy_final: i_data.Settings = await d_schema.Schema.transform({
                 data: settings_copy,
                 transform_items: settings_transform_items,
-                remove_from_storage: false,
                 keys_to_remove: ['open_background_tab_automatically', 'open_position_in_tab_strip'],
+                force,
             });
 
             const click_action: any = await d_schema.Schema.transform({
                 data: settings_copy_final.click_action,
                 transform_items: click_action_transform_items,
+                force,
             });
 
             settings_copy_final.click_action = click_action;
@@ -174,6 +194,10 @@ class Class {
                     }, 'aer_1087'),
                 ),
             );
+
+            settings_copy_final.version = ext.get_app_version();
+
+            await d_schema.Schema.replace({ data: settings_copy_final });
 
             return settings_copy_final;
         }, 'aer_1085');

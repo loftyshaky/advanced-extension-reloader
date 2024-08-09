@@ -32,6 +32,7 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
                 msg.settings,
                 n(msg.rerun_actions) ? msg.rerun_actions : false,
                 n(msg.transform) ? msg.transform : false,
+                n(msg.transform_force) ? msg.transform_force : false,
             );
 
             return Promise.resolve(true);

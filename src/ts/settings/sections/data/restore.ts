@@ -51,6 +51,7 @@ class Class {
                 settings,
                 transform: true,
                 rerun_actions: true,
+                transform_force: true,
             });
 
             s_theme.Theme.set({
