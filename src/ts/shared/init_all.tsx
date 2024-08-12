@@ -10,7 +10,7 @@ import {
     s_tab_index,
     s_theme,
 } from '@loftyshaky/shared/shared';
-import { d_inputs, i_inputs } from '@loftyshaky/shared/inputs';
+import { d_inputs } from '@loftyshaky/shared/inputs';
 import { s_css_vars, s_suffix } from 'shared_clean/internal';
 import { d_settings } from 'shared/internal';
 
@@ -150,12 +150,7 @@ class Class {
 
             const on_css_load = (): Promise<void> =>
                 err_async(async () => {
-                    const { d_sections } = await import('settings/internal');
-
-                    d_inputs.InputWidth.calculate_for_all_sections({
-                        sections: d_sections.Sections.sections as i_inputs.Sections,
-                    });
-                    d_inputs.InputWidth.set_max_width();
+                    await d_inputs.InputWidth.calculate();
 
                     d_loading_screen.Visibility.hide({ app_id: s_suffix.app_id });
 
