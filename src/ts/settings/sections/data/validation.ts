@@ -69,7 +69,7 @@ class Class {
                     }, 'aer_1058');
 
                 if (input.name === 'ports') {
-                    return !/^\d+( *?, *?\d+)*$/.test(raw_val as string);
+                    return !/^\d+(?:,\s*\d+)*\s*$/.test(raw_val as string);
                 }
 
                 if (input.name === 'click_action') {

@@ -33,7 +33,7 @@ class Class {
                     new o_inputs.Section({
                         name: 'reload',
                         inputs: [
-                            new o_inputs.Text({
+                            new o_inputs.Textarea({
                                 name: 'ports',
                                 val_accessor: 'ui.ports',
                                 include_help: true,
