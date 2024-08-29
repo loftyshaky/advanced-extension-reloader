@@ -1,7 +1,7 @@
 import isEmpty from 'lodash/isEmpty';
 import { runInAction } from 'mobx';
 
-import { d_settings } from '@loftyshaky/shared/shared';
+import { d_data } from '@loftyshaky/shared/shared';
 
 class Class {
     private static instance: Class;
@@ -15,51 +15,33 @@ class Class {
 
     public set_transformed = ({ settings = undefined }: { settings?: any } = {}): Promise<void> =>
         err_async(async () => {
-            let settings_final: any;
+            const settings_final = settings;
 
-            if (isEmpty(settings)) {
-                const default_settings = await ext.send_msg_resp({ msg: 'get_defaults' });
+            if (!isEmpty(settings) && !isEmpty(settings.prefs)) {
+                Object.entries(settings_final.prefs).forEach(([key, val]: [string, any]): void =>
+                    err(() => {
+                        runInAction(() =>
+                            err(() => {
+                                if (key === 'ports') {
+                                    data.ui[key] = (val as string[]).join(', ');
+                                } else if (['click_action', 'context_menu_actions'].includes(key)) {
+                                    data.ui[key] = JSON.stringify(val, undefined, 4);
+                                }
+                            }, 'aer_1116'),
+                        );
+                    }, 'aer_1081'),
+                );
 
-                settings_final = default_settings;
-            } else {
-                settings_final = settings;
+                ext.send_msg({ msg: 'react_to_change' });
             }
-
-            Object.entries(settings_final).forEach(([key, val]): void =>
-                err(() => {
-                    if (key === 'ports') {
-                        settings_final[key] = (val as string[]).join(',');
-                    } else if (['click_action', 'context_menu_actions'].includes(key)) {
-                        settings_final[key] = JSON.stringify(val, undefined, 4);
-                    } else {
-                        settings_final[key] = val;
-                    }
-                }, 'aer_1081'),
-            );
-
-            runInAction(() =>
-                err(() => {
-                    data.settings = settings_final;
-                }, 'aer_1116'),
-            );
-
-            ext.send_msg({ msg: 'react_to_change' });
         }, 'aer_1082');
 
     public set_transformed_from_storage = (): Promise<void> =>
         err_async(async () => {
-            const settings = await ext.storage_get();
-            const settings_are_corrupt: boolean = !n(settings.enable_cut_features);
+            await d_data.Settings.set_from_storage();
 
-            if (isEmpty(settings) || settings_are_corrupt) {
-                const default_settings = await ext.send_msg_resp({ msg: 'get_defaults' });
-
-                await ext.storage_set(default_settings);
-                await d_settings.Settings.set({ settings: default_settings, settings_are_corrupt });
-            }
-
-            if (!settings_are_corrupt) {
-                this.set_transformed({ settings });
+            if (x.prefs_are_filled()) {
+                this.set_transformed({ settings: data.settings });
             }
         }, 'aer_1083');
 }

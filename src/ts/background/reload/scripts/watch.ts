@@ -31,9 +31,10 @@ class Class {
         automatic_reload?: boolean;
     }): Promise<void> =>
         err_async(async () => {
-            const settings = await ext.storage_get();
-
-            if (!automatic_reload || (automatic_reload && !settings.suspend_automatic_reload)) {
+            if (
+                !automatic_reload ||
+                (automatic_reload && !data.settings.prefs.suspend_automatic_reload)
+            ) {
                 globalThis.clearTimeout(this.reload_cooldown_timer);
                 globalThis.clearTimeout(this.debounce_reload_timer);
 
@@ -93,8 +94,6 @@ class Class {
 
     private reload = (options: i_options.Options): Promise<void> =>
         err_async(async () => {
-            const settings = await ext.storage_get();
-
             const options_final: i_options.Options = s_reload.DefaultValues.tranform_reload_action({
                 reload_action: options,
             });
@@ -134,7 +133,7 @@ class Class {
                                 await s_reload_shared.Watch.extension_is_eligible_for_reload({
                                     ext_id: options_final.ext_id,
                                     ext_info,
-                                    settings,
+                                    settings: data.settings,
                                 });
 
                             if (extension_is_eligible_for_reload) {
@@ -199,7 +198,7 @@ class Class {
                 if (options_final.play_sound) {
                     ext.send_msg({
                         msg: 'play_reload_sound',
-                        reload_notification_volume: settings.reload_notification_volume,
+                        reload_notification_volume: data.settings.prefs.reload_notification_volume,
                     });
                 }
             }
@@ -254,17 +253,17 @@ class Class {
         err_async(async () => {
             this.running_suspend_or_resume_automatic_reload_f = true;
 
-            const settings = await ext.storage_get();
-            settings.suspend_automatic_reload = !settings.suspend_automatic_reload;
+            data.settings.prefs.suspend_automatic_reload =
+                !data.settings.prefs.suspend_automatic_reload;
 
-            await s_data.Data.update_settings({ settings });
+            await s_data.Manipulation.update_settings({ settings: data.settings });
 
             s_badge.Badge.show_reload_suspended_badge();
 
             this.running_suspend_or_resume_automatic_reload_f = false;
 
-            if (s_data.Data.set_from_storage_run_prevented) {
-                await s_data.Data.set_from_storage({ transform: true });
+            if (s_data.Manipulation.set_from_storage_run_prevented) {
+                await s_data.Manipulation.set_from_storage({ transform: true });
             }
         }, 'aer_1101');
 }

@@ -4,7 +4,6 @@ import { observer } from 'mobx-react';
 import { c_settings } from '@loftyshaky/shared/settings';
 import { d_inputs, i_inputs } from '@loftyshaky/shared/inputs';
 import { d_sections, p_settings } from 'settings/internal';
-import { d_settings } from 'shared/internal';
 
 export const Body: React.FunctionComponent<p_settings.Body> = observer((props) => {
     const { on_render } = props;
@@ -18,8 +17,6 @@ export const Body: React.FunctionComponent<p_settings.Body> = observer((props) =
             err(() => {
                 const run = async () =>
                     err(() => {
-                        d_settings.Transform.set_transformed_from_storage();
-
                         d_inputs.NestedInput.set_all_parents_disbled_vals({
                             sections: d_sections.Sections.sections as i_inputs.Sections,
                         });

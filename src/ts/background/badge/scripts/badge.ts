@@ -47,9 +47,9 @@ class Class {
 
     public show_reload_suspended_badge = (): Promise<void> =>
         err_async(async () => {
-            const settings = await ext.storage_get();
-
-            this.reload_suspended_badge = settings.suspend_automatic_reload ? 'off' : 'on';
+            this.reload_suspended_badge = data.settings.prefs.suspend_automatic_reload
+                ? 'off'
+                : 'on';
 
             await this.set_badge_text();
             await this.set_badge_background_color();
@@ -117,8 +117,7 @@ class Class {
 
     private set_badge_background_color = (): Promise<void> =>
         err_async(async () => {
-            const settings = await ext.storage_get();
-            const background_color: string = settings.suspend_automatic_reload
+            const background_color: string = data.settings.prefs.suspend_automatic_reload
                 ? '#cc2b2b'
                 : '#249c3e'; // off/on
 

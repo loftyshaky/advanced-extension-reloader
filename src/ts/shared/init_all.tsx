@@ -50,7 +50,7 @@ class Class {
                                     err(() => {
                                         if (page === 'dependencies') {
                                             s_theme.Theme.set({
-                                                name: data.settings.options_page_theme,
+                                                name: data.settings.prefs.options_page_theme,
                                             });
                                         }
 
@@ -166,7 +166,7 @@ class Class {
                                     const settings_css = x.css('settings_css', document.head);
 
                                     s_theme.Theme.set({
-                                        name: data.settings.options_page_theme,
+                                        name: data.settings.prefs.options_page_theme,
                                     });
 
                                     if (n(settings_css)) {
@@ -201,7 +201,7 @@ class Class {
                                     );
 
                                     s_theme.Theme.set({
-                                        name: data.settings.options_page_theme,
+                                        name: data.settings.prefs.options_page_theme,
                                         additional_theme_callback: s_theme.Theme.set,
                                     });
 

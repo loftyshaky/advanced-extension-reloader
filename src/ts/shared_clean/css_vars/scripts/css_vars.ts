@@ -16,7 +16,7 @@ class Class {
 
             s_css_vars.CssVars.set_transition_vars({
                 roots,
-                transition_duration: data.settings.transition_duration,
+                transition_duration: data.settings.prefs.transition_duration,
             });
         }, 'aer_1065');
 }

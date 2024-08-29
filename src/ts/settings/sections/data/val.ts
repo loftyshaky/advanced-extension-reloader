@@ -3,9 +3,9 @@ import trim from 'lodash/trim';
 
 import { t } from '@loftyshaky/shared/shared';
 import { d_inputs, i_inputs } from '@loftyshaky/shared/inputs';
-import { s_settings } from '@loftyshaky/shared/settings';
+import { s_sections } from '@loftyshaky/shared/settings';
 import { s_css_vars } from 'shared_clean/internal';
-import { d_sections } from 'settings/internal';
+import { d_data, d_sections } from 'settings/internal';
 
 class Class {
     private static instance: Class;
@@ -30,7 +30,7 @@ class Class {
                 } else if (n(raw_val)) {
                     val = input.name === 'transition_duration' ? +raw_val : raw_val;
 
-                    s_settings.Theme.change({
+                    s_sections.Theme.change({
                         input,
                         name: val as string,
                     });
@@ -49,9 +49,9 @@ class Class {
 
                     s_css_vars.CssVars.set();
 
-                    ext.send_msg({
-                        msg: 'update_settings',
-                        settings: { [input.name]: val },
+                    d_data.Manipulation.send_msg_to_update_settings({
+                        settings: { prefs: { ...data.settings.prefs, [input.name]: val } },
+                        load_settings: n(input.val_accessor),
                     });
                 }
             },
@@ -66,10 +66,13 @@ class Class {
 
     public enable_developer_mode_save_callback = (): Promise<void> =>
         err_async(async () => {
-            await ext.send_msg_resp({
-                msg: 'update_settings',
-                settings: { developer_mode: data.settings.developer_mode },
-                rerun_actions: true,
+            await d_data.Manipulation.send_msg_to_update_settings({
+                settings: {
+                    prefs: {
+                        ...data.settings.prefs,
+                        developer_mode: data.settings.prefs.developer_mode,
+                    },
+                },
             });
         }, 'aer_1210');
 }

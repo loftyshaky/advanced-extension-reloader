@@ -21,14 +21,13 @@ class Class {
             if (!this.creating_context_menu) {
                 this.creating_context_menu = true;
 
-                const settings = await ext.storage_get();
                 await we.contextMenus.removeAll();
 
                 await we.contextMenus.create({
                     id: 'suspend_or_resume_automatic_reload',
                     title: ext.msg(
                         `${
-                            settings.suspend_automatic_reload
+                            data.settings.prefs.suspend_automatic_reload
                                 ? 'resume_automatic_reload'
                                 : 'suspend_automatic_reload'
                         }_context_menu_item`,
@@ -36,7 +35,7 @@ class Class {
                     contexts: ['action'],
                 });
 
-                if (n(settings.context_menu_actions)) {
+                if (n(data.settings.prefs.context_menu_actions)) {
                     const apps_info: Management.ExtensionInfo[] = await we.management.getAll();
 
                     const get_ext_info_with_id = ({
@@ -58,7 +57,7 @@ class Class {
                             'aer_1015',
                         );
 
-                    settings.context_menu_actions.forEach(
+                    data.settings.prefs.context_menu_actions.forEach(
                         (reload_action: i_options.Options, i: number): Promise<void> =>
                             err_async(async () => {
                                 const reload_actions_final: i_options.Options =

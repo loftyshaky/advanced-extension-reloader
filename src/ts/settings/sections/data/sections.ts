@@ -2,8 +2,8 @@ import { makeObservable, computed } from 'mobx';
 
 import { s_utils } from '@loftyshaky/shared/shared';
 import { o_inputs, i_inputs } from '@loftyshaky/shared/inputs';
-import { d_settings } from '@loftyshaky/shared/settings';
-import { d_sections } from 'settings/internal';
+import { d_sections as d_sections_loftyshaky } from '@loftyshaky/shared/settings';
+import { d_data, d_sections } from 'settings/internal';
 
 class Class {
     private static instance: Class;
@@ -19,7 +19,9 @@ class Class {
     }
 
     public get current_section() {
-        return n(data.settings.current_section) ? data.settings.current_section : 'reload';
+        return n(data.settings.prefs.current_section)
+            ? data.settings.prefs.current_section
+            : 'reload';
     }
 
     public sections: o_inputs.Section[] | i_inputs.Sections = [];
@@ -33,12 +35,14 @@ class Class {
                         inputs: [
                             new o_inputs.Text({
                                 name: 'ports',
+                                val_accessor: 'ui.ports',
                                 include_help: true,
                                 event_callback: d_sections.Val.change,
                                 warn_state_checker: d_sections.Validation.validate_input,
                             }),
                             new o_inputs.Textarea({
                                 name: 'click_action',
+                                val_accessor: 'ui.click_action',
                                 include_help: true,
                                 alt_help_msg: ext.msg(`click_action_help_text_${env.browser}`),
                                 input_errors: ['invalid_reload_action'],
@@ -47,6 +51,7 @@ class Class {
                             }),
                             new o_inputs.Textarea({
                                 name: 'context_menu_actions',
+                                val_accessor: 'ui.context_menu_actions',
                                 include_help: true,
                                 input_errors: ['invalid_reload_action'],
                                 event_callback: d_sections.Val.change,
@@ -73,7 +78,7 @@ class Class {
                         ],
                     }),
                 ],
-                ...d_settings.Sections.make_shared_sections({
+                ...d_sections_loftyshaky.Sections.make_shared_sections({
                     download_back_up_callback: ext.storage_get,
                     upload_back_up_callback: d_sections.Restore.restore_back_up,
                     restore_defaults_callback: () => d_sections.Restore.restore_confirm(),
@@ -134,9 +139,6 @@ class Class {
             this.sections = s_utils.Utils.to_object({
                 arr: this.sections as o_inputs.Section[],
             });
-            this.sections.back_up.inputs = s_utils.Utils.to_object({
-                arr: this.sections.back_up.inputs as o_inputs.Section[],
-            });
             this.sections.restore.inputs = s_utils.Utils.to_object({
                 arr: this.sections.restore.inputs as o_inputs.Section[],
             });
@@ -155,11 +157,16 @@ class Class {
 
     public change_current_section_val = (): void =>
         err(() => {
-            data.settings.current_section = d_settings.Sections.current_section;
+            data.settings.prefs.current_section = d_sections_loftyshaky.Sections.current_section;
 
-            ext.send_msg({
-                msg: 'update_settings',
-                settings: { current_section: d_settings.Sections.current_section },
+            d_data.Manipulation.send_msg_to_update_settings({
+                settings: {
+                    prefs: {
+                        ...data.settings.prefs,
+                        current_section: d_sections_loftyshaky.Sections.current_section,
+                    },
+                },
+                update_instantly: true,
             });
         }, 'aer_1048');
 }

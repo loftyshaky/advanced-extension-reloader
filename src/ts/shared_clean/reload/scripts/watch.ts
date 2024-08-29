@@ -1,5 +1,7 @@
 import { Management } from 'webextension-polyfill';
 
+import { i_data } from 'shared_clean/internal';
+
 class Class {
     private static instance: Class;
 
@@ -17,7 +19,7 @@ class Class {
     }: {
         ext_id?: string;
         ext_info?: Management.ExtensionInfo;
-        settings?: any;
+        settings?: i_data.Settings;
     } = {}): Promise<boolean> =>
         err_async(async (): Promise<boolean> => {
             const extension_is_eligible_for_reload_inner = ({
@@ -35,7 +37,7 @@ class Class {
                         ext_info_2.id !== we.runtime.id &&
                         ext_info_2.enabled &&
                         ext_info_2.installType === 'development' &&
-                        ((ext_info_2.type === 'theme' && settings_2.allow_theme_reload) ||
+                        ((ext_info_2.type === 'theme' && settings_2.prefs.allow_theme_reload) ||
                             ext_info_2.type !== 'theme') &&
                         (!ext_id_option_specified || matched_ext_id_from_options)
                     ) {
