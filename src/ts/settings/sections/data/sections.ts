@@ -37,6 +37,7 @@ class Class {
                                 name: 'ports',
                                 val_accessor: 'ui.ports',
                                 include_help: true,
+                                input_errors: ['invalid_ports'],
                                 event_callback: d_sections.Val.change,
                                 warn_state_checker: d_sections.Validation.validate_input,
                             }),

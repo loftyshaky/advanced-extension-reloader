@@ -38,6 +38,9 @@
     "allow_theme_reload_label_text": {
         "message": "Allow theme reload"
     },
+    "invalid_ports_input_error_text": {
+        "message": "Invalid settings. Separate individual ports by commas."
+    },
     "invalid_reload_action_input_error_text": {
         "message": "Invalid settings. Click on the ? button to see the list of allowed poperties. Make sure you provided a valid JSON. Invalid settings won't be saved."
     },
