@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash/cloneDeep';
 import { i_options } from 'shared_clean/internal';
 
 class Class {
@@ -16,7 +17,7 @@ class Class {
         reload_action: i_options.Options;
     }): i_options.Options =>
         err(() => {
-            const transformed_reload_action: i_options.Options = reload_action;
+            const transformed_reload_action: i_options.Options = cloneDeep(reload_action); // cloneDeep prevents the storage from being overwritten with the values below
 
             if (!n(reload_action.ext_id)) {
                 transformed_reload_action.ext_id = undefined;
