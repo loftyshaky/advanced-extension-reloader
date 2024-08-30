@@ -64,10 +64,6 @@ class Class {
                                 step: 0.01,
                                 event_callback: d_sections.Val.change,
                             }),
-                            new o_inputs.Checkbox({
-                                name: 'allow_theme_reload',
-                                event_callback: d_sections.Val.change,
-                            }),
                         ],
                     }),
                     new o_inputs.Section({
@@ -84,6 +80,12 @@ class Class {
                     upload_back_up_callback: d_sections.Restore.restore_back_up,
                     restore_defaults_callback: () => d_sections.Restore.restore_confirm(),
                     input_change_val_callback: d_sections.Val.change,
+                    admin_inputs: [
+                        new o_inputs.Checkbox({
+                            name: 'allow_theme_reload',
+                            event_callback: d_sections.Val.change,
+                        }),
+                    ],
                 }),
                 ...[
                     new o_inputs.Section({
