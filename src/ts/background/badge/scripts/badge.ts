@@ -47,9 +47,7 @@ class Class {
 
     public show_reload_suspended_badge = (): Promise<void> =>
         err_async(async () => {
-            this.reload_suspended_badge = data.settings.prefs.suspend_automatic_reload
-                ? 'off'
-                : 'on';
+            this.reload_pauseed_badge = data.settings.prefs.pause_automatic_reload ? 'off' : 'on';
 
             await this.set_badge_text();
             await this.set_badge_background_color();
