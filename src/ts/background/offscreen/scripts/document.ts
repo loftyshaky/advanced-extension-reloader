@@ -21,4 +21,5 @@ class Class {
             }
         }, 'aer_1100');
 }
+
 export const Document = Class.get_instance();
