@@ -33,6 +33,8 @@ class Class {
                     load_settings: true,
                 });
 
+                d_settings.Transform.set_transformed({ settings: data.settings });
+
                 s_theme.Theme.set({
                     name: data.settings.prefs.options_page_theme,
                 });
