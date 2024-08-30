@@ -19,9 +19,6 @@ class Manifest {
             },
             permissions: ['storage', 'tabs', 'management', 'offscreen', 'contextMenus'],
             commands: {
-                reload_main: {
-                    description: '__MSG_reload_main_hotkey__',
-                },
                 suspend_or_resume_automatic_reload: {
                     description: '__MSG_suspend_or_resume_automatic_reload_hotkey__',
                 },
