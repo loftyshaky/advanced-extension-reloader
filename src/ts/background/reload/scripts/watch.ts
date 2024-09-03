@@ -194,13 +194,14 @@ class Class {
                 }
 
                 await s_badge.Badge.show_ok_badge();
+            }
 
-                if (options_final.play_sound) {
-                    ext.send_msg({
-                        msg: 'play_reload_sound',
-                        reload_notification_volume: data.settings.prefs.reload_notification_volume,
-                    });
-                }
+            if (options_final.play_notifications) {
+                ext.send_msg({
+                    msg: 'play_reload_notification',
+                    reload_notification_volume: data.settings.prefs.reload_notification_volume,
+                    at_least_one_extension_reloaded,
+                });
             }
         }, 'aer_1039');
 

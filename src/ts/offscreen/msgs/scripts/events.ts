@@ -14,11 +14,12 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
             return Promise.resolve(true);
         }
 
-        if (msg_str === 'play_reload_sound') {
-            s_reload.Watch.play_sound({
+        if (msg_str === 'play_reload_notification') {
+            s_reload.Watch.play_notification({
                 notification_type: 'reload',
                 reload_notification_volume: msg.reload_notification_volume,
                 ext_id: msg.ext_id,
+                at_least_one_extension_reloaded: msg.at_least_one_extension_reloaded,
             });
 
             return Promise.resolve(true);

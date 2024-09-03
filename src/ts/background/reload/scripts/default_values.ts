@@ -31,8 +31,8 @@ class Class {
                 transformed_reload_action.all_tabs = false;
             }
 
-            if (!n(reload_action.play_sound)) {
-                transformed_reload_action.play_sound = false;
+            if (!n(reload_action.play_notifications)) {
+                transformed_reload_action.play_notifications = false;
             }
 
             if (!n(reload_action.after_reload_delay)) {

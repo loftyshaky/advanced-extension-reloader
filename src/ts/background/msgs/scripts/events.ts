@@ -20,6 +20,13 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
                 .catch((error_obj: any) => show_err_ribbon(error_obj, 'aer_1115'));
         }
 
+        if (msg_str === 'check_if_ext_is_installed') {
+            return we.management
+                .get(msg.ext_id)
+                .then((response: Management.ExtensionInfo) => n(response))
+                .catch((error_obj: any) => show_err_ribbon(error_obj, 'aer_1128'));
+        }
+
         if (msg_str === 'get_settings') {
             return ext
                 .storage_get()

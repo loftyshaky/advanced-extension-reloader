@@ -46,7 +46,7 @@ class Class {
                             'hard',
                             'all_tabs',
                             'ext_id',
-                            'play_sound',
+                            'play_notifications',
                             'after_reload_delay',
                         ];
                         const reload_obj_keys: string[] = Object.keys(reload_obj);
@@ -60,7 +60,7 @@ class Class {
                             reload_obj_has_only_allowed_els &&
                             validate_bool_val({ val: reload_obj.hard }) &&
                             validate_bool_val({ val: reload_obj.all_tabs }) &&
-                            validate_bool_val({ val: reload_obj.play_sound }) &&
+                            validate_bool_val({ val: reload_obj.play_notifications }) &&
                             validate_number_val({ val: reload_obj.after_reload_delay }) &&
                             (!n(reload_obj.ext_id) ||
                                 (typeof reload_obj.ext_id === 'string' &&

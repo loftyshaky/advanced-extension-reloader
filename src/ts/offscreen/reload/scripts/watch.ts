@@ -45,8 +45,19 @@ class Class {
                     client.on(
                         'play_error_notification',
                         ({ ext_id }: { ext_id?: string } = {}): void => {
-                            this.play_sound({
+                            this.play_notification({
                                 notification_type: 'error',
+                                reload_notification_volume,
+                                ext_id,
+                            });
+                        },
+                    );
+
+                    client.on(
+                        'play_manifest_error_notification',
+                        ({ ext_id }: { ext_id?: string } = {}): void => {
+                            this.play_notification({
+                                notification_type: 'manifest_error',
                                 reload_notification_volume,
                                 ext_id,
                             });
@@ -56,36 +67,66 @@ class Class {
             );
         }, 'aer_1003');
 
-    public play_sound = ({
+    public play_notification = ({
         reload_notification_volume,
         notification_type,
         ext_id,
+        at_least_one_extension_reloaded = false,
     }: {
         reload_notification_volume: number;
-        notification_type: 'reload' | 'error';
+        notification_type: 'reload' | 'error' | 'manifest_error';
         ext_id?: string;
+        at_least_one_extension_reloaded?: boolean;
     }): Promise<void> =>
         err_async(async () => {
-            const play_sound_inner = (): void =>
+            const play_notification_inner = ({
+                notification_type_inner,
+            }: {
+                notification_type_inner:
+                    | 'reload_success'
+                    | 'bundle_success'
+                    | 'reload_error'
+                    | 'bundle_error'
+                    | 'manifest_error';
+            }): void =>
                 err(() => {
-                    const sound_filename =
-                        notification_type === 'reload'
-                            ? '330046__paulmorek__beep-03-positive.wav'
-                            : '330068__paulmorek__beep-06-low-2015-06-22.wav';
+                    const sound_filename = `${notification_type_inner}.wav`;
                     const audio = new Audio(sound_filename);
+
                     audio.volume = reload_notification_volume;
                     audio.play();
                 }, 'aer_1113');
 
-            if (n(ext_id)) {
+            if (notification_type === 'manifest_error') {
+                play_notification_inner({ notification_type_inner: notification_type });
+            } else {
+                const reload_notification_type: 'reload_success' | 'reload_error' =
+                    notification_type === 'reload' ? 'reload_success' : 'reload_error';
+                const bundle_notification_type: 'bundle_success' | 'bundle_error' =
+                    notification_type === 'reload' ? 'bundle_success' : 'bundle_error';
                 const extension_is_eligible_for_reload: boolean =
                     await s_reload.Watch.extension_is_eligible_for_reload({ ext_id });
 
-                if (extension_is_eligible_for_reload) {
-                    play_sound_inner();
+                const reloading_one_exts: boolean = n(ext_id);
+                const ext_is_installed: boolean = await ext.send_msg_resp({
+                    msg: 'check_if_ext_is_installed',
+                    ext_id,
+                });
+                if (
+                    extension_is_eligible_for_reload &&
+                    (ext_is_installed ||
+                        (notification_type === 'reload'
+                            ? at_least_one_extension_reloaded
+                            : !reloading_one_exts))
+                ) {
+                    play_notification_inner({
+                        notification_type_inner: reload_notification_type,
+                    });
+                } else {
+                    play_notification_inner({
+                        notification_type_inner: bundle_notification_type,
+                    });
                 }
-            } else {
-                play_sound_inner();
             }
         }, 'aer_1004');
 }
