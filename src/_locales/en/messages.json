@@ -12,37 +12,40 @@
         "message": "Docs"
     },
     "ports_help_text": {
-        "message": "Ports separated by commas that should expect messages to reload extensions. You will need multiple ports if you develop multiple extensions."
+        "message": "The \"Advanced Extension Reloader Watch 1/2\" sets up a server that listens on a specified port (default is 7220) and accepts connections from the \"Advanced Extension Reloader\".\n\nThe \"Advanced Extension Reloader\" connects to this server using the port specified here and listens for reload events. When a reload event is received, it automatically reloads the extension you're developing.\n\nIf you're developing multiple extensions, you should list the ports for all the servers you've created, separated by commas."
     },
     "click_action_help_text_chrome": {
-        "message": "An object that defines what happens when you click on the browser action icon or hit \"Reload extension main\" hotkey specified at chrome://extensions/shortcuts.\n\nAccepted properties:\n\nhard: boolean\ndefault: true\nWhether to reload an extension as opposed to just reloading the current tab. If set to false, the background script will not reload. The extension(s) won't reload on manifest.json changes even if this option is true unless you use listen() function from the \"Advanced Extension Reloader Watch 2\" supplementary package in the background script of the target extension. Can be combined with \"all_tabs\".\n\nall_tabs: boolean\ndefault: false\nWhether to reload all tabs as opposed to just reloading the current tab.\n\next_id: string\ndefault: undefined\nAn id of an extension to reload in \"hard\" mode. If unspecified, all extensions will be reloaded.\n\nplay_sound: boolean\ndefault: false\nWhether to play a notification sound upon reload completion.\n\nafter_reload_delay: number\ndefault: 1000\nThe amount of time in milliseconds to wait after an extension was reloaded before reloading closed tabs. If you experience any errors in your extension after its pages are reloaded or the extension's pages are reloaded blank, you may try to increase this value.\n\nExample:\n{\n    \"all_tabs\": false,\n    \"hard\": true,\n    \"ext_id\": \"ffhljpfecjcfjdaneehmhdgplkaafnbb\",\n    \"play_sound\": true\n}"
+        "message": "An object that configures the behavior triggered when you click the Advanced Extension Reloader's icon or use the \"Activate the extension\" hotkey defined at chrome://extensions/shortcuts.\n\nAccepted Properties:\n\nhard: boolean\ndefault: true\nDetermines whether to reload the entire extension (true) or just the current tab (false). If set to false, changes to the background script will not be applied. Even if set to true, changes to the manifest.json file will not be applied unless you use the listen() function from the \"Advanced Extension Reloader Watch 2\" supplementary npm package in your extension's background script. This option can be used in conjunction with all_tabs.\n\nall_tabs: boolean\ndefault: false\nSpecifies whether to reload all open tabs instead of just the current one.\n\next_id: string\ndefault: undefined\nDefines the ID of the extension to reload. If left undefined, all extensions will be reloaded.\n\nplay_notifications: boolean\ndefault: false\nIndicates whether to play audio notifications for reload success.\n\nafter_reload_delay: number\ndefault: 1000\nSpecifies the delay, in milliseconds, to wait after an extension is reloaded before reopening any closed tabs. If your extension experiences issues, such as errors or blank pages after a reload, you may want to increase this value.\n\nExample:\n{\n    \"all_tabs\": false,\n    \"hard\": true,\n    \"ext_id\": \"dphafhlelejgffkmbmnmomfehnekdnlj\",\n    \"play_sound\": true\n}"
     },
     "click_action_help_text_edge": {
-        "message": "An object that defines what happens when you click on the browser action icon or hit \"Reload extension main\" hotkey specified at edge://extensions/shortcuts.\n\nAccepted properties:\n\nhard: boolean\ndefault: true\nWhether to reload an extension as opposed to just reloading the current tab. If set to false, the background script will not reload. The extension(s) won't reload on manifest.json changes even if this option is true unless you use listen() function from the \"Advanced Extension Reloader Watch 2\" supplementary package in the background script of the target extension. Can be combined with \"all_tabs\".\n\nall_tabs: boolean\ndefault: false\nWhether to reload all tabs as opposed to just reloading the current tab.\n\next_id: string\ndefault: undefined\nAn id of an extension to reload in \"hard\" mode. If unspecified, all extensions will be reloaded.\n\next_id: string\ndefault: undefined\nAn id of an extension to reload in \"hard\" mode. If unspecified, all extensions will be reloaded.\n\nplay_sound: boolean\ndefault: false\nWhether to play a notification sound upon reload completion.\n\nafter_reload_delay: number\ndefault: 1000\nThe amount of time in milliseconds to wait after an extension was reloaded before reloading closed tabs. If you experience any errors in your extension after its pages are reloaded or the extension's pages are reloaded blank, you may try to increase this value.\n\nExample:\n{\n    \"all_tabs\": false,\n    \"hard\": true,\n    \"ext_id\": \"ffhljpfecjcfjdaneehmhdgplkaafnbb\",\n    \"play_sound\": true\n}"
+        "message": "An object that configures the behavior triggered when you click the Advanced Extension Reloader's icon or use the \"Activate the extension\" hotkey defined at edge://extensions/shortcuts.\n\nAccepted Properties:\n\nhard: boolean\ndefault: true\nDetermines whether to reload the entire extension (true) or just the current tab (false). If set to false, changes to the background script will not be applied. Even if set to true, changes to the manifest.json file will not be applied unless you use the listen() function from the \"Advanced Extension Reloader Watch 2\" supplementary npm package in your extension's background script. This option can be used in conjunction with all_tabs.\n\nall_tabs: boolean\ndefault: false\nSpecifies whether to reload all open tabs instead of just the current one.\n\next_id: string\ndefault: undefined\nDefines the ID of the extension to reload. If left undefined, all extensions will be reloaded.\n\nplay_notifications: boolean\ndefault: false\nIndicates whether to play audio notifications for reload success.\n\nafter_reload_delay: number\ndefault: 1000\nSpecifies the delay, in milliseconds, to wait after an extension is reloaded before reopening any closed tabs. If your extension experiences issues, such as errors or blank pages after a reload, you may want to increase this value."
     },
-    "context_menu_actions_help_text": {
-        "message": "An array of objects with the same schema as seen in \"Extension's icon click action\" that define additional reload actions that appear in the browser action context menu. Keep in mind that there is a limit on how many items can appear there. You can also use reload actions defined here by hitting one of the \"Reload extension X\" hotkeys, where X is a position in the array."
+    "context_menu_actions_help_text_chrome": {
+        "message": "An array of objects, each following the same schema as defined in \"Extension icon click action\", specifying additional reload actions to be included in the extension's icon context menu. Keep in mind that there may be only up to six actions in the extension's icon context menu. Additionally, you can trigger these reload actions by using the \"Reload extension X\" hotkeys defined at chrome://extensions/shortcuts, where X corresponds to the position of the action in the array + 1."
+    },
+    "context_menu_actions_help_text_edge": {
+        "message": "An array of objects, each following the same schema as defined in \"Extension icon click action\", specifying additional reload actions to be included in the extension's icon context menu. Keep in mind that there may be only up to six actions in the extension's icon context menu. Additionally, you can trigger these reload actions by using the \"Reload extension X\" hotkeys defined at edge://extensions/shortcuts, where X corresponds to the position of the action in the array + 1."
     },
     "ports_label_text": {
         "message": "Ports"
     },
     "click_action_label_text": {
-        "message": "Extension's icon click action"
+        "message": "Extension icon click action"
     },
     "context_menu_actions_label_text": {
-        "message": "Extension's icon context menu actions"
+        "message": "Extension icon context menu actions"
     },
     "reload_notification_volume_label_text": {
-        "message": "Reload notification volume"
+        "message": "Notification volume"
     },
     "allow_theme_reload_label_text": {
         "message": "Allow theme reload"
     },
     "invalid_ports_input_error_text": {
-        "message": "Invalid settings. Separate individual ports by commas."
+        "message": "Invalid settings. Please separate each port with a comma. Invalid settings will not be saved."
     },
     "invalid_reload_action_input_error_text": {
-        "message": "Invalid settings. Click on the ? button to see the list of allowed poperties. Make sure you provided a valid JSON. Invalid settings won't be saved."
+        "message": "Invalid settings. Click the \"?\" button to view the list of allowed properties. Please ensure your JSON is valid. Invalid settings will not be saved."
     },
     "docs_link_text": {
         "message": "📄 Documentation"
@@ -68,17 +71,14 @@
     "github_link_href": {
         "message": "https://github.com/loftyshaky/advanced-extension-reloader"
     },
-    "suspend_automatic_reload_context_menu_item": {
-        "message": "Suspend automatic reload"
+    "pause_automatic_reload_context_menu_item": {
+        "message": "Pause automatic reload"
     },
     "resume_automatic_reload_context_menu_item": {
         "message": "Resume automatic reload"
     },
-    "reload_main_hotkey": {
-        "message": "Reload extension main"
-    },
-    "suspend_or_resume_automatic_reload_hotkey": {
-        "message": "Suspend/resume automatic reload"
+    "pause_or_resume_automatic_reload_hotkey": {
+        "message": "Pause/resume automatic reload"
     },
     "reload_1_hotkey": {
         "message": "Reload extension 1"
