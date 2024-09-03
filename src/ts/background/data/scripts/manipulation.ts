@@ -226,6 +226,11 @@ class Class {
                 new o_schema.TransformItem({
                     old_key: 'full_reload_timeout',
                 }),
+                new o_schema.TransformItem({
+                    old_key: 'play_sound',
+                    new_key: 'play_notifications',
+                    create_property_if_it_doesnt_exist: false,
+                }),
             ];
 
             const updated_prefs: i_data.Prefs = await d_schema.Schema.transform({
