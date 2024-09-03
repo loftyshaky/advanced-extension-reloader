@@ -24,12 +24,12 @@ class Class {
                 await we.contextMenus.removeAll();
 
                 await we.contextMenus.create({
-                    id: 'suspend_or_resume_automatic_reload',
+                    id: 'pause_or_resume_automatic_reload',
                     title: ext.msg(
                         `${
-                            data.settings.prefs.suspend_automatic_reload
+                            data.settings.prefs.pause_automatic_reload
                                 ? 'resume_automatic_reload'
-                                : 'suspend_automatic_reload'
+                                : 'pause_automatic_reload'
                         }_context_menu_item`,
                     ),
                     contexts: ['action'],

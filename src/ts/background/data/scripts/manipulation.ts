@@ -101,7 +101,7 @@ class Class {
         transform = false,
     }: { transform?: boolean } = {}): Promise<void> =>
         err_async(async () => {
-            if (s_reload.Watch.running_suspend_or_resume_automatic_reload_f) {
+            if (s_reload.Watch.running_pause_or_resume_automatic_reload_f) {
                 this.set_from_storage_run_prevented = true;
             } else if (!x.prefs_are_filled() && !x.settings_are_filled()) {
                 await this.update_settings({ transform });
@@ -169,7 +169,7 @@ class Class {
                     old_key: 'allow_theme_reload',
                 }),
                 new o_schema.TransformItem({
-                    old_key: 'suspend_automatic_reload',
+                    old_key: 'pause_automatic_reload',
                 }),
                 new o_schema.TransformItem({
                     old_key: 'click_action',
@@ -204,7 +204,7 @@ class Class {
                     new_val: false,
                 }),
                 new o_schema.TransformItem({
-                    new_key: 'suspend_automatic_reload',
+                    new_key: 'pause_automatic_reload',
                     new_val: false,
                 }),
                 new o_schema.TransformItem({

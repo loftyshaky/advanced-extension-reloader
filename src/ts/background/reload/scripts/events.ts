@@ -14,8 +14,8 @@ we.action.onClicked.addListener(
 we.contextMenus.onClicked.addListener(
     (info: Menus.OnClickData): Promise<void> =>
         err_async(async () => {
-            if (info.menuItemId === 'suspend_or_resume_automatic_reload') {
-                s_reload.Watch.suspend_or_resume_automatic_reload();
+            if (info.menuItemId === 'pause_or_resume_automatic_reload') {
+                s_reload.Watch.pause_or_resume_automatic_reload();
             } else {
                 s_reload.Watch.try_to_reload({
                     options: data.settings.prefs.context_menu_actions[info.menuItemId],
@@ -27,8 +27,8 @@ we.contextMenus.onClicked.addListener(
 we.commands.onCommand.addListener(
     async (command: string): Promise<void> =>
         err_async(async () => {
-            if (command === 'suspend_or_resume_automatic_reload') {
-                s_reload.Watch.suspend_or_resume_automatic_reload();
+            if (command === 'pause_or_resume_automatic_reload') {
+                s_reload.Watch.pause_or_resume_automatic_reload();
             } else {
                 const reload_action_i: number = +command.replace(/\D/g, '') - 1;
                 const reload_action = data.settings.prefs.context_menu_actions[reload_action_i];

@@ -14,7 +14,7 @@ class Class {
     private constructor() {}
 
     public ok_badge_text: string = '';
-    private reload_suspended_badge: string = '';
+    private reload_paused_badge: string = '';
     public time_badge_text: string = '';
     private timer_badge_time_left: number = 0;
     private timer_badge_interval: number = 0;
@@ -45,9 +45,9 @@ class Class {
             await this.set_badge_text();
         }, 'aer_1006');
 
-    public show_reload_suspended_badge = (): Promise<void> =>
+    public show_reload_paused_badge = (): Promise<void> =>
         err_async(async () => {
-            this.reload_pauseed_badge = data.settings.prefs.pause_automatic_reload ? 'off' : 'on';
+            this.reload_paused_badge = data.settings.prefs.pause_automatic_reload ? 'off' : 'on';
 
             await this.set_badge_text();
             await this.set_badge_background_color();
@@ -97,7 +97,7 @@ class Class {
 
             this.time_badge_text = '';
 
-            this.show_reload_suspended_badge();
+            this.show_reload_paused_badge();
         }, 'aer_1006');
 
     private set_badge_text = (): Promise<void> =>
@@ -107,7 +107,7 @@ class Class {
             if (this.ok_badge_text !== '') {
                 prefix = this.ok_badge_text;
             } else if (this.time_badge_text === '') {
-                prefix = this.reload_suspended_badge;
+                prefix = this.reload_paused_badge;
             }
 
             await we.action.setBadgeText({ text: prefix + this.time_badge_text });
@@ -115,7 +115,7 @@ class Class {
 
     private set_badge_background_color = (): Promise<void> =>
         err_async(async () => {
-            const background_color: string = data.settings.prefs.suspend_automatic_reload
+            const background_color: string = data.settings.prefs.pause_automatic_reload
                 ? '#cc2b2b'
                 : '#249c3e'; // off/on
 

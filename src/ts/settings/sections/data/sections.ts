@@ -54,6 +54,9 @@ class Class {
                                 name: 'context_menu_actions',
                                 val_accessor: 'ui.context_menu_actions',
                                 include_help: true,
+                                alt_help_msg: ext.msg(
+                                    `context_menu_actions_help_text_${env.browser}`,
+                                ),
                                 input_errors: ['invalid_reload_action'],
                                 event_callback: d_sections.Val.change,
                                 warn_state_checker: d_sections.Validation.validate_input,

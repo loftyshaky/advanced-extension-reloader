@@ -29,7 +29,7 @@ class Class {
                     ports: ['7220'],
                     reload_notification_volume: '1',
                     allow_theme_reload: false,
-                    suspend_automatic_reload: false,
+                    pause_automatic_reload: false,
                     click_action: {
                         all_tabs: false,
                         hard: true,

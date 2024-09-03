@@ -21,7 +21,7 @@ class Class {
     private full_reload_delay: number = 1000;
     public last_cooldown_time = 0;
     public reload_cooldown_timer_start_timestamp = 0;
-    public running_suspend_or_resume_automatic_reload_f: boolean = false;
+    public running_pause_or_resume_automatic_reload_f: boolean = false;
 
     public try_to_reload = ({
         options,
@@ -33,7 +33,7 @@ class Class {
         err_async(async () => {
             if (
                 !automatic_reload ||
-                (automatic_reload && !data.settings.prefs.suspend_automatic_reload)
+                (automatic_reload && !data.settings.prefs.pause_automatic_reload)
             ) {
                 globalThis.clearTimeout(this.reload_cooldown_timer);
                 globalThis.clearTimeout(this.debounce_reload_timer);
@@ -249,18 +249,18 @@ class Class {
             await s_reload.Tabs.recreate_tabs({ ext_tabs });
         }, 'aer_1089');
 
-    public suspend_or_resume_automatic_reload = (): Promise<void> =>
+    public pause_or_resume_automatic_reload = (): Promise<void> =>
         err_async(async () => {
-            this.running_suspend_or_resume_automatic_reload_f = true;
+            this.running_pause_or_resume_automatic_reload_f = true;
 
-            data.settings.prefs.suspend_automatic_reload =
-                !data.settings.prefs.suspend_automatic_reload;
+            data.settings.prefs.pause_automatic_reload =
+                !data.settings.prefs.pause_automatic_reload;
 
             await s_data.Manipulation.update_settings({ settings: data.settings });
 
-            s_badge.Badge.show_reload_suspended_badge();
+            s_badge.Badge.show_reload_paused_badge();
 
-            this.running_suspend_or_resume_automatic_reload_f = false;
+            this.running_pause_or_resume_automatic_reload_f = false;
 
             if (s_data.Manipulation.set_from_storage_run_prevented) {
                 await s_data.Manipulation.set_from_storage({ transform: true });
