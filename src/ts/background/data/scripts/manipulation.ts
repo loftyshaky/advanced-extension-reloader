@@ -58,10 +58,10 @@ class Class {
                 }
             }
 
-            await ext.storage_set(settings_final, replace);
             await s_data_loftyshaky_shared_clean.Cache.set_settings({
                 settings: settings_final,
             });
+            await ext.storage_set(settings_final, replace);
             await s_side_effects.SideEffects.react_to_change();
 
             if (load_settings) {
@@ -70,6 +70,18 @@ class Class {
 
             s_service_worker.ServiceWorker.make_persistent();
         }, 'aer_1008');
+
+    public react_to_settings_change = (): Promise<void> =>
+        err_async(async () => {
+            await s_data_loftyshaky_shared_clean.Cache.set({
+                key: 'updating_settings',
+                val: false,
+            });
+
+            await s_side_effects.SideEffects.react_to_change();
+            await ext.send_msg_resp({ msg: 'load_settings', transform: true });
+            s_service_worker.ServiceWorker.make_persistent();
+        }, 'aer_1129');
 
     public update_settings_debounce = debounce(
         (
@@ -93,7 +105,7 @@ class Class {
                 if (load_settings) {
                     ext.send_msg_to_all_tabs({ msg: 'rerun_actions' });
                 }
-            }, 'aer_1177'),
+            }, 'aer_1130'),
         250,
     );
 

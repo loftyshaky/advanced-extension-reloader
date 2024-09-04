@@ -1,12 +1,14 @@
-import { t, d_data } from '@loftyshaky/shared/shared';
-import { d_sections } from 'settings/internal';
+import { t } from '@loftyshaky/shared/shared';
+import { d_data, d_sections } from 'settings/internal';
 
 we.runtime.onMessage.addListener((msg: t.Msg): any =>
     err(() => {
         const msg_str: string = msg.msg;
 
         if (msg_str === 'load_settings') {
-            return d_data.Settings.set_from_storage()
+            return d_data.Settings.set_from_storage({
+                transform: n(msg.transform) ? msg.transform : false,
+            })
                 .then(() => {
                     if (n(msg.restore_back_up) && msg.restore_back_up) {
                         d_sections.Restore.restore_back_up_react();
