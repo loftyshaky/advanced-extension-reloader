@@ -200,7 +200,11 @@ class Class {
                 ext.send_msg({
                     msg: 'play_reload_notification',
                     reload_notification_volume: data.settings.prefs.reload_notification_volume,
-                    at_least_one_extension_reloaded,
+                    ext_id: options_final.ext_id,
+                    at_least_one_extension_reloaded:
+                        !options_final.hard && !n(options_final.ext_id)
+                            ? true
+                            : at_least_one_extension_reloaded,
                 });
             }
         }, 'aer_1039');
