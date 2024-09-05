@@ -194,6 +194,8 @@ class Class {
                 }
 
                 await s_badge.Badge.show_ok_badge();
+            } else {
+                this.allow_fast_reload = true;
             }
 
             if (options_final.play_notifications) {
