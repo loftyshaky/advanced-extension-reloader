@@ -8,7 +8,7 @@ import {
     s_service_worker,
 } from '@loftyshaky/shared/shared_clean';
 import { i_data } from 'shared_clean/internal';
-import { s_data, s_reload, s_side_effects } from 'background/internal';
+import { s_badge, s_data, s_reload, s_side_effects } from 'background/internal';
 
 class Class {
     private static instance: Class;
@@ -63,6 +63,7 @@ class Class {
             });
             await ext.storage_set(settings_final, replace);
             await s_side_effects.SideEffects.react_to_change();
+            await s_badge.Badge.show_reload_paused_badge();
 
             if (load_settings) {
                 await ext.send_msg_resp({ msg: 'load_settings', restore_back_up });
