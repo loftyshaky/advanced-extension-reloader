@@ -189,6 +189,9 @@ class Class {
                 new o_schema.TransformItem({
                     old_key: 'context_menu_actions',
                 }),
+                new o_schema.TransformItem({
+                    old_key: 'suspend_automatic_reload',
+                }),
             ];
 
             const updated_settings = await d_schema.Schema.transform({
@@ -216,8 +219,8 @@ class Class {
                     new_val: false,
                 }),
                 new o_schema.TransformItem({
+                    old_key: 'suspend_automatic_reload',
                     new_key: 'pause_automatic_reload',
-                    new_val: false,
                 }),
                 new o_schema.TransformItem({
                     old_key: 'after_reload_delay',
