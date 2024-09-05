@@ -112,6 +112,7 @@ class Class {
                     msg: 'check_if_ext_is_installed',
                     ext_id,
                 });
+
                 if (
                     extension_is_eligible_for_reload &&
                     (ext_is_installed ||
