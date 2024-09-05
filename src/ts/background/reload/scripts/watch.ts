@@ -193,7 +193,11 @@ class Class {
                     });
                 }
 
-                await s_badge.Badge.show_ok_badge();
+                if (options_final.hard) {
+                    await s_badge.Badge.show_ok_badge();
+                } else {
+                    this.allow_fast_reload = true;
+                }
             } else {
                 this.allow_fast_reload = true;
             }
