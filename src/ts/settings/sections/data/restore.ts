@@ -58,12 +58,6 @@ class Class {
     public restore_back_up_react = (): Promise<void> =>
         err_async(async () => {
             d_settings.Transform.set_transformed({ settings: data.settings });
-
-            await d_data.Manipulation.send_msg_to_update_settings({
-                settings: data.settings,
-                replace: true,
-                update_instantly: true,
-            });
             s_theme.Theme.set({
                 name: data.settings.prefs.options_page_theme,
             });
