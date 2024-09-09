@@ -35,8 +35,20 @@ class Class {
                 transformed_reload_action.play_notifications = false;
             }
 
+            if (!n(reload_action.reload_throttle_delay)) {
+                transformed_reload_action.reload_throttle_delay = 500;
+            }
+
             if (!n(reload_action.after_reload_delay)) {
                 transformed_reload_action.after_reload_delay = 1000;
+            }
+
+            if (!n(reload_action.between_reloads_delay)) {
+                transformed_reload_action.between_reloads_delay = 1000;
+            }
+
+            if (!n(reload_action.listen_message_response_timeout)) {
+                transformed_reload_action.listen_message_response_timeout = 400;
             }
 
             return transformed_reload_action;

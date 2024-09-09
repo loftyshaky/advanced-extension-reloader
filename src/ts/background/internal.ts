@@ -10,3 +10,5 @@ export * as s_data from 'background/data/scripts';
 export * as s_offscreen from 'background/offscreen/scripts';
 export * as s_reload from 'background/reload/scripts';
 export * as s_side_effects from 'background/side_effects/scripts';
+
+export * as i_reload from 'background/reload/interfaces';

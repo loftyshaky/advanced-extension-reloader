@@ -6,8 +6,8 @@ export const init = (): Promise<void> =>
         s_data.Settings.init_defaults();
         await s_data_loftyshaky_shared_clean.Cache.set_data();
         await s_data.Manipulation.on_init_set_from_storage();
-        s_badge.Badge.set_badge_text_color();
-        s_badge.Badge.show_reload_paused_badge();
+        s_badge.Badge.set_text_color();
+        s_badge.Badge.show_reload_paused();
         s_reload.ContextMenu.create();
         await s_offscreen.Document.create();
     }, 'aer_1010');

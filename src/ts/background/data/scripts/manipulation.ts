@@ -63,7 +63,7 @@ class Class {
             });
             await ext.storage_set(settings_final, replace);
             await s_side_effects.SideEffects.react_to_change();
-            await s_badge.Badge.show_reload_paused_badge();
+            await s_badge.Badge.show_reload_paused();
 
             if (load_settings) {
                 await ext.send_msg_resp({ msg: 'load_settings', restore_back_up });

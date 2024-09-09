@@ -1,7 +1,7 @@
 import { Management } from 'webextension-polyfill';
 
 import { t } from '@loftyshaky/shared/shared_clean';
-import { s_badge, s_data, s_reload, s_side_effects } from 'background/internal';
+import { s_data, s_reload, s_side_effects } from 'background/internal';
 
 we.runtime.onMessage.addListener((msg: t.Msg): any =>
     err(() => {
@@ -73,12 +73,6 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
                 options: msg.options,
                 automatic_reload: true,
             });
-
-            return Promise.resolve(true);
-        }
-
-        if (msg_str === 'show_badge') {
-            s_badge.Badge.show_ok_badge();
 
             return Promise.resolve(true);
         }

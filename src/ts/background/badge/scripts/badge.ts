@@ -1,7 +1,4 @@
-import debounce from 'lodash/debounce';
 import isInteger from 'lodash/isInteger';
-
-import { s_reload } from 'background/internal';
 
 class Class {
     private static instance: Class;
@@ -13,107 +10,120 @@ class Class {
     // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
-    public ok_badge_text: string = '';
-    private reload_paused_badge: string = '';
+    private prefixes: { reloading_tabs: '\u2B6E '; ok: '\u2713 ' } = {
+        reloading_tabs: '\u2B6E ',
+        ok: '\u2713 ',
+    };
+
+    private symbol_prefix: string = '';
+    private on_off_text: string = '';
     public time_badge_text: string = '';
     private timer_badge_time_left: number = 0;
     private timer_badge_interval: number = 0;
 
-    public show_ok_badge = (): Promise<void> =>
+    public show_prefixed_timer = ({
+        prefix_name,
+        time,
+    }: {
+        prefix_name: 'reloading_tabs' | 'ok';
+        time: number;
+    }): Promise<void> =>
         err_async(async () => {
-            this.hide_timer_badge();
+            await this.hide_timer();
 
-            this.ok_badge_text = '\u2713';
+            const prefix = this.prefixes[prefix_name];
 
-            await this.set_badge_text();
+            this.symbol_prefix = prefix;
 
-            this.show_timer_badge({
-                time:
-                    s_reload.Watch.reload_cooldown_timer_start_timestamp === 0
-                        ? s_reload.Watch.last_cooldown_time
-                        : s_reload.Watch.last_cooldown_time -
-                          (Date.now() - s_reload.Watch.reload_cooldown_timer_start_timestamp),
+            await this.set_text();
+
+            await this.show_timer({
+                time,
             });
 
-            this.hide_debounce();
+            this.hide_prefix();
         }, 'aer_1005');
 
-    public hide_ok_badge = (): Promise<void> =>
+    private hide_prefix = (): Promise<void> =>
         err_async(async () => {
-            this.ok_badge_text = '';
+            this.symbol_prefix = '';
 
-            await this.set_badge_text();
+            await this.set_text();
         }, 'aer_1006');
 
-    public show_reload_paused_badge = (): Promise<void> =>
+    public show_reload_paused = (): Promise<void> =>
         err_async(async () => {
-            this.reload_paused_badge = data.settings.prefs.pause_automatic_reload ? 'off' : 'on';
+            this.on_off_text = data.settings.prefs.pause_automatic_reload ? 'off' : 'on';
 
-            await this.set_badge_text();
-            await this.set_badge_background_color();
+            await this.set_text();
+            await this.set_background_color();
         }, 'aer_1006');
 
-    private hide_debounce = debounce(this.hide_ok_badge, 2000);
+    private show_timer = ({ time }: { time: number }): Promise<void> =>
+        new Promise<void>((resolve, reject) => {
+            err_async(async () => {
+                this.timer_badge_time_left = time;
 
-    public show_timer_badge = ({ time }: { time: number }): Promise<void> =>
-        err_async(async () => {
-            this.timer_badge_time_left = time;
+                const set_badge_time = (): Promise<void> =>
+                    err_async(async () => {
+                        const seconds = (this.timer_badge_time_left / 1000.0).toFixed(1); // May be decimal
 
-            const set_badge_time = (): Promise<void> =>
-                err_async(async () => {
-                    const seconds = (this.timer_badge_time_left / 1000.0).toFixed(1); // May be decimal
+                        this.time_badge_text = (
+                            isInteger(seconds) ? `${seconds}.0` : seconds
+                        ).toString();
 
-                    this.time_badge_text = (
-                        isInteger(seconds) ? `${seconds}.0` : seconds
-                    ).toString();
+                        await this.set_text();
+                    }, 'aer_1097');
 
-                    await this.set_badge_text();
-                }, 'aer_1097');
+                await set_badge_time();
 
-            set_badge_time();
+                const step = 100;
 
-            const step = 100;
+                globalThis.clearInterval(this.timer_badge_interval);
 
-            globalThis.clearInterval(this.timer_badge_interval);
+                this.timer_badge_interval = self.setInterval(async () => {
+                    try {
+                        await set_badge_time();
 
-            this.timer_badge_interval = self.setInterval(async () => {
-                err_async(async () => {
-                    await set_badge_time();
+                        this.timer_badge_time_left -= step;
 
-                    this.timer_badge_time_left -= step;
-
-                    if (this.timer_badge_time_left <= 0) {
-                        this.hide_timer_badge();
+                        if (this.timer_badge_time_left <= 0) {
+                            this.hide_timer();
+                            globalThis.clearInterval(this.timer_badge_interval);
+                            resolve(); // Resolve the promise when the timer ends
+                        }
+                    } catch (error) {
+                        reject(error); // Reject the promise if an error occurs
                     }
-                }, 'aer_1093');
-            }, step);
-        }, 'aer_1005');
+                }, step);
+            }, 'aer_1005');
+        });
 
-    private hide_timer_badge = (): void =>
-        err(() => {
+    private hide_timer = (): Promise<void> =>
+        err_async(async () => {
             this.timer_badge_time_left = 0;
 
             globalThis.clearInterval(this.timer_badge_interval);
 
             this.time_badge_text = '';
 
-            this.show_reload_paused_badge();
+            await this.show_reload_paused();
         }, 'aer_1006');
 
-    private set_badge_text = (): Promise<void> =>
+    private set_text = (): Promise<void> =>
         err_async(async () => {
             let prefix: string = '';
 
-            if (this.ok_badge_text !== '') {
-                prefix = this.ok_badge_text;
+            if (this.symbol_prefix !== '') {
+                prefix = this.symbol_prefix;
             } else if (this.time_badge_text === '') {
-                prefix = this.reload_paused_badge;
+                prefix = this.on_off_text;
             }
 
             await we.action.setBadgeText({ text: prefix + this.time_badge_text });
         }, 'aer_1096');
 
-    private set_badge_background_color = (): Promise<void> =>
+    private set_background_color = (): Promise<void> =>
         err_async(async () => {
             const background_color: string = data.settings.prefs.pause_automatic_reload
                 ? '#cc2b2b'
@@ -122,7 +132,7 @@ class Class {
             await we.action.setBadgeBackgroundColor({ color: background_color });
         }, 'aer_1102');
 
-    public set_badge_text_color = (): Promise<void> =>
+    public set_text_color = (): Promise<void> =>
         err_async(async () => {
             await we.action.setBadgeTextColor({ color: 'white' });
         }, 'aer_1103');
