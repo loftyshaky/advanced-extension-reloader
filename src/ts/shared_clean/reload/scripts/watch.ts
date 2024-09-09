@@ -13,11 +13,11 @@ class Class {
     private constructor() {}
 
     public extension_is_eligible_for_reload = ({
-        ext_id,
+        extension_id,
         ext_info,
         settings,
     }: {
-        ext_id?: string;
+        extension_id?: string;
         ext_info?: Management.ExtensionInfo;
         settings?: i_data.Settings;
     } = {}): Promise<boolean> =>
@@ -30,8 +30,8 @@ class Class {
                 settings_2: any;
             }): void =>
                 err(() => {
-                    const ext_id_option_specified = typeof ext_id === 'string';
-                    const matched_ext_id_from_options = ext_info_2.id === ext_id;
+                    const ext_id_option_specified = typeof extension_id === 'string';
+                    const matched_ext_id_from_options = ext_info_2.id === extension_id;
 
                     if (
                         ext_info_2.id !== we.runtime.id &&

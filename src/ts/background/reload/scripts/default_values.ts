@@ -19,8 +19,8 @@ class Class {
         err(() => {
             const transformed_reload_action: i_options.Options = cloneDeep(reload_action); // cloneDeep prevents the storage from being overwritten with the values below
 
-            if (!n(reload_action.ext_id)) {
-                transformed_reload_action.ext_id = undefined;
+            if (!n(reload_action.extension_id)) {
+                transformed_reload_action.extension_id = undefined;
             }
 
             if (!n(reload_action.hard)) {
@@ -35,16 +35,16 @@ class Class {
                 transformed_reload_action.play_notifications = false;
             }
 
-            if (!n(reload_action.reload_throttle_delay)) {
-                transformed_reload_action.reload_throttle_delay = 500;
+            if (!n(reload_action.min_interval_between_extension_reloads)) {
+                transformed_reload_action.min_interval_between_extension_reloads = 500;
             }
 
-            if (!n(reload_action.after_reload_delay)) {
-                transformed_reload_action.after_reload_delay = 1000;
+            if (!n(reload_action.delay_after_extension_reload)) {
+                transformed_reload_action.delay_after_extension_reload = 1000;
             }
 
-            if (!n(reload_action.between_reloads_delay)) {
-                transformed_reload_action.between_reloads_delay = 1000;
+            if (!n(reload_action.delay_after_tab_reload)) {
+                transformed_reload_action.delay_after_tab_reload = 1000;
             }
 
             if (!n(reload_action.listen_message_response_timeout)) {

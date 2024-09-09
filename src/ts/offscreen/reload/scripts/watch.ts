@@ -44,22 +44,22 @@ class Class {
 
                     client.on(
                         'play_error_notification',
-                        ({ ext_id }: { ext_id?: string } = {}): void => {
+                        ({ extension_id }: { extension_id?: string } = {}): void => {
                             this.play_notification({
                                 notification_type: 'error',
                                 reload_notification_volume,
-                                ext_id,
+                                extension_id,
                             });
                         },
                     );
 
                     client.on(
                         'play_manifest_error_notification',
-                        ({ ext_id }: { ext_id?: string } = {}): void => {
+                        ({ extension_id }: { extension_id?: string } = {}): void => {
                             this.play_notification({
                                 notification_type: 'manifest_error',
                                 reload_notification_volume,
-                                ext_id,
+                                extension_id,
                             });
                         },
                     );
@@ -70,12 +70,12 @@ class Class {
     public play_notification = ({
         reload_notification_volume,
         notification_type,
-        ext_id,
+        extension_id,
         at_least_one_extension_reloaded = false,
     }: {
         reload_notification_volume: number;
         notification_type: 'reload' | 'error' | 'manifest_error';
-        ext_id?: string;
+        extension_id?: string;
         at_least_one_extension_reloaded?: boolean;
     }): Promise<void> =>
         err_async(async () => {
@@ -105,12 +105,12 @@ class Class {
                 const bundle_notification_type: 'bundle_success' | 'bundle_error' =
                     notification_type === 'reload' ? 'bundle_success' : 'bundle_error';
                 const extension_is_eligible_for_reload: boolean =
-                    await s_reload.Watch.extension_is_eligible_for_reload({ ext_id });
+                    await s_reload.Watch.extension_is_eligible_for_reload({ extension_id });
 
-                const reloading_one_exts: boolean = n(ext_id);
+                const reloading_one_exts: boolean = n(extension_id);
                 const ext_is_installed: boolean = await ext.send_msg_resp({
                     msg: 'check_if_ext_is_installed',
-                    ext_id,
+                    extension_id,
                 });
 
                 if (

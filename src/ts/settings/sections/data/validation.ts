@@ -45,11 +45,11 @@ class Class {
                         const allowed_keys: string[] = [
                             'hard',
                             'all_tabs',
-                            'ext_id',
+                            'extension_id',
                             'play_notifications',
-                            'reload_throttle_delay',
-                            'after_reload_delay',
-                            'between_reloads_delay',
+                            'min_interval_between_extension_reloads',
+                            'delay_after_extension_reload',
+                            'delay_after_tab_reload',
                             'listen_message_response_timeout',
                         ];
                         const reload_obj_keys: string[] = Object.keys(reload_obj);
@@ -64,15 +64,17 @@ class Class {
                             validate_bool_val({ val: reload_obj.hard }) &&
                             validate_bool_val({ val: reload_obj.all_tabs }) &&
                             validate_bool_val({ val: reload_obj.play_notifications }) &&
-                            validate_number_val({ val: reload_obj.reload_throttle_delay }) &&
-                            validate_number_val({ val: reload_obj.after_reload_delay }) &&
-                            validate_number_val({ val: reload_obj.between_reloads_delay }) &&
+                            validate_number_val({
+                                val: reload_obj.min_interval_between_extension_reloads,
+                            }) &&
+                            validate_number_val({ val: reload_obj.delay_after_extension_reload }) &&
+                            validate_number_val({ val: reload_obj.delay_after_tab_reload }) &&
                             validate_number_val({
                                 val: reload_obj.listen_message_response_timeout,
                             }) &&
-                            (!n(reload_obj.ext_id) ||
-                                (typeof reload_obj.ext_id === 'string' &&
-                                    /^[a-z]+$/.test(reload_obj.ext_id)))
+                            (!n(reload_obj.extension_id) ||
+                                (typeof reload_obj.extension_id === 'string' &&
+                                    /^[a-z]+$/.test(reload_obj.extension_id)))
                         );
                     }, 'aer_1058');
 
@@ -100,9 +102,9 @@ class Class {
 
                 if (
                     [
-                        'reload_throttle_delay',
-                        'after_reload_delay',
-                        'between_reloads_delay',
+                        'min_interval_between_extension_reloads',
+                        'delay_after_extension_reload',
+                        'delay_after_tab_reload',
                         'listen_message_response_timeout',
                     ].includes(input.name)
                 ) {

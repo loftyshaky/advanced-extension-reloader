@@ -247,6 +247,16 @@ class Class {
                     new_key: 'play_notifications',
                     create_property_if_it_doesnt_exist: false,
                 }),
+                new o_schema.TransformItem({
+                    old_key: 'after_reload_delay',
+                    new_key: 'delay_after_extension_reload',
+                    create_property_if_it_doesnt_exist: false,
+                }),
+                new o_schema.TransformItem({
+                    old_key: 'ext_id',
+                    new_key: 'extension_id',
+                    create_property_if_it_doesnt_exist: false,
+                }),
             ];
 
             const updated_prefs: i_data.Prefs = await d_schema.Schema.transform({

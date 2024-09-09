@@ -45,11 +45,11 @@ class Class {
                     }): Management.ExtensionInfo | undefined =>
                         err(
                             () =>
-                                typeof reload_action.ext_id === 'string'
+                                typeof reload_action.extension_id === 'string'
                                     ? apps_info.find(
                                           (ext_info: Management.ExtensionInfo): boolean =>
                                               err(
-                                                  () => ext_info.id === reload_action.ext_id,
+                                                  () => ext_info.id === reload_action.extension_id,
                                                   'aer_1014',
                                               ),
                                       )

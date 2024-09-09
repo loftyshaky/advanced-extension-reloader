@@ -18,7 +18,7 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
             s_reload.Watch.play_notification({
                 notification_type: 'reload',
                 reload_notification_volume: msg.reload_notification_volume,
-                ext_id: msg.ext_id,
+                extension_id: msg.extension_id,
                 at_least_one_extension_reloaded: msg.at_least_one_extension_reloaded,
             });
 

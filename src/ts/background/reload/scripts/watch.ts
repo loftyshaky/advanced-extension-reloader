@@ -17,7 +17,7 @@ class Class {
     private constructor() {}
 
     public reloading: boolean = false;
-    public after_reload_delay_timer_canceled: boolean = false;
+    public delay_after_extension_reload_timer_canceled: boolean = false;
     public cancel_reload_f_execution: boolean = false;
     public running_pause_or_resume_automatic_reload_f: boolean = false;
     private attempted_to_reload_during_before_ext_reload_execution_phase: boolean = false;
@@ -41,8 +41,8 @@ class Class {
             const is_hard: boolean = n(options_final.hard) && options_final.hard;
 
             if (is_hard) {
-                if (n(this.after_reload_delay_cancel_delay)) {
-                    this.after_reload_delay_cancel_delay();
+                if (n(this.delay_after_extension_reload_cancel_delay)) {
+                    this.delay_after_extension_reload_cancel_delay();
                 }
 
                 this.automatic_reload = automatic_reload;
@@ -86,7 +86,7 @@ class Class {
                     async () =>
                         n(options_final)
                             ? s_reload_shared.Watch.extension_is_eligible_for_reload({
-                                  ext_id: options_final.ext_id,
+                                  extension_id: options_final.extension_id,
                                   ext_info,
                                   settings: data.settings,
                               })
@@ -100,7 +100,7 @@ class Class {
                     err_async(async () => {
                         if (
                             n(options_final) &&
-                            n(options_final.after_reload_delay) &&
+                            n(options_final.delay_after_extension_reload) &&
                             n(options_final.listen_message_response_timeout)
                         ) {
                             const reload_triggered = await this.trigger_reload({
@@ -123,7 +123,7 @@ class Class {
 
             if (options_final.hard) {
                 this.reload_f_execution_phase = 'before_ext_reload';
-                this.after_reload_delay_timer_canceled = false;
+                this.delay_after_extension_reload_timer_canceled = false;
                 this.cancel_reload_f_execution = false;
             }
 
@@ -168,7 +168,7 @@ class Class {
                                                     );
 
                                                     if (matched_tab) {
-                                                        ext_tab.ext_id = ext_info.id;
+                                                        ext_tab.extension_id = ext_info.id;
 
                                                         return [ext_tab as Tabs.Tab];
                                                     }
@@ -228,19 +228,19 @@ class Class {
                             if (n(options_final)) {
                                 if (
                                     at_least_one_extension_reloaded &&
-                                    n(options_final.after_reload_delay)
+                                    n(options_final.delay_after_extension_reload)
                                 ) {
                                     s_badge.Badge.show_prefixed_timer({
                                         prefix_name: 'reloading_tabs',
-                                        time: options_final.after_reload_delay,
+                                        time: options_final.delay_after_extension_reload,
                                     });
 
-                                    await this.after_reload_delay_delay_with_cancel(
-                                        options_final.after_reload_delay,
+                                    await this.delay_after_extension_reload_delay_with_cancel(
+                                        options_final.delay_after_extension_reload,
                                     );
                                 }
 
-                                if (this.after_reload_delay_timer_canceled) {
+                                if (this.delay_after_extension_reload_timer_canceled) {
                                     this.cancel_reload_f_execution = true;
 
                                     this.reset_reload_f_execution_phase_flags();
@@ -264,7 +264,7 @@ class Class {
                         this.cancel_reload_f_execution = true;
 
                         this.reset_reload_f_execution_phase_flags();
-                    } else if (n(options_final.after_reload_delay)) {
+                    } else if (n(options_final.delay_after_extension_reload)) {
                         await recreate_tabs();
                     }
                 }
@@ -294,10 +294,10 @@ class Class {
                     }
 
                     if (options_final.hard) {
-                        if (n(options_final.between_reloads_delay)) {
+                        if (n(options_final.delay_after_tab_reload)) {
                             s_badge.Badge.show_prefixed_timer({
                                 prefix_name: 'ok',
-                                time: options_final.between_reloads_delay,
+                                time: options_final.delay_after_tab_reload,
                             });
                         }
                     }
@@ -307,9 +307,9 @@ class Class {
                     ext.send_msg({
                         msg: 'play_reload_notification',
                         reload_notification_volume: data.settings.prefs.reload_notification_volume,
-                        ext_id: options_final.ext_id,
+                        extension_id: options_final.extension_id,
                         at_least_one_extension_reloaded:
-                            !options_final.hard && !n(options_final.ext_id)
+                            !options_final.hard && !n(options_final.extension_id)
                                 ? true
                                 : at_least_one_extension_reloaded,
                     });
@@ -317,7 +317,7 @@ class Class {
 
                 if (options_final.hard) {
                     if (at_least_one_extension_reloaded_or_soft) {
-                        await x.delay(options_final.between_reloads_delay);
+                        await x.delay(options_final.delay_after_tab_reload);
                     }
 
                     if (this.attempted_to_reload_during_after_tab_recreate_execution_phase) {
@@ -335,20 +335,26 @@ class Class {
             const options_final: i_options.Options = s_reload.DefaultValues.tranform_reload_action({
                 reload_action: options,
             });
-            if (n(options_final) && n(options_final.reload_throttle_delay)) {
-                if (!this.reload_throttle_fs.has(options_final.reload_throttle_delay)) {
+            if (n(options_final) && n(options_final.min_interval_between_extension_reloads)) {
+                if (
+                    !this.reload_throttle_fs.has(
+                        options_final.min_interval_between_extension_reloads,
+                    )
+                ) {
                     const reload_throttle_fs = x.async_throttle(
                         this.reload,
-                        options_final.reload_throttle_delay,
+                        options_final.min_interval_between_extension_reloads,
                     );
 
                     this.reload_throttle_fs.set(
-                        options_final.reload_throttle_delay,
+                        options_final.min_interval_between_extension_reloads,
                         reload_throttle_fs,
                     );
                 }
 
-                return this.reload_throttle_fs.get(options_final.reload_throttle_delay)!;
+                return this.reload_throttle_fs.get(
+                    options_final.min_interval_between_extension_reloads,
+                )!;
             }
 
             return undefined;
@@ -458,15 +464,15 @@ class Class {
             }
         }, 'aer_1101');
 
-    private after_reload_delay_cancel_delay: (() => void) | null = null;
+    private delay_after_extension_reload_cancel_delay: (() => void) | null = null;
 
-    private after_reload_delay_delay_with_cancel(delay: number): Promise<void> {
+    private delay_after_extension_reload_delay_with_cancel(delay: number): Promise<void> {
         return new Promise((resolve) => {
             err(() => {
                 const timeout_id = setTimeout(resolve, delay);
 
-                this.after_reload_delay_cancel_delay = () => {
-                    this.after_reload_delay_timer_canceled = true;
+                this.delay_after_extension_reload_cancel_delay = () => {
+                    this.delay_after_extension_reload_timer_canceled = true;
 
                     clearTimeout(timeout_id);
                     resolve(); // Resolve the promise immediately on cancellation
