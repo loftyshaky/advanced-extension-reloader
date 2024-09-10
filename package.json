@@ -49,10 +49,10 @@
         "webpack-license-plugin": "^4.5.0"
     },
     "dependencies": {
-        "@loftyshaky/shared": "2.0.0",
+        "@loftyshaky/shared": "2.1.0",
         "@simonwep/pickr": "^1.9.1",
         "@types/webextension-polyfill": "^0.12.1",
-        "advanced-extension-reloader-watch-2": "^1.4.1",
+        "advanced-extension-reloader-watch-2": "^2.0.0",
         "confusing-browser-globals": "^1.0.11",
         "lodash": "^4.17.21",
         "mobx": "^6.13.1",
