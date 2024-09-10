@@ -30,8 +30,8 @@ class Class {
                 settings_2: any;
             }): void =>
                 err(() => {
-                    const ext_id_option_specified = typeof extension_id === 'string';
-                    const matched_ext_id_from_options = ext_info_2.id === extension_id;
+                    const extension_id_option_specified = typeof extension_id === 'string';
+                    const matched_extension_id_from_options = ext_info_2.id === extension_id;
 
                     if (
                         ext_info_2.id !== we.runtime.id &&
@@ -39,7 +39,7 @@ class Class {
                         ext_info_2.installType === 'development' &&
                         ((ext_info_2.type === 'theme' && settings_2.prefs.allow_theme_reload) ||
                             ext_info_2.type !== 'theme') &&
-                        (!ext_id_option_specified || matched_ext_id_from_options)
+                        (!extension_id_option_specified || matched_extension_id_from_options)
                     ) {
                         extension_is_eligible_for_reload = true;
                     }
