@@ -44,7 +44,7 @@ class Class {
             }
 
             if (!n(reload_action.delay_after_tab_reload)) {
-                transformed_reload_action.delay_after_tab_reload = 1000;
+                transformed_reload_action.delay_after_tab_reload = 2000;
             }
 
             if (!n(reload_action.listen_message_response_timeout)) {
