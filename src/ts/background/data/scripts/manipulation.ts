@@ -202,7 +202,7 @@ class Class {
                 force,
             });
 
-            const settings_transform_items: o_schema.TransformItem[] = [
+            const transform_items_prefs: o_schema.TransformItem[] = [
                 new o_schema.TransformItem({
                     new_key: 'allow_theme_reload',
                     new_val: true,
@@ -262,7 +262,7 @@ class Class {
             const updated_prefs: i_data.Prefs = await d_schema.Schema.transform({
                 data_obj: updated_settings.prefs,
                 version,
-                transform_items: settings_transform_items,
+                transform_items: transform_items_prefs,
                 keys_to_remove: ['open_background_tab_automatically', 'open_position_in_tab_strip'],
                 force,
             });
