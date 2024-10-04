@@ -2,7 +2,7 @@ import { makeObservable, computed } from 'mobx';
 
 import { s_utils } from '@loftyshaky/shared/shared';
 import { o_inputs, i_inputs } from '@loftyshaky/shared/inputs';
-import { d_sections as d_sections_loftyshaky } from '@loftyshaky/shared/settings';
+import { d_sections as d_sections_loftyshaky_settings } from '@loftyshaky/shared/settings';
 import { d_data, d_sections } from 'settings/internal';
 
 class Class {
@@ -78,7 +78,7 @@ class Class {
                         ],
                     }),
                 ],
-                ...d_sections_loftyshaky.Sections.make_shared_sections({
+                ...d_sections_loftyshaky_settings.Sections.make_shared_sections({
                     download_back_up_callback: ext.storage_get,
                     upload_back_up_callback: d_sections.Restore.restore_back_up,
                     restore_defaults_callback: () => d_sections.Restore.restore_confirm(),
@@ -163,13 +163,14 @@ class Class {
 
     public change_current_section_val = (): void =>
         err(() => {
-            data.settings.prefs.current_section = d_sections_loftyshaky.Sections.current_section;
+            data.settings.prefs.current_section =
+                d_sections_loftyshaky_settings.Sections.current_section;
 
             d_data.Manipulation.send_msg_to_update_settings({
                 settings: {
                     prefs: {
                         ...data.settings.prefs,
-                        current_section: d_sections_loftyshaky.Sections.current_section,
+                        current_section: d_sections_loftyshaky_settings.Sections.current_section,
                     },
                 },
                 update_instantly: true,
