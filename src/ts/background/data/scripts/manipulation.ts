@@ -102,10 +102,6 @@ class Class {
                     load_settings,
                     restore_back_up,
                 });
-
-                if (load_settings) {
-                    ext.send_msg_to_all_tabs({ msg: 'rerun_actions' });
-                }
             }, 'aer_1130'),
         250,
     );
