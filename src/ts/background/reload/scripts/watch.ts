@@ -3,7 +3,7 @@ import isEqual from 'lodash/isEqual';
 import { Tabs, Management } from 'webextension-polyfill';
 
 import { t } from '@loftyshaky/shared/shared_clean';
-import { s_reload as s_reload_shared, s_suffix, i_options } from 'shared_clean/internal';
+import { s_reload as s_reload_shared, i_options } from 'shared_clean/internal';
 import { s_badge, s_data, s_reload, i_reload } from 'background/internal';
 
 class Class {
@@ -385,7 +385,7 @@ class Class {
             const reload_ext = (): Promise<void> =>
                 err(async () => {
                     await we.runtime.sendMessage(ext_info.id, {
-                        msg: new s_suffix.Suffix('reload_extension').result,
+                        msg: 'reload_extension',
                     });
 
                     reload_triggered = true;
