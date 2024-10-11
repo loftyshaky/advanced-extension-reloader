@@ -262,6 +262,8 @@ class Class {
                                         await s_reload.Tabs.recreate_tabs({
                                             ext_tabs: tabs_to_reload,
                                         });
+                                    } else {
+                                        s_reload.Tabs.reset_vars();
                                     }
 
                                     await s_reload.Tabs.remove_temporary_tabs();
