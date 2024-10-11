@@ -45,6 +45,7 @@ class Class {
                         const allowed_keys: string[] = [
                             'hard',
                             'all_tabs',
+                            'open_popup',
                             'extension_id',
                             'play_notifications',
                             'min_interval_between_extension_reloads',
@@ -63,6 +64,7 @@ class Class {
                             reload_obj_has_only_allowed_els &&
                             validate_bool_val({ val: reload_obj.hard }) &&
                             validate_bool_val({ val: reload_obj.all_tabs }) &&
+                            validate_bool_val({ val: reload_obj.open_popup }) &&
                             validate_bool_val({ val: reload_obj.play_notifications }) &&
                             validate_number_val({
                                 val: reload_obj.min_interval_between_extension_reloads,

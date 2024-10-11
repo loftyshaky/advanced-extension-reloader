@@ -1,6 +1,7 @@
 export interface Options {
     all_tabs?: boolean;
     hard?: boolean;
+    open_popup?: boolean;
     play_notifications?: boolean;
     extension_id?: string;
     min_interval_between_extension_reloads?: number;

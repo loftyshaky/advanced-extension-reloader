@@ -31,6 +31,10 @@ class Class {
                 transformed_reload_action.all_tabs = false;
             }
 
+            if (!n(reload_action.open_popup)) {
+                transformed_reload_action.open_popup = false;
+            }
+
             if (!n(reload_action.play_notifications)) {
                 transformed_reload_action.play_notifications = false;
             }

@@ -25,6 +25,10 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
             return Promise.resolve(true);
         }
 
+        if (msg_str === 'start_open_popup_interval') {
+            s_reload.Popup.start_open_popup_interval();
+        }
+
         return false;
     }, 'aer_1001'),
 );

@@ -16,7 +16,7 @@ class Class {
     // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
-    public reloading: boolean = false;
+    public reloading_extensions: boolean = false;
     public delay_after_extension_reload_timer_canceled: boolean = false;
     public cancel_reload_f_execution: boolean = false;
     public running_pause_or_resume_automatic_reload_f: boolean = false;
@@ -25,7 +25,7 @@ class Class {
     private attempted_to_reload_during_after_tab_recreate_execution_phase: boolean = false;
     private reload_f_execution_phase: i_reload.ReloadFExecutionPhase = 'none';
     private automatic_reload: boolean = false;
-    private reload_throttle_fs = new Map<number, (options: i_options.Options) => Promise<void>>();
+    private reload_throttle_fs = new Map<number, () => Promise<void>>();
 
     public try_to_reload = async ({
         options,
@@ -35,10 +35,17 @@ class Class {
         automatic_reload?: boolean;
     }): Promise<void> =>
         err_async(async () => {
-            const options_final: i_options.Options = s_reload.DefaultValues.tranform_reload_action({
+            this.reloading_extensions = true;
+
+            data.options = s_reload.DefaultValues.tranform_reload_action({
                 reload_action: options,
             });
-            const is_hard: boolean = n(options_final.hard) && options_final.hard;
+
+            await we.storage.session.set({
+                options: data.options,
+            });
+
+            const is_hard: boolean = n(data.options) && data.options;
 
             if (is_hard) {
                 if (n(this.delay_after_extension_reload_cancel_delay)) {
@@ -69,14 +76,16 @@ class Class {
                 !this.attempted_to_reload_during_before_tab_recreate_execution_phase &&
                 !this.attempted_to_reload_during_after_tab_recreate_execution_phase
             ) {
-                this.reload_throttle({ options: options_final });
+                this.reload_throttle();
             } else if (!is_hard) {
-                this.reload(options_final);
+                this.reload();
             }
         }, 'aer_1035');
 
-    private reload = (options: i_options.Options): Promise<void> =>
+    private reload = (): Promise<void> =>
         err_async(async () => {
+            s_reload.Popup.set_reload_session_vals({ options: data.options });
+
             const extension_is_eligible_for_reload_f = ({
                 ext_info,
             }: {
@@ -118,7 +127,7 @@ class Class {
                 };
 
             const options_final: i_options.Options = s_reload.DefaultValues.tranform_reload_action({
-                reload_action: options,
+                reload_action: data.options,
             });
 
             if (options_final.hard) {
@@ -215,6 +224,10 @@ class Class {
                         ),
                     );
 
+                    await s_reload.Popup.set_popup_was_open_on_extension_reload({
+                        options: data.options,
+                    });
+
                     await Promise.all(
                         re_enable_callers.map(async (f: t.CallbackVoid) => {
                             await f();
@@ -266,6 +279,12 @@ class Class {
                         this.reset_reload_f_execution_phase_flags();
                     } else if (n(options_final.delay_after_extension_reload)) {
                         await recreate_tabs();
+
+                        if (!this.delay_after_extension_reload_timer_canceled) {
+                            this.reloading_extensions = false;
+
+                            await s_reload.Popup.try_to_reload({ options: options_final });
+                        }
                     }
                 }
             }
@@ -280,7 +299,7 @@ class Class {
                     this.attempted_to_reload_during_before_ext_reload_execution_phase)
             ) {
                 this.reset_reload_f_execution_phase_flags();
-                await this.reload_throttle({ options: options_final });
+                await this.reload_throttle();
             } else {
                 const at_least_one_extension_reloaded_or_soft: boolean =
                     at_least_one_extension_reloaded || !options_final.hard;
@@ -322,7 +341,7 @@ class Class {
 
                     if (this.attempted_to_reload_during_after_tab_recreate_execution_phase) {
                         this.reset_reload_f_execution_phase_flags();
-                        await this.reload_throttle({ options: options_final });
+                        await this.reload_throttle();
                     }
 
                     this.reload_f_execution_phase = 'none';
@@ -330,45 +349,39 @@ class Class {
             }
         }, 'aer_1039');
 
-    private get_reload_throttle = ({ options }: { options: i_options.Options }) =>
+    private get_reload_throttle = () =>
         err(() => {
-            const options_final: i_options.Options = s_reload.DefaultValues.tranform_reload_action({
-                reload_action: options,
-            });
-            if (n(options_final) && n(options_final.min_interval_between_extension_reloads)) {
+            if (n(data.options) && n(data.options.min_interval_between_extension_reloads)) {
                 if (
                     !this.reload_throttle_fs.has(
-                        options_final.min_interval_between_extension_reloads,
+                        data.options.min_interval_between_extension_reloads,
                     )
                 ) {
                     const reload_throttle_fs = x.async_throttle(
                         this.reload,
-                        options_final.min_interval_between_extension_reloads,
+                        data.options.min_interval_between_extension_reloads,
                     );
 
                     this.reload_throttle_fs.set(
-                        options_final.min_interval_between_extension_reloads,
+                        data.options.min_interval_between_extension_reloads,
                         reload_throttle_fs,
                     );
                 }
 
                 return this.reload_throttle_fs.get(
-                    options_final.min_interval_between_extension_reloads,
+                    data.options.min_interval_between_extension_reloads,
                 )!;
             }
 
             return undefined;
         }, 'aer_1138');
 
-    private reload_throttle = ({ options }: { options: i_options.Options }) =>
+    private reload_throttle = () =>
         err_async(async () => {
-            const options_final: i_options.Options = s_reload.DefaultValues.tranform_reload_action({
-                reload_action: options,
-            });
+            const throttled_reload = this.get_reload_throttle();
 
-            const throttled_reload = this.get_reload_throttle({ options });
             if (n(throttled_reload)) {
-                await throttled_reload(options_final);
+                await throttled_reload();
             }
         }, 'aer_1139');
 

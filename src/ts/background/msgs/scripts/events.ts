@@ -83,6 +83,28 @@ we.runtime.onMessage.addListener((msg: t.Msg): any =>
                 .catch((error_obj: any) => show_err_ribbon(error_obj, 'aer_1105'));
         }
 
+        if (msg_str === 'get_window_focus_state') {
+            return s_reload.Popup.get_window_focus_state()
+                .then((response: any) => response)
+                .catch((error_obj: any) => show_err_ribbon(error_obj, 'aer_1150'));
+        }
+
+        if (msg_str === 'get_popup_was_open_on_extension_reload') {
+            return Promise.resolve(data.popup_was_open_on_extension_reload);
+        }
+
+        if (msg_str === 'get_popup_will_reload_when_window_will_focus') {
+            return Promise.resolve(data.popup_will_reload_when_window_will_focus);
+        }
+
+        if (msg_str === 'get_reloading_extensions') {
+            return Promise.resolve(s_reload.Watch.reloading_extensions);
+        }
+
+        if (msg_str === 'open_popup') {
+            s_reload.Popup.reload();
+        }
+
         return false;
     }, 'aer_1012'),
 );
