@@ -20,8 +20,8 @@ class Class {
             if (
                 n(options) &&
                 n(options.extension_id) &&
-                n(options.open_popup) &&
-                (options.open_popup ||
+                n(options.always_open_popup) &&
+                (options.always_open_popup ||
                     (n(data.popup_will_reload_when_window_will_focus) &&
                         data.popup_will_reload_when_window_will_focus) ||
                     data.popup_was_open_on_extension_reload)
@@ -74,12 +74,12 @@ class Class {
 
             if (n(options) && (!window_is_focused || s_reload.Watch.reloading_extensions)) {
                 data.extension_id =
-                    !n(data.extension_id) || options.open_popup
+                    !n(data.extension_id) || options.always_open_popup
                         ? options.extension_id
                         : data.extension_id;
                 data.popup_will_reload_when_window_will_focus =
-                    !n(data.popup_will_reload_when_window_will_focus) || options.open_popup
-                        ? options.open_popup
+                    !n(data.popup_will_reload_when_window_will_focus) || options.always_open_popup
+                        ? options.always_open_popup
                         : data.popup_will_reload_when_window_will_focus;
 
                 await we.storage.session.set({
