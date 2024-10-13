@@ -28,7 +28,7 @@ The `ext_id`, `play_sound` and `after_reload_delay` properties have been renamed
 
 📄 Reload the current tab or all open tabs after your extensions are reloaded (useful for content scripts).
 
-♻️ **Advanced Extension Reloader** will also reopen any tabs that were closed during the reloading process, such as your extension's options page.
+♻️ Advanced Extension Reloader will also reopen the popup and any tabs that were closed during the reload process, including your extension's options page.
 
 Below is a detailed guide on how to use **Advanced Extension Reloader** and its supplementary packages.
 
@@ -38,6 +38,7 @@ Below is a detailed guide on how to use **Advanced Extension Reloader** and its 
 - [Automatic reload](#automatic_reload)
 - [Advanced Extension Reloader Watch 1: Auto reload WITHOUT bundler](#advanced_extension_reloader_watch_1_no_bundler)
 - [Advanced Extension Reloader Watch 2: Auto reload WITH bundler](#advanced_extension_reloader_watch_2_bundler)
+- [Popup reload](#popup_reload)
 - [Apply changes in manifest.json on reload](#manifest_changes_reload)
 - [Pause automatic reload](#pause_automatic_reload)
 - [Sample extensions](#sample_extensions)
@@ -98,22 +99,31 @@ For extensions developed without a bundler, use **Advanced Extension Reloader Wa
 
 For extensions developed with a bundler, use **Advanced Extension Reloader Watch 2**.<br>
 
-**Example usage in a Webpack project:**
+**Example usage in a Vite/Webpack project:**
 
 1. Install **Advanced Extension Reloader Watch 2**:
     ```shell
     npm install advanced-extension-reloader-watch-2
     ```
 
-2. Import `Reloader` in your Webpack config:
+2. Import `Reloader` in your bundler config:
+
+    **TypeScript Vite config example**:
+
+    ```typescript
+    import Reloader from 'advanced-extension-reloader-watch-2/es/reloader';
+    ```
+
+    **JavaScript Webpack config example**:
+
     ```javascript
     const Reloader = require('advanced-extension-reloader-watch-2/umd/reloader');
     ```
 
 3. Start watching files in your project's `src` directory:
-    ```javascript
+    ```typescript
     const reloader = new Reloader({
-        port: 6223,
+        port: 6220,
     });
 
     reloader.watch();
@@ -122,8 +132,39 @@ For extensions developed with a bundler, use **Advanced Extension Reloader Watch
 
     🚩 Important: The port specified here must be duplicated in the **Advanced Extension Reloader** settings page.
 
-4. Add the following configuration to the `plugins` array in your Webpack config. Replace `extension_id` with your extension's ID:
-     ```javascript
+4. Add the following to the plugins array in your bundler config. Replace extension_id with your actual extension ID:
+
+    **Vite example**:
+
+    ```typescript
+    let bundle_error = false; // Declare at the top level
+
+    // Add this to the "plugins" array
+    {
+        name: 'build-events',
+        apply: 'build',
+        buildEnd(an_error_occured) {
+            if (an_error_occured) {
+                bundle_error = true;
+
+                reloader.play_error_notification({ extension_id });
+            }
+        },
+        closeBundle() {
+            if (bundle_error) {
+                bundle_error = false;
+            } else {
+                reloader.reload({
+                    extension_id,
+                    play_notifications: true,
+                });
+            }
+        },
+    },
+    ```
+    **Webpack example**:
+
+    ```javascript
     {
         apply: (compiler) => {
             compiler.hooks.done.tap('done', (stats) => {
@@ -145,7 +186,11 @@ For extensions developed with a bundler, use **Advanced Extension Reloader Watch
     ```
     The `reloader.reload()` function reloads your extension, and `reloader.play_error_notification()` plays an audio notification on bundling failure.
 
-You can view an example of the Webpack configuration [here](https://github.com/loftyshaky/advanced-extension-reloader-examples/blob/main/webpack/webpack.config.js).
+You can view a full Vite config example [here](https://github.com/loftyshaky/advanced-extension-reloader-examples/blob/main/vite/vite.config.ts), and a Webpack config example [here](https://github.com/loftyshaky/advanced-extension-reloader-examples/blob/main/webpack/webpack.config.js).
+
+<h2 id="popup_reload">Popup reload</h2>
+
+If you perform a hard reload while the popup is open, **Advanced Extension Reloader** will automatically reopen it. To ensure the popup always opens, even if it was closed before the reload, set the `always_open_popup` property to `true`. Additionally, you can use the `always_open_popup_paths` property to specify which file paths should cause the popup to open each time a change occurs.
 
 <h2 id="manifest_changes_reload">Apply changes in manifest.json on reload</h2>
 
@@ -189,6 +234,7 @@ Sample extensions can be found [here](https://github.com/loftyshaky/advanced-ext
 | :--- | :--- | :--- | :--- | :--- |
 | `hard` | `boolean` | `true` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Determines whether to reload the entire extension (`true`) or just the current tab (`false`). If set to `false`, changes to the background script will not be applied.<br><br>Even if set to `true`, changes to the *manifest.json* file will not be applied unless you use the `listen()` function from the **Advanced Extension Reloader Watch 2** supplementary npm package in your extension's background script.<br><br>This option can be used in conjunction with `all_tabs`. |
 | `all_tabs` | `boolean` | `false` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Specifies whether to reload all open tabs instead of just the current one. |
+| `always_open_popup` | `boolean` | `false` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Determines whether the popup should open after a `hard` reload of your extension. This property controls the opening of the popup only if it was closed before the reload. Even when set to `false`, **Advanced Extension Reloader** will automatically open the popup if it was open during the reload. |
 | `extension_id` | `string` | `undefined` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Defines the ID of the extension to reload. If left `undefined`, all extensions will be reloaded. |
 | `play_notifications` | `boolean` | `false` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Indicates whether to play audio notifications for reload success/failure and bundling success. |
 | `min_interval_between_extension_reloads` | `number` | `500` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Defines the minimum interval between extension reloads, ensuring that the **Advanced Extension Reloader** triggers the reload at most once during this period. |
@@ -202,6 +248,7 @@ Sample extensions can be found [here](https://github.com/loftyshaky/advanced-ext
 | `soft_paths` | `string[]` | `[]` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, the extension will be reloaded with `hard`: `false`, even if `hard`: `true` is specified in the configuration. |
 | `all_tabs_paths` | `string[]` | `[]` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, the extension will be reloaded with `all_tabs`: `true`, even if `all_tabs`: `false` is specified in the configuration. |
 | `one_tab_paths` | `string[]` | `[]` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, the extension will be reloaded with `all_tabs`: `false`, even if `all_tabs`: `true` is specified in the configuration. |
+| `always_open_popup_paths` | `string[]` | `[]` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, your extension's popup will be opened, even if it was closed before the reload. |
 
 <h2 id="build_steps">Build steps</h2>
 
