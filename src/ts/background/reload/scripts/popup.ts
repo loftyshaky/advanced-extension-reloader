@@ -50,10 +50,12 @@ class Class {
 
             data.open_popup = undefined;
             data.popup_will_reload_when_window_will_focus = undefined;
+            data.popup_was_open_on_extension_reload = undefined;
 
             await we.storage.session.remove([
                 'extension_id',
                 'popup_will_reload_when_window_will_focus',
+                'popup_was_open_on_extension_reload',
             ]);
         }, 'aer_1145');
 
@@ -102,7 +104,9 @@ class Class {
                 });
                 const popup_is_open_final: boolean = n(popup_is_open) ? popup_is_open : false;
 
-                data.popup_was_open_on_extension_reload = popup_is_open_final;
+                data.popup_was_open_on_extension_reload = data.popup_was_open_on_extension_reload
+                    ? data.popup_was_open_on_extension_reload
+                    : popup_is_open_final;
 
                 await we.storage.session.set({
                     popup_was_open_on_extension_reload: data.popup_was_open_on_extension_reload,
