@@ -3,7 +3,7 @@
         "message": "Advanced Extension Reloader"
     },
     "description": {
-        "message": "Reload an unpacked extension with one click, a hotkey or automatically (extension for developers)."
+        "message": "Reload an unpacked extension with one click, a hotkey, or automatically (extension for developers)."
     },
     "reload_section_text": {
         "message": "Reload"

@@ -1,6 +1,6 @@
 <h1 id="advanced_extension_reloader">Advanced Extension Reloader</h2>
 
-A browser extension that enables you to reload an unpacked extension with one click, a hotkey or automatically (extension for developers).
+A browser extension that enables you to reload an unpacked extension with one click, a hotkey, or automatically (extension for developers).
 
 <h2 id="links">Links</h2>
 
