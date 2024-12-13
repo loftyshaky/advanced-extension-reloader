@@ -12,7 +12,6 @@ import {
 } from '@loftyshaky/shared/shared';
 import { d_inputs } from '@loftyshaky/shared/inputs';
 import { s_css_vars, s_suffix } from 'shared_clean/internal';
-import { d_settings } from 'shared/internal';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, @typescript-eslint/no-unused-vars
 declare let __webpack_public_path__: string;
@@ -65,10 +64,6 @@ class Class {
 
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 __webpack_public_path__ = we.runtime.getURL('');
-
-                if (page === 'settings') {
-                    await d_settings.Transform.set_transformed_from_storage();
-                }
 
                 this.set_page_title();
 

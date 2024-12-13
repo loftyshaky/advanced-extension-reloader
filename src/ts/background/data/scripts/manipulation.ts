@@ -112,7 +112,7 @@ class Class {
         err_async(async () => {
             if (s_reload.Watch.running_pause_or_resume_automatic_reload_f) {
                 this.set_from_storage_run_prevented = true;
-            } else if (!x.prefs_are_filled() && !x.settings_are_filled()) {
+            } else if (!x.prefs_are_filled() && !x.found_old_settings()) {
                 await this.update_settings({ transform });
             } else if (transform) {
                 await this.update_settings({ settings: data.settings, transform });
