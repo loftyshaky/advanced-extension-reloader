@@ -19,7 +19,7 @@ class Class {
                 prefs: {
                     version: ext.get_app_version(),
                     current_section: 'reload',
-                    options_page_theme: 'dark',
+                    options_page_theme: 'clover',
                     transition_duration: 200,
                     color_help_is_visible: true,
                     developer_mode: false,
