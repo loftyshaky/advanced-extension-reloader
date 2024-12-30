@@ -16,10 +16,18 @@ class Class {
     public ext_tabs_recreate: TabsExt.Tab[] = [];
     public ext_tabs: TabsExt.Tab[] = [];
     public new_tab_tabs: TabsExt.Tab[] = [];
-    public browser_protocol: string = 'chrome://';
-    public ext_protocol: string = 'chrome-extension://';
+    public browser_protocol: string = '';
+    public ext_protocol: string = '';
     public temporary_tabs: TabsExt.Tab[] = [];
-    private new_tab_link: string = `${this.browser_protocol}newtab/`;
+    public new_tab_link: string = '';
+
+    public set_extension_urls = (): Promise<void> =>
+        err_async(async () => {
+            this.browser_protocol = `${env.browser}://`;
+            this.ext_protocol = 'chrome-extension://';
+
+            this.new_tab_link = `${this.browser_protocol}newtab/`;
+        }, 'aer_1152');
 
     public get_tabs = (): Promise<TabsExt.Tab[]> =>
         err_async(async () => {
@@ -121,19 +129,32 @@ class Class {
                             (temporary_tab: TabsExt.Tab): boolean =>
                                 err(() => temporary_tab.windowId === ext_tab.windowId, 'aer_1123'),
                         );
-                        const tab: TabsExt.Tab = await we.tabs.create({
-                            windowId: ext_tab.windowId,
-                            index: window_has_temporary_tab ? ext_tab.index + 1 : ext_tab.index,
-                            url: ext_tab.url,
-                            active: false, // prevent focus stealing on Ubuntu when extension's tab is reopened
-                            pinned: ext_tab.pinned,
+                        const remaining_new_tabs: TabsExt.Tab[] = await we.tabs.query({
+                            url: this.new_tab_link,
                         });
+                        const all_new_tabs_were_closed_during_extension_reload: boolean =
+                            remaining_new_tabs.length === 0;
 
-                        //> prevent focus stealing on Ubuntu when extension's tab is reopened
-                        if (ext_tab.active) {
-                            await we.tabs.update(tab.id, {
-                                active: true,
+                        if (
+                            env.browser === 'chrome' ||
+                            (env.browser === 'edge' &&
+                                (all_new_tabs_were_closed_during_extension_reload ||
+                                    ext_tab.url !== this.new_tab_link))
+                        ) {
+                            const tab: TabsExt.Tab = await we.tabs.create({
+                                windowId: ext_tab.windowId,
+                                index: window_has_temporary_tab ? ext_tab.index + 1 : ext_tab.index,
+                                url: ext_tab.url,
+                                active: false, // prevent focus stealing on Ubuntu when extension's tab is reopened
+                                pinned: ext_tab.pinned,
                             });
+
+                            //> prevent focus stealing on Ubuntu when extension's tab is reopened
+                            if (ext_tab.active) {
+                                await we.tabs.update(tab.id, {
+                                    active: true,
+                                });
+                            }
                         }
                         //< prevent focus stealing on Ubuntu when extension's tab is reopened
                     }, 'aer_1029'),
@@ -156,60 +177,57 @@ class Class {
         err_async(async () => {
             const windows: Windows.Window[] = await we.windows.getAll();
 
-            windows.forEach(
-                (window: Windows.Window): Promise<void> =>
-                    err_async(async () => {
-                        const temporary_tabs_old: TabsExt.Tab[] = cloneDeep(this.temporary_tabs);
-                        this.temporary_tabs = [];
+            this.temporary_tabs = [];
 
-                        const tabs: TabsExt.Tab[] = await we.tabs.query({ windowId: window.id });
+            // eslint-disable-next-line no-restricted-syntax
+            for await (const window of windows) {
+                const temporary_tabs_old: TabsExt.Tab[] = cloneDeep(this.temporary_tabs);
+                const tabs: TabsExt.Tab[] = await we.tabs.query({ windowId: window.id });
 
-                        const tabs_that_wont_reload: TabsExt.Tab[] = tabs.filter(
-                            (tab: TabsExt.Tab): boolean =>
-                                err(() => {
-                                    const is_new_tab_tab: boolean = tab.url === this.new_tab_link;
-                                    const is_browser_close_protect_tab: boolean =
-                                        tab.url === 'about:blank';
-                                    const is_ext_to_reaload_tab: boolean = this.ext_tabs.some(
-                                        (ext_tab: TabsExt.Tab): boolean =>
-                                            err(() => tab.url === ext_tab.url, 'aer_1122'),
-                                    );
+                const tabs_that_wont_reload: TabsExt.Tab[] = tabs.filter(
+                    (tab: TabsExt.Tab): boolean =>
+                        err(() => {
+                            const is_new_tab_tab: boolean = tab.url === this.new_tab_link;
+                            const is_browser_close_protect_tab: boolean = tab.url === 'about:blank';
+                            const is_ext_to_reaload_tab: boolean = this.ext_tabs.some(
+                                (ext_tab: TabsExt.Tab): boolean =>
+                                    err(() => tab.url === ext_tab.url, 'aer_1122'),
+                            );
 
-                                    return (
-                                        !is_new_tab_tab &&
-                                        !is_ext_to_reaload_tab &&
-                                        !is_browser_close_protect_tab
-                                    );
-                                }, 'aer_1121'),
-                        );
+                            return (
+                                ((env.browser === 'chrome' && !is_new_tab_tab) ||
+                                    (env.browser === 'edge' && is_new_tab_tab)) &&
+                                !is_ext_to_reaload_tab &&
+                                !is_browser_close_protect_tab
+                            );
+                        }, 'aer_1121'),
+                );
 
-                        const has_browser_close_protect_tab: boolean = tabs.some(
-                            (tab: TabsExt.Tab): boolean =>
-                                err(() => {
-                                    const is_browser_close_protect_tab: boolean =
-                                        tab.url === 'about:blank';
+                const has_browser_close_protect_tab: boolean = tabs.some(
+                    (tab: TabsExt.Tab): boolean =>
+                        err(() => {
+                            const is_browser_close_protect_tab: boolean = tab.url === 'about:blank';
 
-                                    return is_browser_close_protect_tab;
-                                }, 'aer_1134'),
-                        );
+                            return is_browser_close_protect_tab;
+                        }, 'aer_1134'),
+                );
 
-                        if (has_browser_close_protect_tab) {
-                            this.temporary_tabs = temporary_tabs_old;
-                        } else if (tabs_that_wont_reload.length === 0) {
-                            const created_tab: TabsExt.Tab = await we.tabs.create({
-                                url: 'about:blank',
-                                windowId: window.id,
-                                index: 0,
-                                active: false,
-                                pinned: true,
-                            });
+                if (has_browser_close_protect_tab) {
+                    this.temporary_tabs = temporary_tabs_old;
+                } else if (tabs_that_wont_reload.length === 0 || env.browser === 'edge') {
+                    const created_tab: TabsExt.Tab = await we.tabs.create({
+                        url: 'about:blank',
+                        windowId: window.id,
+                        index: 0,
+                        active: env.browser === 'edge',
+                        pinned: true,
+                    });
 
-                            if (n(created_tab.id)) {
-                                this.temporary_tabs.push(created_tab);
-                            }
-                        }
-                    }, 'aer_1118'),
-            );
+                    if (n(created_tab.id)) {
+                        this.temporary_tabs.push(created_tab);
+                    }
+                }
+            }
         }, 'aer_1117');
 
     public remove_temporary_tabs = (): Promise<void> =>

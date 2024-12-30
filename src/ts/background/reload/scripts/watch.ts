@@ -154,6 +154,11 @@ class Class {
                         : await s_reload.Tabs.get_ext_tabs();
                     const new_ext_tabs: Tabs.Tab[] = [];
                     const new_tab_tabs: Tabs.Tab[] = await s_reload.Tabs.get_new_tab_tabs();
+
+                    if (env.browser === 'edge') {
+                        await s_reload.Tabs.create_temporary_tabs();
+                    }
+
                     const re_enable_callers: t.CallbackVoid[] = [];
                     s_reload.Tabs.new_tab_tabs = s_reload.Tabs.pending_tabs_recreate
                         ? s_reload.Tabs.new_tab_tabs
@@ -212,7 +217,9 @@ class Class {
 
                     at_least_one_extension_tab_is_open = tabs_to_reload.length !== 0;
 
-                    await s_reload.Tabs.create_temporary_tabs();
+                    if (env.browser === 'chrome') {
+                        await s_reload.Tabs.create_temporary_tabs();
+                    }
 
                     await Promise.all(
                         new_tab_tabs.map(async (tab: Tabs.Tab) =>
