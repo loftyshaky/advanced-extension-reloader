@@ -21,6 +21,7 @@ class Class {
     public temporary_tabs: TabsExt.Tab[] = [];
     public new_tab_link: string = '';
     private temp_page_link: string = we.runtime.getURL('temp.html');
+    private active_tab_id: number = 0;
 
     public set_extension_urls = (): Promise<void> =>
         err_async(async () => {
@@ -123,6 +124,7 @@ class Class {
 
     public recreate_tabs = ({ ext_tabs }: { ext_tabs: TabsExt.Tab[] }): Promise<void> =>
         err_async(async () => {
+            let one_of_restored_tabs_was_active: boolean = false;
             await Promise.all(
                 sortBy(ext_tabs, 'index').map(async (ext_tab: TabsExt.Tab) =>
                     err_async(async () => {
@@ -152,12 +154,19 @@ class Class {
 
                             //> prevent focus stealing on Ubuntu when extension's tab is reopened
                             if (ext_tab.active) {
+                                one_of_restored_tabs_was_active = true;
                                 await we.tabs.update(tab.id, {
                                     active: true,
                                 });
                             }
                         }
                         //< prevent focus stealing on Ubuntu when extension's tab is reopened
+
+                        if (!one_of_restored_tabs_was_active) {
+                            await we.tabs.update(this.active_tab_id, {
+                                active: true,
+                            });
+                        }
                     }, 'aer_1029'),
                 ),
             );
@@ -178,7 +187,12 @@ class Class {
         err_async(async () => {
             const windows: Windows.Window[] = await we.windows.getAll();
 
+            const active_tab: TabsExt.Tab = await ext.get_active_tab();
             this.temporary_tabs = [];
+
+            if (n(active_tab.id)) {
+                this.active_tab_id = active_tab.id;
+            }
 
             // eslint-disable-next-line no-restricted-syntax
             for await (const window of windows) {
