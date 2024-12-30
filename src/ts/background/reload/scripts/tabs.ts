@@ -57,7 +57,7 @@ class Class {
             });
 
             return tabs;
-        }, 'aer_1024');
+        }, 'aer_1153');
 
     private check_if_excluded_tab = ({ url }: { url: string | undefined }): boolean =>
         err(
