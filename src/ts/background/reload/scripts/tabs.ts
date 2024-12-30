@@ -219,7 +219,7 @@ class Class {
                         url: 'about:blank',
                         windowId: window.id,
                         index: 0,
-                        active: env.browser === 'edge',
+                        active: window.focused && env.browser === 'edge',
                         pinned: true,
                     });
 
