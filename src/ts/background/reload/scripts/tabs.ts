@@ -155,6 +155,7 @@ class Class {
                             //> prevent focus stealing on Ubuntu when extension's tab is reopened
                             if (ext_tab.active) {
                                 one_of_restored_tabs_was_active = true;
+
                                 await we.tabs.update(tab.id, {
                                     active: true,
                                 });
@@ -188,6 +189,7 @@ class Class {
             const windows: Windows.Window[] = await we.windows.getAll();
 
             const active_tab: TabsExt.Tab = await ext.get_active_tab();
+            const last_focused_window: Windows.Window = await we.windows.getLastFocused();
             this.temporary_tabs = [];
 
             if (n(active_tab.id)) {
@@ -236,9 +238,15 @@ class Class {
                         url: this.temp_page_link,
                         windowId: window.id,
                         index: 0,
-                        active: window.focused && env.browser === 'edge',
+                        active: false, // prevent focus stealing on Ubuntu when extension's tab is reopened
                         pinned: true,
                     });
+
+                    //> prevent focus stealing on Ubuntu when extension's tab is reopened
+                    await we.tabs.update(created_tab.id, {
+                        active: window.id === last_focused_window.id && env.browser === 'edge',
+                    });
+                    //< prevent focus stealing on Ubuntu when extension's tab is reopened
 
                     if (n(created_tab.id)) {
                         this.temporary_tabs.push(created_tab);
