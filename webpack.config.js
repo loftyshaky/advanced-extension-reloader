@@ -105,6 +105,7 @@ module.exports = (env, argv) => {
             offscreen: path.join(paths.ts, 'offscreen', 'offscreen.ts'),
             settings: path.join(paths.ts, 'settings', 'settings.ts'),
             settings_css: path.join(app_root, 'src', 'scss', 'settings', 'index.scss'),
+            temp_css: path.join(app_root, 'src', 'scss', 'temp', 'index.scss'),
         },
     };
 

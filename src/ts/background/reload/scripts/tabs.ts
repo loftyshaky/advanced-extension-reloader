@@ -20,6 +20,7 @@ class Class {
     public ext_protocol: string = '';
     public temporary_tabs: TabsExt.Tab[] = [];
     public new_tab_link: string = '';
+    private temp_page_link: string = we.runtime.getURL('temp.html');
 
     public set_extension_urls = (): Promise<void> =>
         err_async(async () => {
@@ -188,7 +189,8 @@ class Class {
                     (tab: TabsExt.Tab): boolean =>
                         err(() => {
                             const is_new_tab_tab: boolean = tab.url === this.new_tab_link;
-                            const is_browser_close_protect_tab: boolean = tab.url === 'about:blank';
+                            const is_browser_close_protect_tab: boolean =
+                                tab.url === this.temp_page_link;
                             const is_ext_to_reaload_tab: boolean = this.ext_tabs.some(
                                 (ext_tab: TabsExt.Tab): boolean =>
                                     err(() => tab.url === ext_tab.url, 'aer_1122'),
@@ -206,7 +208,8 @@ class Class {
                 const has_browser_close_protect_tab: boolean = tabs.some(
                     (tab: TabsExt.Tab): boolean =>
                         err(() => {
-                            const is_browser_close_protect_tab: boolean = tab.url === 'about:blank';
+                            const is_browser_close_protect_tab: boolean =
+                                tab.url === this.temp_page_link;
 
                             return is_browser_close_protect_tab;
                         }, 'aer_1134'),
@@ -216,7 +219,7 @@ class Class {
                     this.temporary_tabs = temporary_tabs_old;
                 } else if (tabs_that_wont_reload.length === 0 || env.browser === 'edge') {
                     const created_tab: TabsExt.Tab = await we.tabs.create({
-                        url: 'about:blank',
+                        url: this.temp_page_link,
                         windowId: window.id,
                         index: 0,
                         active: window.focused && env.browser === 'edge',
