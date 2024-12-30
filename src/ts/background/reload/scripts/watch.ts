@@ -37,6 +37,8 @@ class Class {
         err_async(async () => {
             this.reloading_extensions = true;
 
+            s_reload.Tabs.set_extension_urls();
+
             data.options = s_reload.DefaultValues.tranform_reload_action({
                 reload_action: options,
             });
