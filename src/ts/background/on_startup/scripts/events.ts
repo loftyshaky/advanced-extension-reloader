@@ -5,7 +5,6 @@ import { init } from 'background/internal';
 
 we.runtime.onStartup.addListener((): void =>
     err(() => {
-        importScripts('/env.js');
-        init();
+        void init();
     }, 'aer_1104'),
 );

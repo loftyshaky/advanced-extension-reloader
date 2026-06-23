@@ -1,6 +1,8 @@
 import io from 'socket.io-client';
 
-import { s_reload, i_options } from 'shared_clean/internal';
+import type { t } from '@loftyshaky/shared/shared_clean';
+import type { i_options } from 'shared_clean/internal';
+import { s_reload } from 'shared_clean/internal';
 
 class Class {
     private static instance: Class;
@@ -9,9 +11,8 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
-    private clients: any[] = [];
+    private clients: t.AnyRecord[] = [];
 
     public connect = async ({
         ports,
@@ -21,7 +22,7 @@ class Class {
         reload_notification_volume: number;
     }): Promise<void> =>
         err_async(async () => {
-            this.clients.forEach((client: any): void => {
+            this.clients.forEach((client: t.AnyRecord): void => {
                 client.close();
             });
 
@@ -30,22 +31,20 @@ class Class {
             ports.forEach((port: string): void =>
                 err(() => {
                     const client = io(`http://localhost:${port}`, {
-                        // eslint-disable-next-line @typescript-eslint/naming-convention
                         reconnectionDelayMax: 500,
-                        // eslint-disable-next-line @typescript-eslint/naming-convention
                         randomizationFactor: 0,
                     });
 
                     this.clients.push(client);
 
                     client.on('reload_app', (options: i_options.Options): void => {
-                        ext.send_msg({ msg: 'reload', options });
+                        void ext.send_msg({ msg: 'reload', options });
                     });
 
                     client.on(
                         'play_error_notification',
                         ({ extension_id }: { extension_id?: string } = {}): void => {
-                            this.play_notification({
+                            void this.play_notification({
                                 notification_type: 'error',
                                 reload_notification_volume,
                                 extension_id,
@@ -56,7 +55,7 @@ class Class {
                     client.on(
                         'play_manifest_error_notification',
                         ({ extension_id }: { extension_id?: string } = {}): void => {
-                            this.play_notification({
+                            void this.play_notification({
                                 notification_type: 'manifest_error',
                                 reload_notification_volume,
                                 extension_id,
@@ -94,7 +93,7 @@ class Class {
                     const audio = new Audio(sound_filename);
 
                     audio.volume = reload_notification_volume;
-                    audio.play();
+                    void audio.play();
                 }, 'aer_1113');
 
             if (notification_type === 'manifest_error') {
@@ -108,14 +107,17 @@ class Class {
                     await s_reload.Watch.extension_is_eligible_for_reload({ extension_id });
 
                 const reloading_one_exts: boolean = n(extension_id);
-                const ext_is_installed: boolean = await ext.send_msg_resp({
+                const ext_is_installed: unknown = await ext.send_msg_resp({
                     msg: 'check_if_ext_is_installed',
                     extension_id,
                 });
 
+                const ext_is_installed_final: boolean =
+                    typeof ext_is_installed === 'boolean' ? ext_is_installed : false;
+
                 if (
                     extension_is_eligible_for_reload &&
-                    (ext_is_installed ||
+                    (ext_is_installed_final ||
                         (notification_type === 'reload'
                             ? at_least_one_extension_reloaded
                             : !reloading_one_exts))

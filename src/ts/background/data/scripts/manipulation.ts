@@ -1,14 +1,15 @@
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 
+import type { t } from '@loftyshaky/shared/shared_clean';
 import {
-    o_schema,
     d_schema,
+    o_schema,
     s_data as s_data_loftyshaky_shared_clean,
     s_service_worker,
 } from '@loftyshaky/shared/shared_clean';
-import { i_data } from 'shared_clean/internal';
 import { s_badge, s_data, s_reload, s_side_effects } from 'background/internal';
+import type { i_data } from 'shared_clean/internal';
 
 class Class {
     private static instance: Class;
@@ -17,7 +18,6 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
     public set_from_storage_run_prevented: boolean = false;
@@ -69,7 +69,7 @@ class Class {
                 await ext.send_msg_resp({ msg: 'load_settings', restore_back_up });
             }
 
-            s_service_worker.ServiceWorker.make_persistent();
+            void s_service_worker.ServiceWorker.make_persistent();
         }, 'aer_1008');
 
     public react_to_settings_change = (): Promise<void> =>
@@ -81,7 +81,7 @@ class Class {
 
             await s_side_effects.SideEffects.react_to_change();
             await ext.send_msg_resp({ msg: 'load_settings', transform: true });
-            s_service_worker.ServiceWorker.make_persistent();
+            void s_service_worker.ServiceWorker.make_persistent();
         }, 'aer_1129');
 
     public update_settings_debounce = debounce(
@@ -128,7 +128,7 @@ class Class {
 
     private transform = ({
         settings,
-        force = false, // true is used when restoring back up to ignore version
+        force,
     }: {
         settings: i_data.Settings;
         force: boolean;
@@ -255,15 +255,15 @@ class Class {
                 }),
             ];
 
-            const updated_prefs: i_data.Prefs = await d_schema.Schema.transform({
+            const updated_prefs: i_data.Prefs = (await d_schema.Schema.transform({
                 data_obj: updated_settings.prefs,
                 version,
                 transform_items: transform_items_prefs,
                 keys_to_remove: ['open_background_tab_automatically', 'open_position_in_tab_strip'],
                 force,
-            });
+            })) as i_data.Prefs;
 
-            const click_action: any = await d_schema.Schema.transform({
+            const click_action: t.AnyRecord = await d_schema.Schema.transform({
                 data_obj: updated_prefs.click_action,
                 version,
                 transform_items: click_action_transform_items,
@@ -273,17 +273,18 @@ class Class {
             updated_prefs.click_action = click_action;
 
             updated_prefs.context_menu_actions = await Promise.all(
-                updated_prefs.context_menu_actions.map((action: any): any =>
-                    err_async(async () => {
-                        const new_action: any = await d_schema.Schema.transform({
-                            data_obj: action,
-                            version,
-                            transform_items: click_action_transform_items,
-                            force,
-                        });
+                updated_prefs.context_menu_actions.map(
+                    (action: t.AnyRecord): Promise<t.AnyRecord> =>
+                        err_async(async () => {
+                            const new_action: t.AnyRecord = await d_schema.Schema.transform({
+                                data_obj: action,
+                                version,
+                                transform_items: click_action_transform_items,
+                                force,
+                            });
 
-                        return new_action;
-                    }, 'aer_1087'),
+                            return new_action;
+                        }, 'aer_1087'),
                 ),
             );
 

@@ -1,8 +1,9 @@
-import upperFirst from 'lodash/upperFirst';
-import { Management } from 'webextension-polyfill';
+import type { Management } from 'webextension-polyfill';
 
-import { i_options } from 'shared_clean/internal';
+import upperFirst from 'lodash/upperFirst';
+
 import { s_reload } from 'background/internal';
+import type { i_options } from 'shared_clean/internal';
 
 class Class {
     private static instance: Class;
@@ -11,7 +12,6 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
     private creating_context_menu: boolean = false; // prevent "Suspend/resume automatic reload at the bottom"
@@ -23,7 +23,7 @@ class Class {
 
                 await we.contextMenus.removeAll();
 
-                await we.contextMenus.create({
+                we.contextMenus.create({
                     id: 'pause_or_resume_automatic_reload',
                     title: ext.msg(
                         `${
@@ -80,7 +80,7 @@ class Class {
                                         ? upperFirst(context_menu_item_title)
                                         : context_menu_item_title;
 
-                                await we.contextMenus.create({
+                                we.contextMenus.create({
                                     id: `${i}`,
                                     title: context_menu_item_title_final,
                                     contexts: ['action'],

@@ -1,9 +1,11 @@
+import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
-import { observer } from 'mobx-react';
 
+import type { i_inputs } from '@loftyshaky/shared/inputs';
+import { d_inputs } from '@loftyshaky/shared/inputs';
 import { c_settings } from '@loftyshaky/shared/settings';
-import { d_inputs, i_inputs } from '@loftyshaky/shared/inputs';
-import { d_sections, p_settings } from 'settings/internal';
+import type { p_settings } from 'settings/internal';
+import { d_sections } from 'settings/internal';
 
 export const Body: React.FunctionComponent<p_settings.Body> = observer((props) => {
     const { on_render } = props;
@@ -22,7 +24,7 @@ export const Body: React.FunctionComponent<p_settings.Body> = observer((props) =
                         });
                     }, 'aer_1044');
 
-                run();
+                void run();
             }, 'aer_1045'),
         [],
     );

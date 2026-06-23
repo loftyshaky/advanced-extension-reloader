@@ -1,5 +1,5 @@
 import { s_data } from '@loftyshaky/shared/shared_clean';
-import { i_data } from 'shared_clean/internal';
+import type { i_data } from 'shared_clean/internal';
 
 class Class {
     private static instance: Class;
@@ -8,7 +8,6 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
     public send_msg_to_update_settings = ({

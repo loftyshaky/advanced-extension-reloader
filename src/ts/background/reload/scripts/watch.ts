@@ -1,10 +1,13 @@
-import uniqWith from 'lodash/uniqWith';
-import isEqual from 'lodash/isEqual';
-import { Tabs, Management } from 'webextension-polyfill';
+import type { Management, Tabs } from 'webextension-polyfill';
 
-import { t } from '@loftyshaky/shared/shared_clean';
-import { s_reload as s_reload_shared, i_options } from 'shared_clean/internal';
-import { s_badge, s_data, s_reload, i_reload } from 'background/internal';
+import isEqual from 'lodash/isEqual';
+import uniqWith from 'lodash/uniqWith';
+
+import type { t } from '@loftyshaky/shared/shared_clean';
+import type { i_reload } from 'background/internal';
+import { s_badge, s_data, s_reload } from 'background/internal';
+import type { i_options } from 'shared_clean/internal';
+import { s_reload as s_reload_shared } from 'shared_clean/internal';
 
 class Class {
     private static instance: Class;
@@ -13,7 +16,6 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
     public reloading_extensions: boolean = false;
@@ -37,7 +39,7 @@ class Class {
         err_async(async () => {
             this.reloading_extensions = true;
 
-            s_reload.Tabs.set_extension_urls();
+            void s_reload.Tabs.set_extension_urls();
 
             data.options = s_reload.DefaultValues.tranform_reload_action({
                 reload_action: options,
@@ -78,15 +80,15 @@ class Class {
                 !this.attempted_to_reload_during_before_tab_recreate_execution_phase &&
                 !this.attempted_to_reload_during_after_tab_recreate_execution_phase
             ) {
-                this.reload_throttle();
+                void this.reload_throttle();
             } else if (!is_hard) {
-                this.reload();
+                void this.reload();
             }
         }, 'aer_1035');
 
     private reload = (): Promise<void> =>
         err_async(async () => {
-            s_reload.Popup.set_reload_session_vals({ options: data.options });
+            void s_reload.Popup.set_reload_session_vals({ options: data.options });
 
             const extension_is_eligible_for_reload_f = ({
                 ext_info,
@@ -108,7 +110,7 @@ class Class {
             const generate_reload_f =
                 ({ ext_info }: { ext_info: Management.ExtensionInfo }): (() => Promise<void>) =>
                 async () => {
-                    err_async(async () => {
+                    void err_async(async () => {
                         if (
                             n(options_final) &&
                             n(options_final.delay_after_extension_reload) &&
@@ -199,7 +201,7 @@ class Class {
                                     if (extension_is_eligible_for_reload) {
                                         new_ext_tabs.push(...ext_tabs_final);
 
-                                        const reload_f = await generate_reload_f({ ext_info });
+                                        const reload_f = generate_reload_f({ ext_info });
 
                                         re_enable_callers.push(reload_f);
 
@@ -239,7 +241,7 @@ class Class {
 
                     await Promise.all(
                         re_enable_callers.map(async (f: t.CallbackVoid) => {
-                            await f();
+                            f();
                         }),
                     );
 
@@ -252,7 +254,7 @@ class Class {
                                     at_least_one_extension_reloaded &&
                                     n(options_final.delay_after_extension_reload)
                                 ) {
-                                    s_badge.Badge.show_prefixed_timer({
+                                    void s_badge.Badge.show_prefixed_timer({
                                         prefix_name: 'reloading_tabs',
                                         time: options_final.delay_after_extension_reload,
                                     });
@@ -325,7 +327,7 @@ class Class {
 
                     if (options_final.hard) {
                         if (n(options_final.delay_after_tab_reload)) {
-                            s_badge.Badge.show_prefixed_timer({
+                            void s_badge.Badge.show_prefixed_timer({
                                 prefix_name: 'ok',
                                 time: options_final.delay_after_tab_reload,
                             });
@@ -334,7 +336,7 @@ class Class {
                 }
 
                 if (options_final.play_notifications) {
-                    ext.send_msg({
+                    void ext.send_msg({
                         msg: 'play_reload_notification',
                         reload_notification_volume: data.settings.prefs.reload_notification_volume,
                         extension_id: options_final.extension_id,
@@ -346,7 +348,10 @@ class Class {
                 }
 
                 if (options_final.hard) {
-                    if (at_least_one_extension_reloaded_or_soft) {
+                    if (
+                        n(options_final.delay_after_tab_reload) &&
+                        at_least_one_extension_reloaded_or_soft
+                    ) {
                         await x.delay(options_final.delay_after_tab_reload);
                     }
 
@@ -375,7 +380,7 @@ class Class {
 
                     this.reload_throttle_fs.set(
                         data.options.min_interval_between_extension_reloads,
-                        reload_throttle_fs,
+                        reload_throttle_fs as t.Any,
                     );
                 }
 
@@ -479,7 +484,7 @@ class Class {
 
             await s_data.Manipulation.update_settings({ settings: data.settings });
 
-            s_badge.Badge.show_reload_paused();
+            void s_badge.Badge.show_reload_paused();
 
             this.running_pause_or_resume_automatic_reload_f = false;
 

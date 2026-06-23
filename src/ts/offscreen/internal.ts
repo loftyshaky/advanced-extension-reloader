@@ -1,6 +1,6 @@
-import '@loftyshaky/shared/ext';
-
 import 'offscreen/msgs/scripts';
+
+import '@loftyshaky/shared/ext';
 
 misplaced_dependency('offscreen');
 

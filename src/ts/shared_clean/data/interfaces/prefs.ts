@@ -1,4 +1,4 @@
-import { i_options } from 'shared_clean/internal';
+import type { i_options } from 'shared_clean/internal';
 
 export interface Prefs {
     version: string;

@@ -48,7 +48,7 @@
 
 <h2 id="manual_reload">Ручная перезагрузка</h2>
 
-Чтобы вручную перезагрузить расширение (расширения), нажмите на его иконку на панели инструментов или воспользуйтесь горячей клавишей *Активация расширения*, которую можно задать по адресу *chrome://extensions/shortcuts*. Вы можете настроить поведение перезагрузки, изменив поле *Действие при нажатии на иконку расширения* на странице настроек.
+Чтобы вручную перезагрузить расширение (расширения), нажмите на его иконку на панели инструментов или воспользуйтесь горячей клавишей _Активация расширения_, которую можно задать по адресу _chrome://extensions/shortcuts_. Вы можете настроить поведение перезагрузки, изменив поле _Действие при нажатии на иконку расширения_ на странице настроек.
 
 **Пример настроек:**
 
@@ -61,9 +61,9 @@
 }
 ```
 
-Нажатие правой кнопкой мыши на иконку расширения даёт дополнительные варианты перезагрузки, которые вы можете настроить в поле *Действия контекстного меню иконки расширения* на странице настроек.
+Нажатие правой кнопкой мыши на иконку расширения даёт дополнительные варианты перезагрузки, которые вы можете настроить в поле _Действия контекстного меню иконки расширения_ на странице настроек.
 
-Это поле принимает массив объектов, каждый из которых соответствует структуре, определённой в поле *Действие при нажатии на иконку расширения*. Кроме того, вы можете вызывать эти действия перезагрузки с помощью горячих клавиш *Перезагрузить расширение X*, задаваемых в *chrome://extensions/shortcuts*, где *X* соответствует позиции действия в массиве + 1.
+Это поле принимает массив объектов, каждый из которых соответствует структуре, определённой в поле _Действие при нажатии на иконку расширения_. Кроме того, вы можете вызывать эти действия перезагрузки с помощью горячих клавиш _Перезагрузить расширение X_, задаваемых в _chrome://extensions/shortcuts_, где _X_ соответствует позиции действия в массиве + 1.
 
 <h2 id="automatic_reload">Автоматическая перезагрузка</h2>
 
@@ -76,11 +76,13 @@
 **Как использовать:**
 
 1. Установите пакет глобально:
+
     ```shell
     npm install advanced-extension-reloader-watch-1 --global
     ```
 
-2. Создайте файл *config.json* в любом месте на вашем компьютере. Замените `extension_id` на ID вашего расширения:
+2. Создайте файл _config.json_ в любом месте на вашем компьютере. Замените `extension_id` на ID вашего расширения:
+
     ```json
     {
         "port": 6220,
@@ -89,6 +91,7 @@
         "play_notifications": true
     }
     ```
+
     🚩 Важно: Указанный здесь порт должен быть продублирован на странице настроек **Advanced Extension Reloader**.
 
 3. Откройте командную строку/терминал и выполните следующую команду:
@@ -103,6 +106,7 @@
 **Пример использования в проекте Vite/Webpack:**
 
 1. Установите **Advanced Extension Reloader Watch 2**:
+
     ```shell
     npm install advanced-extension-reloader-watch-2
     ```
@@ -122,6 +126,7 @@
     ```
 
 3. Начните отслеживание файлов в директории `src` вашего проекта:
+
     ```typescript
     const reloader = new Reloader({
         port: 6220,
@@ -129,6 +134,7 @@
 
     reloader.watch();
     ```
+
     Чтобы отслеживать другую директорию, установите свойство `watch_dir`.
 
     🚩 Важно: Указанный здесь порт должен быть продублирован на странице настроек **Advanced Extension Reloader**.
@@ -163,6 +169,7 @@
         },
     },
     ```
+
     **Пример Webpack**:
 
     ```javascript
@@ -173,7 +180,7 @@
 
                 if (an_error_occured) {
                     reloader.play_error_notification({
-                        extension_id: 'dphafhlelejgffkmbmnmomfehnekdnlj' 
+                        extension_id: 'dphafhlelejgffkmbmnmomfehnekdnlj'
                     });
                 } else {
                     reloader.reload({
@@ -185,6 +192,7 @@
         },
     },
     ```
+
     Функция `reloader.reload()` перезагружает ваше расширение, а `reloader.play_error_notification()` воспроизводит звуковое уведомление при ошибке сборки.
 
 Полный пример конфигурации Vite можно посмотреть [здесь](https://github.com/loftyshaky/advanced-extension-reloader-examples/blob/main/vite/vite.config.ts), а пример конфигурации Webpack - [здесь](https://github.com/loftyshaky/advanced-extension-reloader-examples/blob/main/webpack/webpack.config.js).
@@ -195,7 +203,7 @@
 
 <h2 id="manifest_changes_reload">Применение изменений в manifest.json при перезагрузке</h2>
 
-Для того чтобы изменения в файле *manifest.json* применялись при перезагрузке вашего расширения, необходимо использовать функцию `listen()` из дополнительного пакета **Advanced Extension Reloader Watch 2**.<br>
+Для того чтобы изменения в файле _manifest.json_ применялись при перезагрузке вашего расширения, необходимо использовать функцию `listen()` из дополнительного пакета **Advanced Extension Reloader Watch 2**.<br>
 
 **Как её использовать:**
 
@@ -205,6 +213,7 @@
 Если ваш background-скрипт не является ES-модулем, загрузите файл [здесь](https://raw.githubusercontent.com/loftyshaky/advanced-extension-reloader-watch-2/master/dist/umd/listener.js).
 
 - Для проектов с Webpack: Импортируйте `Listener` в background-скрипт и вызовите функцию `listen()` следующим образом:
+
     ```javascript
     import Listener from 'advanced-extension-reloader-watch-2/umd/listener';
 
@@ -213,7 +222,7 @@
 
 <h2 id="pause_automatic_reload">Приостановка автоматической перезагрузки</h2>
 
-Чтобы приостановить автоматическую перезагрузку, нажмите правой кнопкой мыши на иконку расширения и выберите опцию *Приостановить автоматическую перезагрузку*. Также можно использовать горячую клавишу *Приостановить/возобновить автоматическую перезагрузку*, которую можно задать по адресу *chrome://extensions/shortcuts*.
+Чтобы приостановить автоматическую перезагрузку, нажмите правой кнопкой мыши на иконку расширения и выберите опцию _Приостановить автоматическую перезагрузку_. Также можно использовать горячую клавишу _Приостановить/возобновить автоматическую перезагрузку_, которую можно задать по адресу _chrome://extensions/shortcuts_.
 
 <h2 id="sample_extensions">Примеры расширений</h2>
 
@@ -223,7 +232,7 @@
 
 **Advanced Extension Reloader** имеет пять отличных друг от друга звуковых уведомлений. Вы можете прослушать каждое из них, перейдя по ссылкам ниже:
 
-- [Успешная перезагрузка — расширение установлено](https://freesound.org/people/PaulMorek/sounds/330046): Воспроизводится после того, как расширение успешно перезагружено и подтверждено, что оно установлено в браузере. 
+- [Успешная перезагрузка — расширение установлено](https://freesound.org/people/PaulMorek/sounds/330046): Воспроизводится после того, как расширение успешно перезагружено и подтверждено, что оно установлено в браузере.
 - [Успешная перезагрузка — расширение НЕ установлено](https://freesound.org/people/PaulMorek/sounds/330056): Воспроизводится после попытки перезагрузки расширения и выявления того, что оно не установлено в браузере.
 - [Ошибка перезагрузки — расширение установлено](https://freesound.org/people/PaulMorek/sounds/330068): Воспроизводится при вызове `reloader.play_error_notification()` и выявлении того, что расширение установлено в браузере.
 - [Ошибка перезагрузки — расширение НЕ установлено](https://freesound.org/people/PaulMorek/sounds/330067): Воспроизводится при вызове `reloader.play_error_notification()` и выявлении того, что расширение не установлено в браузере.
@@ -231,25 +240,25 @@
 
 <h2 id="api">Справочник API</h2>
 
-| Свойство | Тип | Значение по умолчанию | Применимо к | Описание |
-| :--- | :--- | :--- | :--- | :--- |
-| `hard` | `boolean` | `true` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Определяет, нужно ли перезагружать расширение полностью (`true`) или только текущую вкладку (`false`). Если установлено значение `false`, изменения в background-скрипте не будут применяться.<br><br>Даже если установлено значение `true`, изменения в *файле manifest.json* не будут применяться, если только вы не используете функцию `listen()` из дополнительного npm-пакета **Advanced Extension Reloader Watch 2** в background-скрипте вашего расширения.<br><br>Эта опция может использоваться в сочетании с `all_tabs`. |
-| `all_tabs` | `boolean` | `false` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Указывает, нужно ли перезагружать все открытые вкладки, а не только текущую. |
-| `always_open_popup` | `boolean` | `false` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Определяет, нужно ли открывать popup после `hard` перезагрузки расширения. Это свойство управляет открытием popup только в том случае, если он был закрытым до перезагрузки. Даже при значении `false` **Advanced Extension Reloader** автоматически откроет popup, если он был открытым во время перезагрузки. Эта опция будет работать только в том случае, если вы также укажете `extension_id`. |
-| `extension_id` | `string` | `undefined` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Определяет ID расширения, которое нужно перезагружать. Если оставить этот параметр `undefined`, будут перезагружаться все расширения. |
-| `play_notifications` | `boolean` | `false` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Указывает, следует ли воспроизводить звуковые уведомления при успешной/неуспешной перезагрузке и при успешной сборке. |
-| `min_interval_between_extension_reloads` | `number` | `500` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Определяет минимальный промежуток времени между перезагрузками расширения, гарантируя, что **Advanced Extension Reloader** запустит перезагрузку не более одного раза за этот период. |
-| `delay_after_extension_reload` | `number` | `1000` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Указывает задержку в миллисекундах после перезагрузки расширения, прежде чем открывать все закрытые вкладки.<br><br>Если ваше расширение сталкивается с проблемами, такими как ошибки или пустые страницы после перезагрузки, вы можете увеличить это значение. |
-| `delay_after_tab_reload` | `number` | `2000` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Указывает задержку в миллисекундах после повторного открытия вкладок расширения, прежде чем его снова можно будет перезагрузить. |
-| `listen_message_response_timeout` | `number` | `400` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Определяет время ожидания ответа от вашего расширения при использовании функции `listen()`. В процессе этого **Advanced Extension Reloader** отправляет сообщение в background-скрипт вашего расширения для выполнения перезагрузки с помощью `runtime.reload()`. Если ответ не получен (например, если service worker не отвечает), **Advanced Extension Reloader** принудительно перезагрузит расширение с помощью `management.setEnabled`. |
-| `port` | `number` | `7220` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | **Advanced Extension Reloader Watch 1/2** создает сервер, который прослушивает указанный вами порт и принимает подключения от **Advanced Extension Reloader**.<br><br>**Advanced Extension Reloader** подключается к этому серверу, используя этот порт, и ожидает события перезагрузки.<br><br>Когда событие перезагрузки получено, оно автоматически перезагружает расширение, над которым вы работаете.<br><br>🚩 Важно: Порт должен быть настроен как в конфигурации **Advanced Extension Reloader Watch 1/2**, так и на странице настроек **Advanced Extension Reloader**. |
-| `watch_dir` | `string` | src | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Путь к директории, в которой нужно следить за изменениями файлов. Это должен быть путь к директории с вашим расширением. |
-| `manifest_path` | `boolean` \| `string` | `false` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Путь к *manifest.json* расширения: Может быть boolean значением или как путь к директории. Если установлено значение `true`, **Advanced Extension Reloader Watch 1/2** автоматически будет искать *manifest.json* в директории `watch_dir`.<br><br>Эта опция необходима для того, чтобы **Advanced Extension Reloader Watch 1/2** мог проверить корректность *manifest.json* перед перезагрузкой расширения. Если *manifest.json* окажется недействительным, процесс перезагрузки будет отменен, чтобы предотвратить падение расширения. |
-| `hard_paths` | `string[]` | `[]` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Массив путей или частичных путей (например, имен файлов). Если в каком-либо файле или директории, совпадающем с этими путями, произойдет изменение, расширение будет перезагружено с `hard`: `true`, даже если в конфигурации указано `hard`: `false`. |
-| `soft_paths` | `string[]` | `[]` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Массив путей или частичных путей (например, имен файлов). Если в каком-либо файле или директории, совпадающем с этими путями, произойдет изменение, расширение будет перезагружено с `hard`: `false`, даже если в конфигурации указано `hard`: `true`. |
-| `all_tabs_paths` | `string[]` | `[]` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Массив путей или частичных путей (например, имен файлов). Если в каком-либо файле или директории, совпадающем с этими путями, произойдет изменение, расширение будет перезагружено с `all_tabs`: `true`, даже если в конфигурации указано `all_tabs`: `false`. |
-| `one_tab_paths` | `string[]` | `[]` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Массив путей или частичных путей (например, имен файлов). Если в каком-либо файле или директории, совпадающем с этими путями, произойдет изменение, расширение будет перезагружено с `all_tabs`: `false`, даже если в конфигурации указано `all_tabs`: `true`. |
-| `always_open_popup_paths` | `string[]` | `[]` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Массив путей или частичных путей (например, имен файлов). Если в каком-либо файле или директории, совпадающем с этими путями, произойдет изменение, popup расширения будет открыт, даже если он был закрытым до перезагрузки. |
+| Свойство                                 | Тип                   | Значение по умолчанию | Применимо к                                                                                           | Описание                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| :--------------------------------------- | :-------------------- | :-------------------- | :---------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `hard`                                   | `boolean`             | `true`                | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Определяет, нужно ли перезагружать расширение полностью (`true`) или только текущую вкладку (`false`). Если установлено значение `false`, изменения в background-скрипте не будут применяться.<br><br>Даже если установлено значение `true`, изменения в _файле manifest.json_ не будут применяться, если только вы не используете функцию `listen()` из дополнительного npm-пакета **Advanced Extension Reloader Watch 2** в background-скрипте вашего расширения.<br><br>Эта опция может использоваться в сочетании с `all_tabs`.                                             |
+| `all_tabs`                               | `boolean`             | `false`               | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Указывает, нужно ли перезагружать все открытые вкладки, а не только текущую.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `always_open_popup`                      | `boolean`             | `false`               | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Определяет, нужно ли открывать popup после `hard` перезагрузки расширения. Это свойство управляет открытием popup только в том случае, если он был закрытым до перезагрузки. Даже при значении `false` **Advanced Extension Reloader** автоматически откроет popup, если он был открытым во время перезагрузки. Эта опция будет работать только в том случае, если вы также укажете `extension_id`.                                                                                                                                                                             |
+| `extension_id`                           | `string`              | `undefined`           | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Определяет ID расширения, которое нужно перезагружать. Если оставить этот параметр `undefined`, будут перезагружаться все расширения.                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `play_notifications`                     | `boolean`             | `false`               | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Указывает, следует ли воспроизводить звуковые уведомления при успешной/неуспешной перезагрузке и при успешной сборке.                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `min_interval_between_extension_reloads` | `number`              | `500`                 | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Определяет минимальный промежуток времени между перезагрузками расширения, гарантируя, что **Advanced Extension Reloader** запустит перезагрузку не более одного раза за этот период.                                                                                                                                                                                                                                                                                                                                                                                           |
+| `delay_after_extension_reload`           | `number`              | `1000`                | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Указывает задержку в миллисекундах после перезагрузки расширения, прежде чем открывать все закрытые вкладки.<br><br>Если ваше расширение сталкивается с проблемами, такими как ошибки или пустые страницы после перезагрузки, вы можете увеличить это значение.                                                                                                                                                                                                                                                                                                                 |
+| `delay_after_tab_reload`                 | `number`              | `2000`                | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Указывает задержку в миллисекундах после повторного открытия вкладок расширения, прежде чем его снова можно будет перезагрузить.                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `listen_message_response_timeout`        | `number`              | `400`                 | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Определяет время ожидания ответа от вашего расширения при использовании функции `listen()`. В процессе этого **Advanced Extension Reloader** отправляет сообщение в background-скрипт вашего расширения для выполнения перезагрузки с помощью `runtime.reload()`. Если ответ не получен (например, если service worker не отвечает), **Advanced Extension Reloader** принудительно перезагрузит расширение с помощью `management.setEnabled`.                                                                                                                                   |
+| `port`                                   | `number`              | `7220`                | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | **Advanced Extension Reloader Watch 1/2** создает сервер, который прослушивает указанный вами порт и принимает подключения от **Advanced Extension Reloader**.<br><br>**Advanced Extension Reloader** подключается к этому серверу, используя этот порт, и ожидает события перезагрузки.<br><br>Когда событие перезагрузки получено, оно автоматически перезагружает расширение, над которым вы работаете.<br><br>🚩 Важно: Порт должен быть настроен как в конфигурации **Advanced Extension Reloader Watch 1/2**, так и на странице настроек **Advanced Extension Reloader**. |
+| `watch_dir`                              | `string`              | src                   | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Путь к директории, в которой нужно следить за изменениями файлов. Это должен быть путь к директории с вашим расширением.                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `manifest_path`                          | `boolean` \| `string` | `false`               | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Путь к _manifest.json_ расширения: Может быть boolean значением или как путь к директории. Если установлено значение `true`, **Advanced Extension Reloader Watch 1/2** автоматически будет искать _manifest.json_ в директории `watch_dir`.<br><br>Эта опция необходима для того, чтобы **Advanced Extension Reloader Watch 1/2** мог проверить корректность _manifest.json_ перед перезагрузкой расширения. Если _manifest.json_ окажется недействительным, процесс перезагрузки будет отменен, чтобы предотвратить падение расширения.                                        |
+| `hard_paths`                             | `string[]`            | `[]`                  | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Массив путей или частичных путей (например, имен файлов). Если в каком-либо файле или директории, совпадающем с этими путями, произойдет изменение, расширение будет перезагружено с `hard`: `true`, даже если в конфигурации указано `hard`: `false`.                                                                                                                                                                                                                                                                                                                          |
+| `soft_paths`                             | `string[]`            | `[]`                  | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Массив путей или частичных путей (например, имен файлов). Если в каком-либо файле или директории, совпадающем с этими путями, произойдет изменение, расширение будет перезагружено с `hard`: `false`, даже если в конфигурации указано `hard`: `true`.                                                                                                                                                                                                                                                                                                                          |
+| `all_tabs_paths`                         | `string[]`            | `[]`                  | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Массив путей или частичных путей (например, имен файлов). Если в каком-либо файле или директории, совпадающем с этими путями, произойдет изменение, расширение будет перезагружено с `all_tabs`: `true`, даже если в конфигурации указано `all_tabs`: `false`.                                                                                                                                                                                                                                                                                                                  |
+| `one_tab_paths`                          | `string[]`            | `[]`                  | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Массив путей или частичных путей (например, имен файлов). Если в каком-либо файле или директории, совпадающем с этими путями, произойдет изменение, расширение будет перезагружено с `all_tabs`: `false`, даже если в конфигурации указано `all_tabs`: `true`.                                                                                                                                                                                                                                                                                                                  |
+| `always_open_popup_paths`                | `string[]`            | `[]`                  | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Массив путей или частичных путей (например, имен файлов). Если в каком-либо файле или директории, совпадающем с этими путями, произойдет изменение, popup расширения будет открыт, даже если он был закрытым до перезагрузки.                                                                                                                                                                                                                                                                                                                                                   |
 
 <h2 id="build_steps">Этапы сборки</h2>
 

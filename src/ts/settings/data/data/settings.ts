@@ -9,22 +9,21 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
-    public set_from_storage = ({ transform = false }: { transform: boolean }): Promise<void> =>
+    public set_from_storage = ({ transform }: { transform: boolean }): Promise<void> =>
         err_async(async () => {
             if (transform) {
                 await d_settings.Transform.set_transformed_from_storage();
             } else {
-                d_data.Settings.set_from_storage();
+                void d_data.Settings.set_from_storage();
             }
 
-            s_theme.Theme.set({
+            void s_theme.Theme.set({
                 name: data.settings.prefs.options_page_theme,
             });
             s_css_vars.CssVars.set();
-        }, 'cot_1035');
+        }, 'aer_1159');
 }
 
 export const Settings = Class.get_instance();

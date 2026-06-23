@@ -1,7 +1,8 @@
-import { t, s_data, s_theme } from '@loftyshaky/shared/shared';
-import { s_css_vars } from 'shared_clean/internal';
-import { d_settings } from 'shared/internal';
+import type { t } from '@loftyshaky/shared/shared';
+import { s_data, s_theme } from '@loftyshaky/shared/shared';
 import { d_data } from 'settings/internal';
+import { d_settings } from 'shared/internal';
+import { s_css_vars } from 'shared_clean/internal';
 
 class Class {
     private static instance: Class;
@@ -10,12 +11,10 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
     public restore_confirm = (): Promise<void> =>
         err_async(async () => {
-            // eslint-disable-next-line no-alert
             const confirmed_restore: boolean = globalThis.confirm(
                 ext.msg('restore_defaults_confirm'),
             );
@@ -23,7 +22,7 @@ class Class {
             if (confirmed_restore) {
                 const default_settings = await ext.send_msg_resp({ msg: 'get_defaults' });
                 const default_settings_final = s_data.Settings.apply_unchanged_prefs({
-                    settings: default_settings,
+                    settings: default_settings as t.AnyRecord,
                 });
 
                 await d_data.Manipulation.send_msg_to_update_settings({
@@ -33,9 +32,9 @@ class Class {
                     load_settings: true,
                 });
 
-                d_settings.Transform.set_transformed({ settings: data.settings });
+                void d_settings.Transform.set_transformed({ settings: data.settings });
 
-                s_theme.Theme.set({
+                void s_theme.Theme.set({
                     name: data.settings.prefs.options_page_theme,
                 });
                 s_css_vars.CssVars.set();
@@ -57,8 +56,8 @@ class Class {
 
     public restore_back_up_react = (): Promise<void> =>
         err_async(async () => {
-            d_settings.Transform.set_transformed({ settings: data.settings });
-            s_theme.Theme.set({
+            void d_settings.Transform.set_transformed({ settings: data.settings });
+            void s_theme.Theme.set({
                 name: data.settings.prefs.options_page_theme,
             });
             s_css_vars.CssVars.set();

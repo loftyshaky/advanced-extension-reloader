@@ -1,7 +1,7 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import '@loftyshaky/shared/ext';
+import { d_inputs } from '@loftyshaky/shared/inputs';
 import {
     c_crash_handler,
     c_error,
@@ -10,11 +10,7 @@ import {
     s_tab_index,
     s_theme,
 } from '@loftyshaky/shared/shared';
-import { d_inputs } from '@loftyshaky/shared/inputs';
 import { s_css_vars, s_suffix } from 'shared_clean/internal';
-
-// eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, @typescript-eslint/no-unused-vars
-declare let __webpack_public_path__: string;
 
 class Class {
     private static instance: Class;
@@ -23,15 +19,15 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
+    private announcement_root: HTMLDivElement | undefined = undefined;
     private settings_root: HTMLDivElement | undefined = undefined;
     private dependencies_root: HTMLDivElement | undefined = undefined;
 
     public init = (): Promise<void> =>
         new Promise((reslove) => {
-            err_async(async () => {
+            void err_async(async () => {
                 const on_loading_screen_render = (): void =>
                     err(() => {
                         const loading_screen_root_el = s<HTMLDivElement>(
@@ -48,12 +44,12 @@ class Class {
                                 x.bind(loading_screen_css, 'load', (): void =>
                                     err(() => {
                                         if (page === 'dependencies') {
-                                            s_theme.Theme.set({
+                                            void s_theme.Theme.set({
                                                 name: data.settings.prefs.options_page_theme,
                                             });
                                         }
 
-                                        d_loading_screen.Visibility.show();
+                                        void d_loading_screen.Visibility.show();
 
                                         reslove();
                                     }, 'aer_1072'),
@@ -61,9 +57,6 @@ class Class {
                             }
                         }
                     }, 'aer_1073');
-
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                __webpack_public_path__ = we.runtime.getURL('');
 
                 this.set_page_title();
 
@@ -74,7 +67,12 @@ class Class {
                     prefix: 'loading_screen',
                 }) as ShadowRoot;
 
-                if (page === 'settings') {
+                if (page === 'announcement') {
+                    this.announcement_root = this.create_root({
+                        prefix: 'announcement',
+                        shadow_root: false,
+                    }) as HTMLDivElement;
+                } else if (page === 'settings') {
                     this.settings_root = this.create_root({
                         prefix: 'settings',
                         shadow_root: false,
@@ -139,6 +137,41 @@ class Class {
             }
         }, 'aer_1076');
 
+    public render_announcement = (): Promise<void> =>
+        err_async(async () => {
+            const { Body } = await import('announcement/components/body');
+
+            const on_css_load = (): Promise<void> =>
+                err_async(async () => {
+                    await d_loading_screen.Visibility.hide({ app_id: s_suffix.app_id });
+                }, 'aer_1157');
+
+            if (n(this.announcement_root)) {
+                ReactDOM.createRoot(this.announcement_root).render(
+                    <c_crash_handler.Body>
+                        <Body
+                            on_render={(): void =>
+                                err(() => {
+                                    const announcement_css = x.css(
+                                        'announcement_css',
+                                        document.head,
+                                    );
+
+                                    void s_theme.Theme.set({
+                                        name: data.settings.prefs.options_page_theme,
+                                    });
+
+                                    if (n(announcement_css)) {
+                                        x.bind(announcement_css, 'load', on_css_load);
+                                    }
+                                }, 'aer_1155')
+                            }
+                        />
+                    </c_crash_handler.Body>,
+                );
+            }
+        }, 'aer_1154');
+
     public render_settings = (): Promise<void> =>
         err_async(async () => {
             const { Body } = await import('settings/components/body');
@@ -147,7 +180,7 @@ class Class {
                 err_async(async () => {
                     await d_inputs.InputWidth.calculate();
 
-                    d_loading_screen.Visibility.hide({ app_id: s_suffix.app_id });
+                    void d_loading_screen.Visibility.hide({ app_id: s_suffix.app_id });
 
                     s_tab_index.TabIndex.bind_set_input_type_f();
                 }, 'aer_1066');
@@ -160,7 +193,7 @@ class Class {
                                 err(() => {
                                     const settings_css = x.css('settings_css', document.head);
 
-                                    s_theme.Theme.set({
+                                    void s_theme.Theme.set({
                                         name: data.settings.prefs.options_page_theme,
                                     });
 
@@ -181,7 +214,7 @@ class Class {
 
             const on_css_load = (): Promise<void> =>
                 err_async(async () => {
-                    d_loading_screen.Visibility.hide({ app_id: s_suffix.app_id });
+                    void d_loading_screen.Visibility.hide({ app_id: s_suffix.app_id });
                 }, 'aer_1107');
 
             if (n(this.dependencies_root)) {
@@ -195,7 +228,7 @@ class Class {
                                         document.head,
                                     );
 
-                                    s_theme.Theme.set({
+                                    void s_theme.Theme.set({
                                         name: data.settings.prefs.options_page_theme,
                                         additional_theme_callback: s_theme.Theme.set,
                                     });

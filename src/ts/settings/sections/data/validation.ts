@@ -1,7 +1,9 @@
 import isArray from 'lodash/isArray';
 
-import { d_inputs, i_inputs } from '@loftyshaky/shared/inputs';
-import { i_options } from 'shared_clean/internal';
+import type { i_inputs } from '@loftyshaky/shared/inputs';
+import { d_inputs } from '@loftyshaky/shared/inputs';
+import type { i_error } from '@loftyshaky/shared/shared_clean';
+import type { i_options } from 'shared_clean/internal';
 
 class Class {
     private static instance: Class;
@@ -10,7 +12,6 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
     public validate_input = ({ input }: { input: i_inputs.Input }): boolean =>
@@ -116,9 +117,11 @@ class Class {
                 if (input.name === 'transition_duration') {
                     return d_inputs.Val.validate_input({ input });
                 }
-            } catch (error_obj: any) {
+            } catch (error_obj: unknown) {
                 // needed to display input warn state when provided incorrect JSON in click_action and context_menu_actions inputs
-                show_err_ribbon(error_obj, 'aer_1060', { silent: true });
+                if (n(error_obj)) {
+                    show_err_ribbon(error_obj as i_error.ErrorObj, 'aer_1060', { silent: true });
+                }
             }
 
             return this.check_if_json_input({ name: input.name });

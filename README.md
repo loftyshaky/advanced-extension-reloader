@@ -48,9 +48,10 @@ Below is a detailed guide on how to use **Advanced Extension Reloader** and its 
 
 <h2 id="manual_reload">Manual reload</h2>
 
-To manually reload your extension(s), either click the extension's icon in the toolbar or use the *Activate the extension* hotkey, which you can specify at *chrome://extensions/shortcuts*. You can customize the reload behavior by adjusting the *Extension icon click action* field on the settings page.
+To manually reload your extension(s), either click the extension's icon in the toolbar or use the _Activate the extension_ hotkey, which you can specify at _chrome://extensions/shortcuts_. You can customize the reload behavior by adjusting the _Extension icon click action_ field on the settings page.
 
 **Example settings:**
+
 ```javascript
 {
     "all_tabs": false,
@@ -60,9 +61,9 @@ To manually reload your extension(s), either click the extension's icon in the t
 }
 ```
 
-Right-clicking on the extension's icon provides additional reload options, which you can configure in the *Extension icon context menu actions* field on the settings page.
+Right-clicking on the extension's icon provides additional reload options, which you can configure in the _Extension icon context menu actions_ field on the settings page.
 
-This field accepts an array of objects, each following the same schema as in the *Extension icon click action*. Additionally, you can trigger these reload actions by using the *Reload extension X* hotkeys defined at *chrome://extensions/shortcuts*, where *X* corresponds to the position of the action in the array + 1.
+This field accepts an array of objects, each following the same schema as in the _Extension icon click action_. Additionally, you can trigger these reload actions by using the _Reload extension X_ hotkeys defined at _chrome://extensions/shortcuts_, where _X_ corresponds to the position of the action in the array + 1.
 
 <h2 id="automatic_reload">Automatic reload</h2>
 
@@ -75,11 +76,13 @@ For extensions developed without a bundler, use **Advanced Extension Reloader Wa
 **To use it:**
 
 1. Install the package globally:
+
     ```shell
     npm install advanced-extension-reloader-watch-1 --global
     ```
 
-2. Create a *config.json* file anywhere on your machine. Replace `extension_id` with your extension's ID:
+2. Create a _config.json_ file anywhere on your machine. Replace `extension_id` with your extension's ID:
+
     ```json
     {
         "port": 6220,
@@ -88,6 +91,7 @@ For extensions developed without a bundler, use **Advanced Extension Reloader Wa
         "play_notifications": true
     }
     ```
+
     🚩 Important: The port specified here must be duplicated in the **Advanced Extension Reloader** settings page.
 
 3. Open a command prompt/terminal and run:
@@ -102,6 +106,7 @@ For extensions developed with a bundler, use **Advanced Extension Reloader Watch
 **Example usage in a Vite/Webpack project:**
 
 1. Install **Advanced Extension Reloader Watch 2**:
+
     ```shell
     npm install advanced-extension-reloader-watch-2
     ```
@@ -121,6 +126,7 @@ For extensions developed with a bundler, use **Advanced Extension Reloader Watch
     ```
 
 3. Start watching files in your project's `src` directory:
+
     ```typescript
     const reloader = new Reloader({
         port: 6220,
@@ -128,6 +134,7 @@ For extensions developed with a bundler, use **Advanced Extension Reloader Watch
 
     reloader.watch();
     ```
+
     To watch a different directory, set the `watch_dir` property.
 
     🚩 Important: The port specified here must be duplicated in the **Advanced Extension Reloader** settings page.
@@ -162,6 +169,7 @@ For extensions developed with a bundler, use **Advanced Extension Reloader Watch
         },
     },
     ```
+
     **Webpack example**:
 
     ```javascript
@@ -172,7 +180,7 @@ For extensions developed with a bundler, use **Advanced Extension Reloader Watch
 
                 if (an_error_occured) {
                     reloader.play_error_notification({
-                        extension_id: 'dphafhlelejgffkmbmnmomfehnekdnlj' 
+                        extension_id: 'dphafhlelejgffkmbmnmomfehnekdnlj'
                     });
                 } else {
                     reloader.reload({
@@ -184,6 +192,7 @@ For extensions developed with a bundler, use **Advanced Extension Reloader Watch
         },
     },
     ```
+
     The `reloader.reload()` function reloads your extension, and `reloader.play_error_notification()` plays an audio notification on bundling failure.
 
 You can view a full Vite config example [here](https://github.com/loftyshaky/advanced-extension-reloader-examples/blob/main/vite/vite.config.ts), and a Webpack config example [here](https://github.com/loftyshaky/advanced-extension-reloader-examples/blob/main/webpack/webpack.config.js).
@@ -194,7 +203,7 @@ If you perform a hard reload while the popup is open, **Advanced Extension Reloa
 
 <h2 id="manifest_changes_reload">Apply changes in manifest.json on reload</h2>
 
-To ensure that changes to the *manifest.json* file are applied upon reloading your extension, you'll need to use the `listen()` function from the **Advanced Extension Reloader Watch 2** supplementary package.<br>
+To ensure that changes to the _manifest.json_ file are applied upon reloading your extension, you'll need to use the `listen()` function from the **Advanced Extension Reloader Watch 2** supplementary package.<br>
 
 **Here's how to set it up:**
 
@@ -204,6 +213,7 @@ To ensure that changes to the *manifest.json* file are applied upon reloading yo
     If your background script is not an ES module, download the file [here](https://raw.githubusercontent.com/loftyshaky/advanced-extension-reloader-watch-2/master/dist/umd/listener.js).
 
 - For Webpack setups: Import `Listener` in the background script and call the `listen()` function like so:
+
     ```javascript
     import Listener from 'advanced-extension-reloader-watch-2/umd/listener';
 
@@ -212,7 +222,7 @@ To ensure that changes to the *manifest.json* file are applied upon reloading yo
 
 <h2 id="pause_automatic_reload">Pause automatic reload</h2>
 
-To pause automatic reloading, right-click the extension's icon and select the *Pause Automatic Reload* option. Alternatively, you can use the *Pause/Resume Automatic Reload* hotkey, which can be configured at *chrome://extensions/shortcuts*.
+To pause automatic reloading, right-click the extension's icon and select the _Pause Automatic Reload_ option. Alternatively, you can use the _Pause/Resume Automatic Reload_ hotkey, which can be configured at _chrome://extensions/shortcuts_.
 
 <h2 id="sample_extensions">Sample extensions</h2>
 
@@ -222,33 +232,33 @@ Sample extensions can be found [here](https://github.com/loftyshaky/advanced-ext
 
 **Advanced Extension Reloader** offers five distinct audio notifications. You can listen to each of them by clicking the links below:
 
-- [Reload success - extension installed](https://freesound.org/people/PaulMorek/sounds/330046): Plays after the extension has been reloaded and is confirmed to be installed in the browser. 
+- [Reload success - extension installed](https://freesound.org/people/PaulMorek/sounds/330046): Plays after the extension has been reloaded and is confirmed to be installed in the browser.
 - [Reload success - extension NOT installed](https://freesound.org/people/PaulMorek/sounds/330056) Plays after attempting to reload the extension and finding that it is not installed in the browser.
 - [Reload error - extension installed](https://freesound.org/people/PaulMorek/sounds/330068): Plays when `reloader.play_error_notification()` is called, and the extension is found to be installed in the browser.
 - [Reload error - extension NOT installed](https://freesound.org/people/PaulMorek/sounds/330067): Plays when `reloader.play_error_notification()` is called, and the extension is found to not be installed in the browser.
-- [Manifest error](https://freesound.org/people/PaulMorek/sounds/330065): Plays when the *manifest.json* file is found to be invalid.
+- [Manifest error](https://freesound.org/people/PaulMorek/sounds/330065): Plays when the _manifest.json_ file is found to be invalid.
 
 <h2 id="api">API reference</h2>
 
-| Property | Type | Default value | Applies to | Description |
-| :--- | :--- | :--- | :--- | :--- |
-| `hard` | `boolean` | `true` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Determines whether to reload the entire extension (`true`) or just the current tab (`false`). If set to `false`, changes to the background script will not be applied.<br><br>Even if set to `true`, changes to the *manifest.json* file will not be applied unless you use the `listen()` function from the **Advanced Extension Reloader Watch 2** supplementary npm package in your extension's background script.<br><br>This option can be used in conjunction with `all_tabs`. |
-| `all_tabs` | `boolean` | `false` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Specifies whether to reload all open tabs instead of just the current one. |
-| `always_open_popup` | `boolean` | `false` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Determines whether the popup should open after a `hard` reload of your extension. This property controls the opening of the popup only if it was closed before the reload. Even when set to `false`, **Advanced Extension Reloader** will automatically open the popup if it was open during the reload. This option will only work if you also provide `extension_id`. |
-| `extension_id` | `string` | `undefined` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Defines the ID of the extension to reload. If left `undefined`, all extensions will be reloaded. |
-| `play_notifications` | `boolean` | `false` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Indicates whether to play audio notifications for reload success/failure and bundling success. |
-| `min_interval_between_extension_reloads` | `number` | `500` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Defines the minimum interval between extension reloads, ensuring that the **Advanced Extension Reloader** triggers the reload at most once during this period. |
-| `delay_after_extension_reload` | `number` | `1000` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Specifies the time, in milliseconds, to wait after an extension is reloaded before reopening any closed tabs.<br><br>If your extension experiences issues, such as errors or blank pages after a reload, you may want to increase this value. |
-| `delay_after_tab_reload` | `number` | `2000` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Specifies time, in milliseconds, to wait after an extension's tabs are reopened before the extension can be reloaded again. |
-| `listen_message_response_timeout` | `number` | `400` | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Specifies the duration to wait for a response from your extension when using the `listen()` function. During this process, the **Advanced Extension Reloader** sends a message to your extension's background script to trigger a reload using `runtime.reload()`. If no response is received (e.g., if the service worker is unresponsive), the **Advanced Extension Reloader** will force a reload using `management.setEnabled`. |
-| `port` | `number` | `7220` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | The **Advanced Extension Reloader Watch 1/2** sets up a server that listens on a specified port and accepts connections from the **Advanced Extension Reloader**.<br><br>The **Advanced Extension Reloader** connects to this server using this port and listens for reload events. When a reload event is received, it automatically reloads the extensions you're developing.<br><br>🚩 Important: The port must be configured in both the **Advanced Extension Reloader Watch 1/2** config and the **Advanced Extension Reloader** settings page. |
-| `watch_dir` | `string` | src | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | A path to the directory to watch for file changes. Should be your extension's directory path. |
-| `manifest_path` | `boolean` \| `string` | `false` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Path to the extension's *manifest.json* file: This can be specified as a boolean value or a path. If set to `true`, **Advanced Extension Reloader Watch 1/2** will automatically search for the *manifest.json* file in the `watch_dir` directory.<br><br>This option is necessary for **Advanced Extension Reloader Watch 1/2** to validate the *manifest.json* before reloading the extension. If the *manifest.json* file is found to be invalid, the reload process will be canceled to prevent the extension from crashing. |
-| `hard_paths` | `string[]` | `[]` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, the extension will be reloaded with `hard`: `true`, even if `hard`: `false` is specified in the configuration. |
-| `soft_paths` | `string[]` | `[]` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, the extension will be reloaded with `hard`: `false`, even if `hard`: `true` is specified in the configuration. |
-| `all_tabs_paths` | `string[]` | `[]` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, the extension will be reloaded with `all_tabs`: `true`, even if `all_tabs`: `false` is specified in the configuration. |
-| `one_tab_paths` | `string[]` | `[]` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, the extension will be reloaded with `all_tabs`: `false`, even if `all_tabs`: `true` is specified in the configuration. |
-| `always_open_popup_paths` | `string[]` | `[]` | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, your extension's popup will be opened, even if it was closed before the reload. |
+| Property                                 | Type                  | Default value | Applies to                                                                                            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| :--------------------------------------- | :-------------------- | :------------ | :---------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `hard`                                   | `boolean`             | `true`        | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Determines whether to reload the entire extension (`true`) or just the current tab (`false`). If set to `false`, changes to the background script will not be applied.<br><br>Even if set to `true`, changes to the _manifest.json_ file will not be applied unless you use the `listen()` function from the **Advanced Extension Reloader Watch 2** supplementary npm package in your extension's background script.<br><br>This option can be used in conjunction with `all_tabs`.                                                                 |
+| `all_tabs`                               | `boolean`             | `false`       | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Specifies whether to reload all open tabs instead of just the current one.                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `always_open_popup`                      | `boolean`             | `false`       | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Determines whether the popup should open after a `hard` reload of your extension. This property controls the opening of the popup only if it was closed before the reload. Even when set to `false`, **Advanced Extension Reloader** will automatically open the popup if it was open during the reload. This option will only work if you also provide `extension_id`.                                                                                                                                                                              |
+| `extension_id`                           | `string`              | `undefined`   | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Defines the ID of the extension to reload. If left `undefined`, all extensions will be reloaded.                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `play_notifications`                     | `boolean`             | `false`       | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Indicates whether to play audio notifications for reload success/failure and bundling success.                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `min_interval_between_extension_reloads` | `number`              | `500`         | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Defines the minimum interval between extension reloads, ensuring that the **Advanced Extension Reloader** triggers the reload at most once during this period.                                                                                                                                                                                                                                                                                                                                                                                       |
+| `delay_after_extension_reload`           | `number`              | `1000`        | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Specifies the time, in milliseconds, to wait after an extension is reloaded before reopening any closed tabs.<br><br>If your extension experiences issues, such as errors or blank pages after a reload, you may want to increase this value.                                                                                                                                                                                                                                                                                                        |
+| `delay_after_tab_reload`                 | `number`              | `2000`        | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Specifies time, in milliseconds, to wait after an extension's tabs are reopened before the extension can be reloaded again.                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `listen_message_response_timeout`        | `number`              | `400`         | Advanced Extension Reloader, Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2 | Specifies the duration to wait for a response from your extension when using the `listen()` function. During this process, the **Advanced Extension Reloader** sends a message to your extension's background script to trigger a reload using `runtime.reload()`. If no response is received (e.g., if the service worker is unresponsive), the **Advanced Extension Reloader** will force a reload using `management.setEnabled`.                                                                                                                  |
+| `port`                                   | `number`              | `7220`        | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | The **Advanced Extension Reloader Watch 1/2** sets up a server that listens on a specified port and accepts connections from the **Advanced Extension Reloader**.<br><br>The **Advanced Extension Reloader** connects to this server using this port and listens for reload events. When a reload event is received, it automatically reloads the extensions you're developing.<br><br>🚩 Important: The port must be configured in both the **Advanced Extension Reloader Watch 1/2** config and the **Advanced Extension Reloader** settings page. |
+| `watch_dir`                              | `string`              | src           | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | A path to the directory to watch for file changes. Should be your extension's directory path.                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `manifest_path`                          | `boolean` \| `string` | `false`       | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Path to the extension's _manifest.json_ file: This can be specified as a boolean value or a path. If set to `true`, **Advanced Extension Reloader Watch 1/2** will automatically search for the _manifest.json_ file in the `watch_dir` directory.<br><br>This option is necessary for **Advanced Extension Reloader Watch 1/2** to validate the _manifest.json_ before reloading the extension. If the _manifest.json_ file is found to be invalid, the reload process will be canceled to prevent the extension from crashing.                     |
+| `hard_paths`                             | `string[]`            | `[]`          | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, the extension will be reloaded with `hard`: `true`, even if `hard`: `false` is specified in the configuration.                                                                                                                                                                                                                                                                                                            |
+| `soft_paths`                             | `string[]`            | `[]`          | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, the extension will be reloaded with `hard`: `false`, even if `hard`: `true` is specified in the configuration.                                                                                                                                                                                                                                                                                                            |
+| `all_tabs_paths`                         | `string[]`            | `[]`          | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, the extension will be reloaded with `all_tabs`: `true`, even if `all_tabs`: `false` is specified in the configuration.                                                                                                                                                                                                                                                                                                    |
+| `one_tab_paths`                          | `string[]`            | `[]`          | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, the extension will be reloaded with `all_tabs`: `false`, even if `all_tabs`: `true` is specified in the configuration.                                                                                                                                                                                                                                                                                                    |
+| `always_open_popup_paths`                | `string[]`            | `[]`          | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, your extension's popup will be opened, even if it was closed before the reload.                                                                                                                                                                                                                                                                                                                                           |
 
 <h2 id="build_steps">Build steps</h2>
 

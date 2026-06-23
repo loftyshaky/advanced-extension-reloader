@@ -1,8 +1,9 @@
-import { makeObservable, computed } from 'mobx';
+import { computed, makeObservable } from 'mobx';
 
-import { s_utils } from '@loftyshaky/shared/shared';
-import { o_inputs, i_inputs } from '@loftyshaky/shared/inputs';
+import type { i_inputs } from '@loftyshaky/shared/inputs';
+import { o_inputs } from '@loftyshaky/shared/inputs';
 import { d_sections as d_sections_loftyshaky_settings } from '@loftyshaky/shared/settings';
+import { s_utils } from '@loftyshaky/shared/shared';
 import { d_data, d_sections } from 'settings/internal';
 
 class Class {
@@ -29,55 +30,51 @@ class Class {
     public init = (): void =>
         err(() => {
             this.sections = [
-                ...[
-                    new o_inputs.Section({
-                        name: 'reload',
-                        inputs: [
-                            new o_inputs.Textarea({
-                                name: 'ports',
-                                val_accessor: 'ui.ports',
-                                include_help: true,
-                                input_errors: ['invalid_ports'],
-                                event_callback: d_sections.Val.change,
-                                warn_state_checker: d_sections.Validation.validate_input,
-                            }),
-                            new o_inputs.Textarea({
-                                name: 'click_action',
-                                val_accessor: 'ui.click_action',
-                                include_help: true,
-                                alt_help_msg: ext.msg(`click_action_help_text_${env.browser}`),
-                                input_errors: ['invalid_reload_action'],
-                                event_callback: d_sections.Val.change,
-                                warn_state_checker: d_sections.Validation.validate_input,
-                            }),
-                            new o_inputs.Textarea({
-                                name: 'context_menu_actions',
-                                val_accessor: 'ui.context_menu_actions',
-                                include_help: true,
-                                alt_help_msg: ext.msg(
-                                    `context_menu_actions_help_text_${env.browser}`,
-                                ),
-                                input_errors: ['invalid_reload_action'],
-                                event_callback: d_sections.Val.change,
-                                warn_state_checker: d_sections.Validation.validate_input,
-                            }),
-                            new o_inputs.Range({
-                                name: 'reload_notification_volume',
-                                max: 1,
-                                step: 0.01,
-                                event_callback: d_sections.Val.change,
-                            }),
-                        ],
-                    }),
-                    new o_inputs.Section({
-                        name: 'docs',
-                        inputs: [
-                            new o_inputs.Link({
-                                name: 'docs',
-                            }),
-                        ],
-                    }),
-                ],
+                new o_inputs.Section({
+                    name: 'reload',
+                    inputs: [
+                        new o_inputs.Textarea({
+                            name: 'ports',
+                            val_accessor: 'ui.ports',
+                            include_help: true,
+                            input_errors: ['invalid_ports'],
+                            event_callback: d_sections.Val.change,
+                            warn_state_checker: d_sections.Validation.validate_input,
+                        }),
+                        new o_inputs.Textarea({
+                            name: 'click_action',
+                            val_accessor: 'ui.click_action',
+                            include_help: true,
+                            alt_help_msg: ext.msg(`click_action_help_text_${env.browser}`),
+                            input_errors: ['invalid_reload_action'],
+                            event_callback: d_sections.Val.change,
+                            warn_state_checker: d_sections.Validation.validate_input,
+                        }),
+                        new o_inputs.Textarea({
+                            name: 'context_menu_actions',
+                            val_accessor: 'ui.context_menu_actions',
+                            include_help: true,
+                            alt_help_msg: ext.msg(`context_menu_actions_help_text_${env.browser}`),
+                            input_errors: ['invalid_reload_action'],
+                            event_callback: d_sections.Val.change,
+                            warn_state_checker: d_sections.Validation.validate_input,
+                        }),
+                        new o_inputs.Range({
+                            name: 'reload_notification_volume',
+                            max: 1,
+                            step: 0.01,
+                            event_callback: d_sections.Val.change,
+                        }),
+                    ],
+                }),
+                new o_inputs.Section({
+                    name: 'docs',
+                    inputs: [
+                        new o_inputs.Link({
+                            name: 'docs',
+                        }),
+                    ],
+                }),
                 ...d_sections_loftyshaky_settings.Sections.make_shared_sections({
                     download_back_up_callback: ext.storage_get,
                     upload_back_up_callback: d_sections.Restore.restore_back_up,
@@ -90,56 +87,54 @@ class Class {
                         }),
                     ],
                 }),
-                ...[
-                    new o_inputs.Section({
-                        name: 'links',
-                        inputs: [
-                            new o_inputs.Link({
-                                name: 'docs',
-                            }),
-                            new o_inputs.Link({
-                                name: 'privacy_policy',
-                                href: ext.msg('privacy_policy_link_href'),
-                            }),
-                            new o_inputs.Link({
-                                name: 'rate',
-                                browser: env.browser,
-                                force_resolve: true,
-                            }),
-                            ...(env.browser === 'edge'
-                                ? []
-                                : [
-                                      new o_inputs.Link({
-                                          name: 'advanced_extension_reloaderi1i',
-                                          browser: 'chrome',
-                                      }),
-                                      new o_inputs.Link({
-                                          name: 'advanced_extension_reloaderi2i',
-                                          browser: 'edge',
-                                      }),
-                                  ]),
-                            new o_inputs.Link({
-                                name: 'github',
-                            }),
-                            new o_inputs.Link({
-                                name: 'facebook_page',
-                                href: ext.msg('facebook_page_link_href'),
-                            }),
-                            new o_inputs.Link({
-                                name: 'support_page',
-                                href: ext.msg('support_page_link_href'),
-                            }),
-                            ...(env.browser === 'edge'
-                                ? []
-                                : [
-                                      new o_inputs.Link({
-                                          name: 'dependencies',
-                                          href: ext.msg('dependencies_link_href'),
-                                      }),
-                                  ]),
-                        ],
-                    }),
-                ],
+                new o_inputs.Section({
+                    name: 'links',
+                    inputs: [
+                        new o_inputs.Link({
+                            name: 'docs',
+                        }),
+                        new o_inputs.Link({
+                            name: 'privacy_policy',
+                            href: ext.msg('privacy_policy_link_href'),
+                        }),
+                        new o_inputs.Link({
+                            name: 'rate',
+                            browser: env.browser,
+                            force_resolve: true,
+                        }),
+                        ...(env.browser === 'edge'
+                            ? []
+                            : [
+                                  new o_inputs.Link({
+                                      name: 'advanced_extension_reloaderi1i',
+                                      browser: 'chrome',
+                                  }),
+                                  new o_inputs.Link({
+                                      name: 'advanced_extension_reloaderi2i',
+                                      browser: 'edge',
+                                  }),
+                              ]),
+                        new o_inputs.Link({
+                            name: 'github',
+                        }),
+                        new o_inputs.Link({
+                            name: 'facebook_page',
+                            href: ext.msg('facebook_page_link_href'),
+                        }),
+                        new o_inputs.Link({
+                            name: 'support_page',
+                            href: ext.msg('support_page_link_href'),
+                        }),
+                        ...(env.browser === 'edge'
+                            ? []
+                            : [
+                                  new o_inputs.Link({
+                                      name: 'dependencies',
+                                      href: ext.msg('dependencies_link_href'),
+                                  }),
+                              ]),
+                    ],
+                }),
             ];
 
             this.sections = s_utils.Utils.to_object({
@@ -166,7 +161,7 @@ class Class {
             data.settings.prefs.current_section =
                 d_sections_loftyshaky_settings.Sections.current_section;
 
-            d_data.Manipulation.send_msg_to_update_settings({
+            void d_data.Manipulation.send_msg_to_update_settings({
                 settings: {
                     prefs: {
                         ...data.settings.prefs,

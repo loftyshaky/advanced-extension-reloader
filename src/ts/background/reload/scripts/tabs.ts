@@ -1,6 +1,7 @@
+import type { Tabs as TabsExt, Windows } from 'webextension-polyfill';
+
 import cloneDeep from 'lodash/cloneDeep';
 import sortBy from 'lodash/sortBy';
-import { Windows, Tabs as TabsExt } from 'webextension-polyfill';
 
 class Class {
     private static instance: Class;
@@ -9,7 +10,6 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
     public pending_tabs_recreate: boolean = false;
@@ -188,16 +188,15 @@ class Class {
         err_async(async () => {
             const windows: Windows.Window[] = await we.windows.getAll();
 
-            const active_tab: TabsExt.Tab = await ext.get_active_tab();
+            const active_tab: TabsExt.Tab | undefined = await ext.get_active_tab();
             const last_focused_window: Windows.Window = await we.windows.getLastFocused();
             this.temporary_tabs = [];
 
-            if (n(active_tab.id)) {
+            if (n(active_tab) && n(active_tab.id)) {
                 this.active_tab_id = active_tab.id;
             }
 
-            // eslint-disable-next-line no-restricted-syntax
-            for await (const window of windows) {
+            for (const window of windows) {
                 const temporary_tabs_old: TabsExt.Tab[] = cloneDeep(this.temporary_tabs);
                 const tabs: TabsExt.Tab[] = await we.tabs.query({ windowId: window.id });
 
@@ -261,7 +260,9 @@ class Class {
                 this.temporary_tabs.map(
                     async (tab: TabsExt.Tab): Promise<void> =>
                         err_async(async () => {
-                            await we.tabs.remove(tab.id);
+                            if (n(tab.id)) {
+                                await we.tabs.remove(tab.id);
+                            }
                         }, 'aer_1120'),
                 ),
             );

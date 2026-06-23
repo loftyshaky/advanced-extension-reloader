@@ -1,7 +1,7 @@
-import { Windows } from 'webextension-polyfill';
+import type { Windows } from 'webextension-polyfill';
 
-import { i_options } from 'shared_clean/internal';
 import { s_reload } from 'background/internal';
+import type { i_options } from 'shared_clean/internal';
 
 class Class {
     private static instance: Class;
@@ -10,7 +10,6 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
     public try_to_reload = async ({
@@ -33,7 +32,7 @@ class Class {
                         extension_id: options.extension_id,
                     });
                 } else {
-                    ext.send_msg({ msg: 'start_open_popup_interval' });
+                    void ext.send_msg({ msg: 'start_open_popup_interval' });
                 }
             }
         }, 'aer_1146');

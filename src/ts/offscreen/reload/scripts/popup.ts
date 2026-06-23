@@ -5,7 +5,6 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
     private open_popup_if_window_is_focused_interval: ReturnType<typeof setInterval> | undefined;
@@ -25,27 +24,40 @@ class Class {
 
     private open_popup_if_window_is_focused = async (): Promise<void> =>
         err_async(async () => {
-            const window_is_focused: boolean = await ext.send_msg_resp({
+            const window_is_focused: unknown = await ext.send_msg_resp({
                 msg: 'get_window_focus_state',
             });
-            const get_popup_was_open_on_extension_reload: boolean = await ext.send_msg_resp({
+            const get_popup_was_open_on_extension_reload: unknown = await ext.send_msg_resp({
                 msg: 'get_popup_was_open_on_extension_reload',
             });
-            const popup_will_reload_when_window_will_focus: boolean = await ext.send_msg_resp({
+            const popup_will_reload_when_window_will_focus: unknown = await ext.send_msg_resp({
                 msg: 'get_popup_will_reload_when_window_will_focus',
             });
-            const reloading_extensions: boolean = await ext.send_msg_resp({
+            const reloading_extensions: unknown = await ext.send_msg_resp({
                 msg: 'get_reloading_extensions',
             });
 
+            const window_is_focused_final: boolean =
+                typeof window_is_focused === 'boolean' ? window_is_focused : false;
+            const get_popup_was_open_on_extension_reload_final: boolean =
+                typeof get_popup_was_open_on_extension_reload === 'boolean'
+                    ? get_popup_was_open_on_extension_reload
+                    : false;
+            const popup_will_reload_when_window_will_focus_final: boolean =
+                typeof popup_will_reload_when_window_will_focus === 'boolean'
+                    ? popup_will_reload_when_window_will_focus
+                    : false;
+            const reloading_extensions_final: boolean =
+                typeof reloading_extensions === 'boolean' ? reloading_extensions : false;
+
             if (
-                window_is_focused &&
-                (get_popup_was_open_on_extension_reload ||
-                    popup_will_reload_when_window_will_focus) &&
-                !reloading_extensions
+                window_is_focused_final &&
+                (get_popup_was_open_on_extension_reload_final ||
+                    popup_will_reload_when_window_will_focus_final) &&
+                !reloading_extensions_final
             ) {
                 clearInterval(this.open_popup_if_window_is_focused_interval);
-                ext.send_msg({
+                void ext.send_msg({
                     msg: 'open_popup',
                 });
 

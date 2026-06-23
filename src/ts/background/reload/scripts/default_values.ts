@@ -1,5 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
-import { i_options } from 'shared_clean/internal';
+
+import type { i_options } from 'shared_clean/internal';
 
 class Class {
     private static instance: Class;
@@ -8,7 +9,6 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
     public tranform_reload_action = ({

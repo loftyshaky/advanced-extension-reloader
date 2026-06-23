@@ -2,6 +2,7 @@ import isEmpty from 'lodash/isEmpty';
 import { runInAction } from 'mobx';
 
 import { d_data } from '@loftyshaky/shared/shared';
+import type { t } from '@loftyshaky/shared/shared_clean';
 
 class Class {
     private static instance: Class;
@@ -10,15 +11,14 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
-    public set_transformed = ({ settings = undefined }: { settings?: any } = {}): Promise<void> =>
+    public set_transformed = ({ settings }: { settings?: t.AnyRecord } = {}): Promise<void> =>
         err_async(async () => {
             const settings_final = settings;
 
-            if (!isEmpty(settings) && !isEmpty(settings.prefs)) {
-                Object.entries(settings_final.prefs).forEach(([key, val]: [string, any]): void =>
+            if (!isEmpty(settings_final) && !isEmpty(settings_final.prefs)) {
+                Object.entries(settings_final.prefs).forEach(([key, val]: [string, t.Any]): void =>
                     err(() => {
                         runInAction(() =>
                             err(() => {
@@ -32,7 +32,7 @@ class Class {
                     }, 'aer_1081'),
                 );
 
-                ext.send_msg({ msg: 'react_to_change' });
+                void ext.send_msg({ msg: 'react_to_change' });
             }
         }, 'aer_1082');
 
@@ -41,7 +41,7 @@ class Class {
             await d_data.Settings.set_from_storage();
 
             if (x.prefs_are_filled()) {
-                this.set_transformed({ settings: data.settings });
+                void this.set_transformed({ settings: data.settings });
             }
         }, 'aer_1083');
 }

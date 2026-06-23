@@ -1,11 +1,12 @@
 import map from 'lodash/map';
 import trim from 'lodash/trim';
 
-import { t } from '@loftyshaky/shared/shared';
-import { d_inputs, i_inputs } from '@loftyshaky/shared/inputs';
+import type { i_inputs } from '@loftyshaky/shared/inputs';
+import { d_inputs } from '@loftyshaky/shared/inputs';
 import { s_sections } from '@loftyshaky/shared/settings';
-import { s_css_vars } from 'shared_clean/internal';
+import type { t } from '@loftyshaky/shared/shared';
 import { d_data, d_sections } from 'settings/internal';
+import { s_css_vars } from 'shared_clean/internal';
 
 class Class {
     private static instance: Class;
@@ -14,7 +15,6 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
     public change = ({ input }: { input: i_inputs.Input }): void =>
@@ -49,7 +49,7 @@ class Class {
 
                     s_css_vars.CssVars.set();
 
-                    d_data.Manipulation.send_msg_to_update_settings({
+                    void d_data.Manipulation.send_msg_to_update_settings({
                         settings: { prefs: { ...data.settings.prefs, [input.name]: val } },
                         load_settings: n(input.val_accessor),
                     });

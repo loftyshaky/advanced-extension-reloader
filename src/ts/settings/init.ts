@@ -1,5 +1,5 @@
-import { InitAll } from 'shared/internal';
 import { d_sections } from 'settings/internal';
+import { InitAll } from 'shared/internal';
 
 export const init = (): Promise<void> =>
     err_async(async () => {
@@ -7,5 +7,5 @@ export const init = (): Promise<void> =>
 
         d_sections.Sections.init();
 
-        InitAll.render_settings();
+        void InitAll.render_settings();
     }, 'aer_1046');

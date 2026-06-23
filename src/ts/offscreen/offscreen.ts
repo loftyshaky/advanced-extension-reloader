@@ -1,5 +1,5 @@
 import { init } from 'offscreen/internal';
 
-(async () => {
+void (async () => {
     await init();
 })();

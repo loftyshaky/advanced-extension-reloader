@@ -1,6 +1,7 @@
-import { Management } from 'webextension-polyfill';
+import type { Management } from 'webextension-polyfill';
 
-import { i_data } from 'shared_clean/internal';
+import type { t } from '@loftyshaky/shared/shared_clean';
+import type { i_data } from 'shared_clean/internal';
 
 class Class {
     private static instance: Class;
@@ -9,7 +10,6 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
     public extension_is_eligible_for_reload = ({
@@ -27,7 +27,7 @@ class Class {
                 settings_2,
             }: {
                 ext_info_2: Management.ExtensionInfo;
-                settings_2: any;
+                settings_2: t.AnyRecord;
             }): void =>
                 err(() => {
                     const extension_id_option_specified = typeof extension_id === 'string';
@@ -53,10 +53,12 @@ class Class {
                     settings_2: settings,
                 });
             } else {
-                const settings_2 = await ext.send_msg_resp({ msg: 'get_settings' });
-                const exts: Management.ExtensionInfo[] = await ext.send_msg_resp({
+                const settings_2: i_data.Settings = (await ext.send_msg_resp({
+                    msg: 'get_settings',
+                })) as i_data.Settings;
+                const exts: Management.ExtensionInfo[] = (await ext.send_msg_resp({
                     msg: 'get_all_extensions',
-                });
+                })) as Management.ExtensionInfo[];
 
                 await Promise.all(
                     exts.map(async (ext_info_2: Management.ExtensionInfo) =>

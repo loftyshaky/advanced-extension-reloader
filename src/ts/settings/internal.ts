@@ -1,6 +1,3 @@
-// eslint-disable-next-line spaced-comment
-/// <reference types="../@loftyshaky/shared/globals.d.ts" />
-
 import 'settings/msgs/scripts';
 
 misplaced_dependency('settings');

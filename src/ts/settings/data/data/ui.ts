@@ -1,4 +1,4 @@
-import { makeObservable, action } from 'mobx';
+import { action, makeObservable } from 'mobx';
 
 class Class {
     private static instance: Class;
@@ -16,7 +16,7 @@ class Class {
     public create_ui_objs = (): void =>
         err(() => {
             data.ui = {};
-        }, 'cnt_1318');
+        }, 'aer_1156');
 }
 
 export const Ui = Class.get_instance();

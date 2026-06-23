@@ -7,7 +7,6 @@ class Class {
         return this.instance || (this.instance = new this());
     }
 
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
     private constructor() {}
 
     private prefixes: { reloading_tabs: '\u2B6E '; ok: '\u2713 ' } = {
@@ -41,7 +40,7 @@ class Class {
                 time,
             });
 
-            this.hide_prefix();
+            void this.hide_prefix();
         }, 'aer_1005');
 
     private hide_prefix = (): Promise<void> =>
@@ -61,7 +60,7 @@ class Class {
 
     private show_timer = ({ time }: { time: number }): Promise<void> =>
         new Promise<void>((resolve, reject) => {
-            err_async(async () => {
+            void err_async(async () => {
                 this.timer_badge_time_left = time;
 
                 const set_badge_time = (): Promise<void> =>
@@ -88,7 +87,7 @@ class Class {
                         this.timer_badge_time_left -= step;
 
                         if (this.timer_badge_time_left <= 0) {
-                            this.hide_timer();
+                            void this.hide_timer();
                             globalThis.clearInterval(this.timer_badge_interval);
                             resolve(); // Resolve the promise when the timer ends
                         }
