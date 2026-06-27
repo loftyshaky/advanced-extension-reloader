@@ -2,14 +2,21 @@ import type { Target } from 'vite-plugin-static-copy';
 
 import path from 'node:path';
 
-import Reloader from 'advanced-extension-reloader-watch-2/umd/reloader';
+import { Reloader } from 'advanced-extension-reloader-watch-2/reloader';
 import appRoot from 'app-root-path';
-import { type LibraryOptions, type UserConfig, defineConfig, loadEnv } from 'vite';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
+import chokidar from 'chokidar';
+import {
+    type LibraryOptions,
+    type PluginOption,
+    type UserConfig,
+    defineConfig,
+    loadEnv,
+} from 'vite';
 
 import { Dependencies as DependenciesShared } from '@loftyshaky/shared/build/ts/dependencies';
 import { Locales } from '@loftyshaky/shared/build/ts/locales';
 import { generate_shared_config } from '@loftyshaky/shared/build/ts/vite.config';
+import { get_shared_dist_path, watch } from '@loftyshaky/shared/build/ts/watch';
 
 import { Dependencies } from './build/ts/dependencies';
 import { Manifest } from './build/ts/manifest';
@@ -71,8 +78,7 @@ const config = defineConfig(({ mode }) => {
                 });
             }
         },
-        viteStaticCopy,
-    }) as UserConfig & { build: { lib: LibraryOptions } };
+    }) as UserConfig & { build: { lib: LibraryOptions } } & { plugins: PluginOption[] };
 
     shared_config.build.lib.entry = {
         ...(shared_config.build.lib.entry as Record<string, unknown>),
@@ -81,6 +87,23 @@ const config = defineConfig(({ mode }) => {
         settings: path.join(paths.ts, 'settings', 'settings.ts'),
         settings_css: path.join(paths.scss, 'settings', 'index.scss'),
     };
+
+    shared_config.plugins = [
+        ...shared_config.plugins,
+        watch({
+            paths_to_watch: [
+                get_shared_dist_path({ app_root, env }),
+                path.join(app_root, 'build', 'ts'),
+                path.join(app_root, 'src', '_locales'),
+                path.join(app_root, 'src', 'audio'),
+                path.join(app_root, 'src', 'html'),
+                path.join(app_root, 'src', 'icons'),
+                path.join(app_root, 'src', 'scss'),
+            ],
+            reload_trigger_file: path.join(paths.ts, 'background', 'background.ts'),
+            chokidar,
+        }),
+    ];
 
     return shared_config;
 });

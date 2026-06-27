@@ -111,7 +111,7 @@ class Class {
                     popup_was_open_on_extension_reload: data.popup_was_open_on_extension_reload,
                 });
             }
-        }, 'aer_1151');
+        }, 'aer_1160');
 }
 
 export const Popup = Class.get_instance();

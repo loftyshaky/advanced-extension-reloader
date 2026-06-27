@@ -22,5 +22,5 @@
         }
     },
     "files": ["node_modules/@loftyshaky/shared/src/ts/custom.d.ts"],
-    "include": ["src/ts/**/*"]
+    "include": ["src/ts/**/*", "build/**/*"]
 }
