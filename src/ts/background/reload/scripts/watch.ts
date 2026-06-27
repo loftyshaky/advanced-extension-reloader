@@ -27,7 +27,8 @@ class Class {
     private attempted_to_reload_during_after_tab_recreate_execution_phase: boolean = false;
     private reload_f_execution_phase: i_reload.ReloadFExecutionPhase = 'none';
     private automatic_reload: boolean = false;
-    private reload_throttle_fs = new Map<number, () => Promise<void>>();
+    private throttle_timestamp: number = 0;
+    private running_throttle_timeout: boolean = false;
 
     public try_to_reload = async ({
         options,
@@ -80,7 +81,7 @@ class Class {
                 !this.attempted_to_reload_during_before_tab_recreate_execution_phase &&
                 !this.attempted_to_reload_during_after_tab_recreate_execution_phase
             ) {
-                void this.reload_throttle();
+                this.reload_throttle();
             } else if (!is_hard) {
                 void this.reload();
             }
@@ -312,7 +313,7 @@ class Class {
                     this.attempted_to_reload_during_before_ext_reload_execution_phase)
             ) {
                 this.reset_reload_f_execution_phase_flags();
-                await this.reload_throttle();
+                this.reload_throttle();
             } else {
                 const at_least_one_extension_reloaded_or_soft: boolean =
                     at_least_one_extension_reloaded || !options_final.hard;
@@ -357,7 +358,7 @@ class Class {
 
                     if (this.attempted_to_reload_during_after_tab_recreate_execution_phase) {
                         this.reset_reload_f_execution_phase_flags();
-                        await this.reload_throttle();
+                        this.reload_throttle();
                     }
 
                     this.reload_f_execution_phase = 'none';
@@ -365,39 +366,31 @@ class Class {
             }
         }, 'aer_1039');
 
-    private get_reload_throttle = () =>
+    private reload_throttle = () =>
         err(() => {
-            if (n(data.options) && n(data.options.min_interval_between_extension_reloads)) {
-                if (
-                    !this.reload_throttle_fs.has(
-                        data.options.min_interval_between_extension_reloads,
-                    )
-                ) {
-                    const reload_throttle_fs = x.async_throttle(
-                        this.reload,
-                        data.options.min_interval_between_extension_reloads,
-                    );
+            if (!this.running_throttle_timeout) {
+                const now: number = Date.now();
+                const remaining_throttle_time =
+                    data.options.min_interval_between_extension_reloads -
+                    (now - this.throttle_timestamp);
 
-                    this.reload_throttle_fs.set(
-                        data.options.min_interval_between_extension_reloads,
-                        reload_throttle_fs as t.Any,
-                    );
+                if (
+                    remaining_throttle_time <= data.options.min_interval_between_extension_reloads
+                ) {
+                    this.running_throttle_timeout = true;
+
+                    setTimeout(() => {
+                        void this.reload();
+
+                        this.throttle_timestamp = Date.now();
+
+                        this.running_throttle_timeout = false;
+                    }, remaining_throttle_time);
+                } else {
+                    void this.reload();
                 }
 
-                return this.reload_throttle_fs.get(
-                    data.options.min_interval_between_extension_reloads,
-                )!;
-            }
-
-            return undefined;
-        }, 'aer_1138');
-
-    private reload_throttle = () =>
-        err_async(async () => {
-            const throttled_reload = this.get_reload_throttle();
-
-            if (n(throttled_reload)) {
-                await throttled_reload();
+                this.throttle_timestamp = now;
             }
         }, 'aer_1139');
 
