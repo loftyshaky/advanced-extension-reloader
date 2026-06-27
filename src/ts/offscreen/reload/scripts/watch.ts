@@ -34,6 +34,13 @@ class Class {
                         reconnectionDelayMax: 500,
                         randomizationFactor: 0,
                     });
+                    /* for testing
+                    const client = io(`http://localhost:${port}`, {
+                        reconnectionDelay: 20000,
+                        reconnectionDelayMax: 20000,
+                        randomizationFactor: 0,
+                    });
+                    */
 
                     this.clients.push(client);
 
