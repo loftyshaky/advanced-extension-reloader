@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 
 import type { t } from '@loftyshaky/shared/shared_clean';
-import type { i_options } from 'shared_clean/internal';
+import type { i_options, i_reload } from 'shared_clean/internal';
 import { s_reload } from 'shared_clean/internal';
 
 class Class {
@@ -110,8 +110,8 @@ class Class {
                     notification_type === 'reload' ? 'reload_success' : 'reload_error';
                 const bundle_notification_type: 'bundle_success' | 'bundle_error' =
                     notification_type === 'reload' ? 'bundle_success' : 'bundle_error';
-                const extension_is_eligible_for_reload: boolean =
-                    await s_reload.Watch.extension_is_eligible_for_reload({ extension_id });
+                const extension_eligibility: i_reload.ExtensionEligibility =
+                    await s_reload.Watch.get_extension_reload_eligibility({ extension_id });
 
                 const reloading_one_exts: boolean = n(extension_id);
                 const ext_is_installed: unknown = await ext.send_msg_resp({
@@ -123,7 +123,7 @@ class Class {
                     typeof ext_is_installed === 'boolean' ? ext_is_installed : false;
 
                 if (
-                    extension_is_eligible_for_reload &&
+                    extension_eligibility.extension_is_eligible_for_reload &&
                     (ext_is_installed_final ||
                         (notification_type === 'reload'
                             ? at_least_one_extension_reloaded
@@ -132,7 +132,7 @@ class Class {
                     play_notification_inner({
                         notification_type_inner: reload_notification_type,
                     });
-                } else {
+                } else if (!extension_eligibility.is_advanced_extension_reloader) {
                     play_notification_inner({
                         notification_type_inner: bundle_notification_type,
                     });

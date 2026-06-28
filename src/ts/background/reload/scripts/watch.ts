@@ -6,7 +6,7 @@ import uniqWith from 'lodash/uniqWith';
 import type { t } from '@loftyshaky/shared/shared_clean';
 import type { i_reload } from 'background/internal';
 import { s_badge, s_data, s_reload } from 'background/internal';
-import type { i_options } from 'shared_clean/internal';
+import type { i_options, i_reload as i_reload_shared_clean } from 'shared_clean/internal';
 import { s_reload as s_reload_shared } from 'shared_clean/internal';
 
 class Class {
@@ -91,20 +91,23 @@ class Class {
         err_async(async () => {
             void s_reload.Popup.set_reload_session_vals({ options: data.options });
 
-            const extension_is_eligible_for_reload_f = ({
+            const get_extension_reload_eligibility = ({
                 ext_info,
             }: {
                 ext_info: Management.ExtensionInfo;
-            }): Promise<boolean> =>
+            }): Promise<i_reload_shared_clean.ExtensionEligibility> =>
                 err_async(
                     async () =>
                         n(options_final)
-                            ? s_reload_shared.Watch.extension_is_eligible_for_reload({
+                            ? s_reload_shared.Watch.get_extension_reload_eligibility({
                                   extension_id: options_final.extension_id,
                                   ext_info,
                                   settings: data.settings,
                               })
-                            : false,
+                            : {
+                                  extension_is_eligible_for_reload: false,
+                                  is_advanced_extension_reloader: false,
+                              },
                     'aer_1142',
                 );
 
@@ -196,10 +199,10 @@ class Class {
                                                 }, 'aer_1036'),
                                         );
 
-                                    const extension_is_eligible_for_reload: boolean =
-                                        await extension_is_eligible_for_reload_f({ ext_info });
+                                    const extension_eligibility: i_reload_shared_clean.ExtensionEligibility =
+                                        await get_extension_reload_eligibility({ ext_info });
 
-                                    if (extension_is_eligible_for_reload) {
+                                    if (extension_eligibility.extension_is_eligible_for_reload) {
                                         new_ext_tabs.push(...ext_tabs_final);
 
                                         const reload_f = generate_reload_f({ ext_info });

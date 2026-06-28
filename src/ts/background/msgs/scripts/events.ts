@@ -21,6 +21,13 @@ we.runtime.onMessage.addListener(
                     .catch((error_obj: i_error.ErrorObj) => show_err_ribbon(error_obj, 'aer_1115'));
             }
 
+            if (msg_str === 'get_ext') {
+                return we.management
+                    .get(msg.extension_id)
+                    .then((response: Management.ExtensionInfo) => response)
+                    .catch((error_obj: i_error.ErrorObj) => show_err_ribbon(error_obj, 'aer_1138'));
+            }
+
             if (msg_str === 'check_if_ext_is_installed') {
                 return we.management
                     .get(typeof msg.extension_id === 'string' ? msg.extension_id : '')
