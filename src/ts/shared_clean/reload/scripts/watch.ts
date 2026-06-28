@@ -1,6 +1,6 @@
 import type { Management } from 'webextension-polyfill';
 
-import type { i_error, t } from '@loftyshaky/shared/shared_clean';
+import type { t } from '@loftyshaky/shared/shared_clean';
 import type { i_data, i_reload } from 'shared_clean/internal';
 
 class Class {
