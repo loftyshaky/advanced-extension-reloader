@@ -29,8 +29,8 @@ export class Dependencies {
             licenseText: 'https://creativecommons.org/publicdomain/zero/1.0/deed',
         },
         {
-            name: '330065__paulmorek__hum_02_high_2015-06-22',
-            link: 'https://freesound.org/people/PaulMorek/sounds/330065',
+            name: 'ui-submit.wav',
+            link: 'https://freesound.org/people/StavSounds/sounds/701704',
             license: 'CC0',
             licenseText: 'https://creativecommons.org/publicdomain/zero/1.0/deed',
         },

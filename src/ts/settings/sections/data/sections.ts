@@ -77,7 +77,7 @@ class Class {
                 }),
                 ...d_sections_loftyshaky_settings.Sections.make_shared_sections({
                     download_back_up_callback: ext.storage_get,
-                    upload_back_up_callback: d_sections.Restore.restore_back_up,
+                    upload_back_up_save_callback: d_sections.Restore.restore_back_up,
                     restore_defaults_callback: () => d_sections.Restore.restore_confirm(),
                     input_change_val_callback: d_sections.Val.change,
                     admin_inputs: [

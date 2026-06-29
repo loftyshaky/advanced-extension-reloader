@@ -5,6 +5,7 @@ import type { i_inputs } from '@loftyshaky/shared/inputs';
 import { d_inputs } from '@loftyshaky/shared/inputs';
 import { s_sections } from '@loftyshaky/shared/settings';
 import type { t } from '@loftyshaky/shared/shared';
+import { s_theme } from '@loftyshaky/shared/shared_clean';
 import { d_data, d_sections } from 'settings/internal';
 import { s_css_vars } from 'shared_clean/internal';
 
@@ -52,6 +53,12 @@ class Class {
                     void d_data.Manipulation.send_msg_to_update_settings({
                         settings: { prefs: { ...data.settings.prefs, [input.name]: val } },
                         load_settings: n(input.val_accessor),
+                    });
+                }
+
+                if (input.name === 'options_page_theme') {
+                    void s_theme.Theme.set({
+                        name: data.settings.prefs.options_page_theme,
                     });
                 }
             },

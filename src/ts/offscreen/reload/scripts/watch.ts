@@ -1,7 +1,9 @@
+import type { Management } from 'webextension-polyfill';
+
 import io from 'socket.io-client';
 
-import type { t } from '@loftyshaky/shared/shared_clean';
-import type { i_options, i_reload } from 'shared_clean/internal';
+import type { i_error, t } from '@loftyshaky/shared/shared_clean';
+import type { i_options } from 'shared_clean/internal';
 import { s_reload } from 'shared_clean/internal';
 
 class Class {
@@ -44,8 +46,17 @@ class Class {
 
                     this.clients.push(client);
 
-                    client.on('reload_app', (options: i_options.Options): void => {
-                        void ext.send_msg({ msg: 'reload', options });
+                    client.on('reload_app', async (options: i_options.Options): Promise<void> => {
+                        if (env.browser === 'firefox') {
+                            const { s_reload } = await import('background/internal');
+
+                            void s_reload.Watch.try_to_reload({
+                                options: options,
+                                automatic_reload: true,
+                            });
+                        } else {
+                            void ext.send_msg({ msg: 'reload', options });
+                        }
                     });
 
                     client.on(
@@ -110,21 +121,39 @@ class Class {
                     notification_type === 'reload' ? 'reload_success' : 'reload_error';
                 const bundle_notification_type: 'bundle_success' | 'bundle_error' =
                     notification_type === 'reload' ? 'bundle_success' : 'bundle_error';
-                const extension_eligibility: i_reload.ExtensionEligibility =
+                const extension_is_eligible_for_reload: boolean =
                     await s_reload.Watch.get_extension_reload_eligibility({ extension_id });
 
                 const reloading_one_exts: boolean = n(extension_id);
-                const ext_is_installed: unknown = await ext.send_msg_resp({
-                    msg: 'check_if_ext_is_installed',
-                    extension_id,
-                });
+                const extension_id_final: string =
+                    typeof extension_id === 'string' ? extension_id : '';
+                let this_ext: Management.ExtensionInfo | undefined;
 
-                const ext_is_installed_final: boolean =
-                    typeof ext_is_installed === 'boolean' ? ext_is_installed : false;
+                if (env.browser === 'firefox') {
+                    try {
+                        this_ext = await we.management.get(extension_id_final);
+                    } catch (error_obj: unknown) {
+                        if (n(error_obj)) {
+                            show_err_ribbon(error_obj as i_error.ErrorObj, 'aer_1163', {
+                                silent: true,
+                            });
+                        }
+                    }
+                } else {
+                    this_ext = (await ext.send_msg_resp({
+                        msg: 'get_ext',
+                        extension_id: extension_id_final,
+                    })) as Management.ExtensionInfo;
+                }
+                const extension_is_enabled: boolean = n(this_ext) && this_ext.enabled;
+                const ext_is_installed: boolean = n(this_ext);
+                const is_advanced_extension_reloader_id: boolean = n(extension_id)
+                    ? s_reload.Watch.allowed_advanced_extension_reloader_ids.includes(extension_id)
+                    : false;
 
                 if (
-                    extension_eligibility.extension_is_eligible_for_reload &&
-                    (ext_is_installed_final ||
+                    extension_is_eligible_for_reload &&
+                    ((ext_is_installed && extension_is_enabled) ||
                         (notification_type === 'reload'
                             ? at_least_one_extension_reloaded
                             : !reloading_one_exts))
@@ -132,7 +161,7 @@ class Class {
                     play_notification_inner({
                         notification_type_inner: reload_notification_type,
                     });
-                } else if (!extension_eligibility.is_advanced_extension_reloader) {
+                } else if (!is_advanced_extension_reloader_id) {
                     play_notification_inner({
                         notification_type_inner: bundle_notification_type,
                     });

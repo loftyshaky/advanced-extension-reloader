@@ -32,7 +32,13 @@ class Class {
                         extension_id: options.extension_id,
                     });
                 } else {
-                    void ext.send_msg({ msg: 'start_open_popup_interval' });
+                    if (env.browser === 'firefox') {
+                        const { s_reload } = await import('offscreen/internal');
+
+                        s_reload.Popup.start_open_popup_interval();
+                    } else {
+                        void ext.send_msg({ msg: 'start_open_popup_interval' });
+                    }
                 }
             }
         }, 'aer_1146');

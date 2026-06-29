@@ -21,11 +21,20 @@ class Class {
             // react to settings change or extension reinstall/removal
             void s_reload.ContextMenu.create();
 
-            void ext.send_msg({
-                msg: 'connect_to_ext_servers',
-                ports: data.settings.prefs.ports,
-                reload_notification_volume: data.settings.prefs.reload_notification_volume,
-            });
+            if (env.browser === 'firefox') {
+                const { s_reload } = await import('offscreen/internal');
+
+                await s_reload.Watch.connect({
+                    ports: data.settings.prefs.ports,
+                    reload_notification_volume: data.settings.prefs.reload_notification_volume,
+                });
+            } else {
+                void ext.send_msg({
+                    msg: 'connect_to_ext_servers',
+                    ports: data.settings.prefs.ports,
+                    reload_notification_volume: data.settings.prefs.reload_notification_volume,
+                });
+            }
         }, 'aer_1041');
 }
 

@@ -5,4 +5,3 @@ export * as s_suffix from 'shared_clean/suffix/scripts';
 
 export * as i_data from 'shared_clean/data/interfaces';
 export * as i_options from 'shared_clean/options/interfaces';
-export * as i_reload from 'shared_clean/reload/interfaces';

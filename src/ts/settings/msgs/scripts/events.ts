@@ -18,6 +18,8 @@ we.runtime.onMessage.addListener(
                         return true;
                     })
                     .catch((error_obj: i_error.ErrorObj) => show_err_ribbon(error_obj, 'aer_1106'));
+            } else if (msg_str === 'get_is_internal_storage_write_val') {
+                return Promise.resolve(d_data.Manipulation.is_internal_storage_write);
             }
 
             return false;

@@ -16,7 +16,7 @@ export class Manifest {
             background: {
                 type: 'module',
                 ...(env.browser === 'firefox'
-                    ? { scripts: ['background.mjs'] }
+                    ? { scripts: ['background.mjs', 'offscreen.mjs'] }
                     : { service_worker: 'background.mjs' }),
             },
             options_ui: {

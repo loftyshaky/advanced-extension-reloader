@@ -15,26 +15,28 @@ import {
 
 import { Dependencies as DependenciesShared } from '@loftyshaky/shared/build/ts/dependencies';
 import { Locales } from '@loftyshaky/shared/build/ts/locales';
+import { get_shared_dist_path, watch } from '@loftyshaky/shared/build/ts/plugins/watch';
 import { generate_shared_config } from '@loftyshaky/shared/build/ts/vite.config';
-import { get_shared_dist_path, watch } from '@loftyshaky/shared/build/ts/watch';
 
 import { Dependencies } from './build/ts/dependencies';
 import { Manifest } from './build/ts/manifest';
 
 const app_root = appRoot.path.replaceAll(path.sep, path.posix.sep);
-
-const extension_id = 'hmhmmmajoblhmohkmfjeoamhdpodihlg';
-
 const dependencies_shared = new DependenciesShared({ app_root });
-
 const manifest = new Manifest();
 const locales = new Locales({ app_root, exclude_shared_locales: ['de'] });
 const dependencies = new Dependencies();
 
 const config = defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
+    const extension_id =
+        env.browser === 'firefox'
+            ? 'advanced-extension-reloader@loftyshaky'
+            : 'hmhmmmajoblhmohkmfjeoamhdpodihlg';
     const reloader = new Reloader({
-        port: 7221,
+        port: env.browser === 'firefox' ? 8221 : 7221,
+        firefox_advanced_extension_reloader_internal_uuids:
+            env.advanced_extension_reloader_firefox_internal_uuids.split(','),
     });
 
     reloader.watch();
@@ -75,6 +77,7 @@ const config = defineConfig(({ mode }) => {
                 reloader.reload({
                     extension_id,
                     play_notifications: true,
+                    delay_after_extension_reload: 2000,
                 });
             }
         },

@@ -13,6 +13,7 @@ class Class {
     private constructor() {}
 
     public pending_tabs_recreate: boolean = false;
+    public ext_tabs_pre_reload: TabsExt.Tab[] = [];
     public ext_tabs_recreate: TabsExt.Tab[] = [];
     public ext_tabs: TabsExt.Tab[] = [];
     public new_tab_tabs: TabsExt.Tab[] = [];
@@ -25,10 +26,13 @@ class Class {
 
     public set_extension_urls = (): Promise<void> =>
         err_async(async () => {
-            this.browser_protocol = `${env.browser}://`;
-            this.ext_protocol = 'chrome-extension://';
+            this.ext_protocol =
+                env.browser === 'firefox' ? 'moz-extension://' : 'chrome-extension://';
 
-            this.new_tab_link = `${this.browser_protocol}newtab/`;
+            if (env.browser !== 'firefox') {
+                this.browser_protocol = 'chrome://';
+                this.new_tab_link = `${this.browser_protocol}newtab/`;
+            }
         }, 'aer_1152');
 
     public get_tabs = (): Promise<TabsExt.Tab[]> =>
@@ -36,7 +40,9 @@ class Class {
             const tabs: TabsExt.Tab[] = await we.tabs.query({});
 
             const tabs_filtered: TabsExt.Tab[] = tabs.filter((tab: TabsExt.Tab): boolean =>
-                err(() => !this.check_if_excluded_tab({ url: tab.url }), 'aer_1022'),
+                err(() => {
+                    return !this.check_if_excluded_tab({ url: tab.url });
+                }, 'aer_1022'),
             );
 
             return tabs_filtered;
@@ -45,7 +51,10 @@ class Class {
     public get_ext_tabs = (): Promise<TabsExt.Tab[]> =>
         err_async(async () => {
             const tabs: TabsExt.Tab[] = await we.tabs.query({
-                url: [`${this.browser_protocol}*/*`, `${this.ext_protocol}*/*`],
+                url:
+                    env.browser === 'firefox'
+                        ? [`${this.ext_protocol}*/*`]
+                        : [`${this.browser_protocol}*/*`, `${this.ext_protocol}*/*`],
             });
 
             return tabs;
@@ -53,6 +62,10 @@ class Class {
 
     public get_new_tab_tabs = (): Promise<TabsExt.Tab[]> =>
         err_async(async () => {
+            if (env.browser === 'firefox') {
+                return [];
+            }
+
             const tabs: TabsExt.Tab[] = await we.tabs.query({
                 url: [this.new_tab_link],
             });
@@ -60,14 +73,15 @@ class Class {
             return tabs;
         }, 'aer_1153');
 
-    private check_if_excluded_tab = ({ url }: { url: string | undefined }): boolean =>
-        err(
-            () =>
+    public check_if_excluded_tab = ({ url }: { url: string | undefined }): boolean =>
+        err(() => {
+            return (
                 n(url) &&
-                (url === `${env.browser}://extensions/` ||
-                    url.includes(`${this.ext_protocol}${we.runtime.id}`)),
-            'aer_1025',
-        );
+                ((env.browser !== 'firefox' && url === `${env.browser}://extensions/`) ||
+                    (env.browser === 'firefox' && url.includes('about:')) ||
+                    url.includes(we.runtime.getURL('')))
+            );
+        }, 'aer_1025');
 
     public reload_tabs = ({
         hard,
@@ -84,7 +98,9 @@ class Class {
                     let is_extension_tab: boolean = false;
 
                     if (n(url)) {
-                        is_extension_tab = reg_exp_extension.test(url) || reg_exp_browser.test(url);
+                        is_extension_tab =
+                            reg_exp_extension.test(url) ||
+                            (env.browser !== 'firefox' && reg_exp_browser.test(url));
                     }
 
                     return hard ? is_extension_tab : false;
@@ -93,11 +109,9 @@ class Class {
             const tab_is_idle = ({ tab }: { tab: TabsExt.Tab }): boolean =>
                 err(() => tab.status !== 'loading', 'aer_1098'); // without this refresh button in browser will not work in extension pages after hard reload
 
-            const tabs: TabsExt.Tab[] = await this.get_tabs();
-
             if (all_tabs) {
                 await Promise.all(
-                    tabs.map(async (ext_tab: TabsExt.Tab) =>
+                    this.ext_tabs_pre_reload.map(async (ext_tab: TabsExt.Tab) =>
                         err_async(async () => {
                             if (
                                 !check_if_excluded_tab_hard({ url: ext_tab.url }) &&
@@ -124,7 +138,10 @@ class Class {
 
     public recreate_tabs = ({ ext_tabs }: { ext_tabs: TabsExt.Tab[] }): Promise<void> =>
         err_async(async () => {
+            const tabs_after_reload: TabsExt.Tab[] = await we.tabs.query({});
+
             let one_of_restored_tabs_was_active: boolean = false;
+
             await Promise.all(
                 sortBy(ext_tabs, 'index').map(async (ext_tab: TabsExt.Tab) =>
                     err_async(async () => {
@@ -132,17 +149,25 @@ class Class {
                             (temporary_tab: TabsExt.Tab): boolean =>
                                 err(() => temporary_tab.windowId === ext_tab.windowId, 'aer_1123'),
                         );
-                        const remaining_new_tabs: TabsExt.Tab[] = await we.tabs.query({
-                            url: this.new_tab_link,
-                        });
+                        const remaining_new_tabs: TabsExt.Tab[] =
+                            env.browser === 'firefox'
+                                ? []
+                                : await we.tabs.query({
+                                      url: this.new_tab_link,
+                                  });
                         const all_new_tabs_were_closed_during_extension_reload: boolean =
                             remaining_new_tabs.length === 0;
+                        const tab_was_closed: boolean = !tabs_after_reload.some(
+                            (tab: TabsExt.Tab): boolean =>
+                                err(() => tab.url === ext_tab.url, 'aer_1161'),
+                        ); // For firefox.
 
                         if (
-                            env.browser === 'chrome' ||
-                            (env.browser === 'edge' &&
-                                (all_new_tabs_were_closed_during_extension_reload ||
-                                    ext_tab.url !== this.new_tab_link))
+                            tab_was_closed &&
+                            (['chrome', 'opera', 'yandex', 'firefox'].includes(env.browser) ||
+                                (env.browser === 'edge' &&
+                                    (all_new_tabs_were_closed_during_extension_reload ||
+                                        ext_tab.url !== this.new_tab_link)))
                         ) {
                             const tab: TabsExt.Tab = await we.tabs.create({
                                 windowId: ext_tab.windowId,
@@ -212,7 +237,8 @@ class Class {
                             );
 
                             return (
-                                ((env.browser === 'chrome' && !is_new_tab_tab) ||
+                                ((['chrome', 'opera', 'yandex', 'firefox'].includes(env.browser) &&
+                                    !is_new_tab_tab) ||
                                     (env.browser === 'edge' && is_new_tab_tab)) &&
                                 !is_ext_to_reaload_tab &&
                                 !is_browser_close_protect_tab

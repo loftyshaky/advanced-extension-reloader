@@ -34,7 +34,7 @@ class Class {
 
                 void d_settings.Transform.set_transformed({ settings: data.settings });
 
-                void s_theme.Theme.set({
+                await s_theme.Theme.set({
                     name: data.settings.prefs.options_page_theme,
                 });
                 s_css_vars.CssVars.set();
@@ -57,7 +57,7 @@ class Class {
     public restore_back_up_react = (): Promise<void> =>
         err_async(async () => {
             void d_settings.Transform.set_transformed({ settings: data.settings });
-            void s_theme.Theme.set({
+            await s_theme.Theme.set({
                 name: data.settings.prefs.options_page_theme,
             });
             s_css_vars.CssVars.set();

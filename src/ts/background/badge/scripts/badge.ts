@@ -30,7 +30,7 @@ class Class {
         err_async(async () => {
             await this.hide_timer();
 
-            const prefix = this.prefixes[prefix_name];
+            const prefix = env.browser === 'firefox' ? '' : this.prefixes[prefix_name];
 
             this.symbol_prefix = prefix;
 

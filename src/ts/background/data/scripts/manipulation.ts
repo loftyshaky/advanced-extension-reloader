@@ -40,7 +40,7 @@ class Class {
     } = {}): Promise<void> =>
         err_async(async () => {
             const settings_2: i_data.Settings = n(settings)
-                ? settings
+                ? x.to_plain(settings)
                 : (s_data.Settings.defaults as i_data.Settings);
 
             let settings_final: i_data.Settings = settings_2;

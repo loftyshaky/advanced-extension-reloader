@@ -2,7 +2,7 @@ import 'offscreen/msgs/scripts';
 
 import '@loftyshaky/shared/ext';
 
-misplaced_dependency('offscreen');
+misplaced_dependency(env.browser === 'firefox' ? 'background' : 'offscreen');
 
 export * from 'offscreen/init';
 

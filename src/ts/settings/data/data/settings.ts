@@ -1,4 +1,4 @@
-import { d_data, s_theme } from '@loftyshaky/shared/shared';
+import { d_data } from '@loftyshaky/shared/shared';
 import { d_settings } from 'shared/internal';
 import { s_css_vars } from 'shared_clean/internal';
 
@@ -16,12 +16,9 @@ class Class {
             if (transform) {
                 await d_settings.Transform.set_transformed_from_storage();
             } else {
-                void d_data.Settings.set_from_storage();
+                await d_data.Settings.set_from_storage();
             }
 
-            void s_theme.Theme.set({
-                name: data.settings.prefs.options_page_theme,
-            });
             s_css_vars.CssVars.set();
         }, 'aer_1159');
 }

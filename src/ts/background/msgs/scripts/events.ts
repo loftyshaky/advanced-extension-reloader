@@ -25,7 +25,7 @@ we.runtime.onMessage.addListener(
                 return we.management
                     .get(msg.extension_id)
                     .then((response: Management.ExtensionInfo) => response)
-                    .catch((error_obj: i_error.ErrorObj) => show_err_ribbon(error_obj, 'aer_1138'));
+                    .catch((error_obj: i_error.ErrorObj) => show_err_ribbon(error_obj, 'aer_1162'));
             }
 
             if (msg_str === 'check_if_ext_is_installed') {

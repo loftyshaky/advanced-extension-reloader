@@ -6,7 +6,7 @@ import uniqWith from 'lodash/uniqWith';
 import type { t } from '@loftyshaky/shared/shared_clean';
 import type { i_reload } from 'background/internal';
 import { s_badge, s_data, s_reload } from 'background/internal';
-import type { i_options, i_reload as i_reload_shared_clean } from 'shared_clean/internal';
+import type { i_options } from 'shared_clean/internal';
 import { s_reload as s_reload_shared } from 'shared_clean/internal';
 
 class Class {
@@ -50,9 +50,9 @@ class Class {
                 options: data.options,
             });
 
-            const is_hard: boolean = n(data.options) && data.options;
+            const { hard } = n(data.options) && data.options;
 
-            if (is_hard) {
+            if (hard) {
                 if (n(this.delay_after_extension_reload_cancel_delay)) {
                     this.delay_after_extension_reload_cancel_delay();
                 }
@@ -75,14 +75,14 @@ class Class {
             if (
                 (!this.automatic_reload ||
                     (automatic_reload && !data.settings.prefs.pause_automatic_reload)) &&
-                is_hard &&
+                hard &&
                 this.reload_f_execution_phase === 'none' &&
                 !this.attempted_to_reload_during_before_ext_reload_execution_phase &&
                 !this.attempted_to_reload_during_before_tab_recreate_execution_phase &&
                 !this.attempted_to_reload_during_after_tab_recreate_execution_phase
             ) {
                 this.reload_throttle();
-            } else if (!is_hard) {
+            } else if (!hard) {
                 void this.reload();
             }
         }, 'aer_1035');
@@ -95,7 +95,7 @@ class Class {
                 ext_info,
             }: {
                 ext_info: Management.ExtensionInfo;
-            }): Promise<i_reload_shared_clean.ExtensionEligibility> =>
+            }): Promise<boolean> =>
                 err_async(
                     async () =>
                         n(options_final)
@@ -104,10 +104,7 @@ class Class {
                                   ext_info,
                                   settings: data.settings,
                               })
-                            : {
-                                  extension_is_eligible_for_reload: false,
-                                  is_advanced_extension_reloader: false,
-                              },
+                            : false,
                     'aer_1142',
                 );
 
@@ -147,6 +144,7 @@ class Class {
             let at_least_one_extension_reloaded: boolean = false;
             let at_least_one_extension_tab_is_open: boolean = false;
             let tabs_to_reload: Tabs.Tab[] = [];
+            s_reload.Tabs.ext_tabs_pre_reload = await s_reload.Tabs.get_tabs();
 
             if (options_final.hard) {
                 if (this.attempted_to_reload_during_before_ext_reload_execution_phase) {
@@ -182,14 +180,21 @@ class Class {
                                             (ext_tab: t.AnyRecord): Tabs.Tab[] =>
                                                 err(() => {
                                                     const reg_exp_extension = new RegExp(
-                                                        s_reload.Tabs.ext_protocol + ext_info.id,
+                                                        s_reload.Tabs.ext_protocol +
+                                                            (env.browser === 'firefox'
+                                                                ? ''
+                                                                : ext_info.id),
                                                     );
-
                                                     const matched_tab = reg_exp_extension.test(
                                                         ext_tab.url,
                                                     );
 
-                                                    if (matched_tab) {
+                                                    if (
+                                                        matched_tab &&
+                                                        !s_reload.Tabs.check_if_excluded_tab({
+                                                            url: ext_tab.url,
+                                                        })
+                                                    ) {
                                                         ext_tab.extension_id = ext_info.id;
 
                                                         return [ext_tab as Tabs.Tab];
@@ -199,10 +204,10 @@ class Class {
                                                 }, 'aer_1036'),
                                         );
 
-                                    const extension_eligibility: i_reload_shared_clean.ExtensionEligibility =
+                                    const extension_is_eligible_for_reload: boolean =
                                         await get_extension_reload_eligibility({ ext_info });
 
-                                    if (extension_eligibility.extension_is_eligible_for_reload) {
+                                    if (extension_is_eligible_for_reload) {
                                         new_ext_tabs.push(...ext_tabs_final);
 
                                         const reload_f = generate_reload_f({ ext_info });
@@ -222,7 +227,6 @@ class Class {
                     );
 
                     tabs_to_reload = [...s_reload.Tabs.ext_tabs, ...s_reload.Tabs.new_tab_tabs];
-
                     at_least_one_extension_tab_is_open = tabs_to_reload.length !== 0;
 
                     if (env.browser === 'chrome') {
@@ -340,15 +344,30 @@ class Class {
                 }
 
                 if (options_final.play_notifications) {
-                    void ext.send_msg({
-                        msg: 'play_reload_notification',
-                        reload_notification_volume: data.settings.prefs.reload_notification_volume,
-                        extension_id: options_final.extension_id,
-                        at_least_one_extension_reloaded:
-                            !options_final.hard && !n(options_final.extension_id)
-                                ? true
-                                : at_least_one_extension_reloaded,
-                    });
+                    const at_least_one_extension_reloaded_finay: boolean =
+                        !options_final.hard && !n(options_final.extension_id)
+                            ? true
+                            : at_least_one_extension_reloaded;
+
+                    if (env.browser === 'firefox') {
+                        const { s_reload } = await import('offscreen/internal');
+
+                        void s_reload.Watch.play_notification({
+                            notification_type: 'reload',
+                            reload_notification_volume:
+                                data.settings.prefs.reload_notification_volume,
+                            extension_id: options_final.extension_id,
+                            at_least_one_extension_reloaded: at_least_one_extension_reloaded_finay,
+                        });
+                    } else {
+                        void ext.send_msg({
+                            msg: 'play_reload_notification',
+                            reload_notification_volume:
+                                data.settings.prefs.reload_notification_volume,
+                            extension_id: options_final.extension_id,
+                            at_least_one_extension_reloaded: at_least_one_extension_reloaded_finay,
+                        });
+                    }
                 }
 
                 if (options_final.hard) {
@@ -382,13 +401,16 @@ class Class {
                 ) {
                     this.running_throttle_timeout = true;
 
-                    setTimeout(() => {
-                        void this.reload();
+                    setTimeout(
+                        () => {
+                            void this.reload();
 
-                        this.throttle_timestamp = Date.now();
+                            this.throttle_timestamp = Date.now();
 
-                        this.running_throttle_timeout = false;
-                    }, remaining_throttle_time);
+                            this.running_throttle_timeout = false;
+                        },
+                        remaining_throttle_time > 0 ? remaining_throttle_time : 0,
+                    );
                 } else {
                     void this.reload();
                 }
