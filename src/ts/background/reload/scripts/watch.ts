@@ -73,17 +73,20 @@ class Class {
             }
 
             if (
-                (!this.automatic_reload ||
-                    (automatic_reload && !data.settings.prefs.pause_automatic_reload)) &&
-                hard &&
-                this.reload_f_execution_phase === 'none' &&
-                !this.attempted_to_reload_during_before_ext_reload_execution_phase &&
-                !this.attempted_to_reload_during_before_tab_recreate_execution_phase &&
-                !this.attempted_to_reload_during_after_tab_recreate_execution_phase
+                !this.automatic_reload ||
+                (automatic_reload && !data.settings.prefs.pause_automatic_reload)
             ) {
-                this.reload_throttle();
-            } else if (!hard) {
-                void this.reload();
+                if (
+                    hard &&
+                    this.reload_f_execution_phase === 'none' &&
+                    !this.attempted_to_reload_during_before_ext_reload_execution_phase &&
+                    !this.attempted_to_reload_during_before_tab_recreate_execution_phase &&
+                    !this.attempted_to_reload_during_after_tab_recreate_execution_phase
+                ) {
+                    this.reload_throttle();
+                } else if (!hard) {
+                    void this.reload();
+                }
             }
         }, 'aer_1035');
 
@@ -390,7 +393,11 @@ class Class {
 
     private reload_throttle = () =>
         err(() => {
-            if (!this.running_throttle_timeout) {
+            if (
+                !this.running_throttle_timeout &&
+                (!this.automatic_reload ||
+                    (this.automatic_reload && !data.settings.prefs.pause_automatic_reload))
+            ) {
                 const now: number = Date.now();
                 const remaining_throttle_time =
                     data.options.min_interval_between_extension_reloads -
