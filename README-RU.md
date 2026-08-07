@@ -342,7 +342,7 @@ reloader.watch();
 
 ## Этапы сборки
 
-1. git clone https://github.com/loftyshaky/advanced-extension-reloader
-2. cd в клонированный репозиторий
-3. npm install
-4. npm run prod (Chrome) / npm run prode (Edge)
+1. `git clone https://github.com/loftyshaky/advanced-extension-reloader`
+2. `cd` в клонированный репозиторий
+3. `npm install`
+4. `npm run prod_test` (Chrome) / `npm run prod_test_edge` (Edge) / `npm run prod_test_opera` (Opera) / `npm run prod_test_yandex` (Яндекс Браузер) / `npm run prod_test_firefox` (Firefox)

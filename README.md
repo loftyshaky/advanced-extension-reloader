@@ -342,7 +342,7 @@ Full configuration examples can be found [here](https://github.com/loftyshaky/ad
 
 ## Build steps
 
-1. git clone https://github.com/loftyshaky/advanced-extension-reloader
-2. cd into the cloned repository
-3. npm install
-4. npm run prod (Chrome) / npm run prode (Edge)
+1. `git clone https://github.com/loftyshaky/advanced-extension-reloader`
+2. `cd` into the cloned repository
+3. `npm install`
+4. `npm run prod_test` (Chrome) / `npm run prod_test_edge` (Edge) / `npm run prod_test_opera` (Opera) / `npm run prod_test_yandex` (Yandex Browser) / `npm run prod_test_firefox` (Firefox)
