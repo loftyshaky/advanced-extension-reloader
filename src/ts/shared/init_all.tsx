@@ -10,6 +10,7 @@ import {
     s_tab_index,
     s_theme,
 } from '@loftyshaky/shared/shared';
+import { d_error } from '@loftyshaky/shared/shared_clean';
 import { s_css_vars, s_suffix } from 'shared_clean/internal';
 
 class Class {
@@ -57,6 +58,8 @@ class Class {
                             }
                         }
                     }, 'aer_1073');
+
+                d_error.Error.set_detect_infinite_loops_val();
 
                 this.set_page_title();
 
