@@ -164,7 +164,9 @@ class Class {
 
                         if (
                             tab_was_closed &&
-                            (['chrome', 'opera', 'yandex', 'firefox'].includes(env.browser) ||
+                            (['chrome', 'opera', 'brave', 'yandex', 'firefox'].includes(
+                                env.browser,
+                            ) ||
                                 (env.browser === 'edge' &&
                                     (all_new_tabs_were_closed_during_extension_reload ||
                                         ext_tab.url !== this.new_tab_link)))
@@ -237,7 +239,9 @@ class Class {
                             );
 
                             return (
-                                ((['chrome', 'opera', 'yandex', 'firefox'].includes(env.browser) &&
+                                ((['chrome', 'opera', 'brave', 'yandex', 'firefox'].includes(
+                                    env.browser,
+                                ) &&
                                     !is_new_tab_tab) ||
                                     (env.browser === 'edge' && is_new_tab_tab)) &&
                                 !is_ext_to_reaload_tab &&
