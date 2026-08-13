@@ -24,6 +24,7 @@ class Class {
                     developer_mode: false,
                     enable_cut_features: false,
                     persistent_service_worker: true,
+                    detect_infinite_loops: false,
                     offers_are_visible: true,
                     ports: ['7220'],
                     reload_notification_volume: '1',

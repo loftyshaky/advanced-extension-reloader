@@ -226,6 +226,10 @@ class Class {
                     old_key: 'show_color_help',
                     new_key: 'color_help_is_visible',
                 }),
+                new o_schema.TransformItem({
+                    new_key: 'detect_infinite_loops',
+                    new_val: false,
+                }),
             ];
 
             const click_action_transform_items: o_schema.TransformItem[] = [

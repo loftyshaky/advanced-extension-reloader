@@ -3,6 +3,8 @@ import type { Tabs as TabsExt, Windows } from 'webextension-polyfill';
 import cloneDeep from 'lodash/cloneDeep';
 import sortBy from 'lodash/sortBy';
 
+import { d_error } from '@loftyshaky/shared/shared_clean';
+
 class Class {
     private static instance: Class;
 
@@ -224,6 +226,8 @@ class Class {
             }
 
             for (const window of windows) {
+                d_error.Error.print_error_code({ error_code: 'aer_1117', loop: true });
+
                 const temporary_tabs_old: TabsExt.Tab[] = cloneDeep(this.temporary_tabs);
                 const tabs: TabsExt.Tab[] = await we.tabs.query({ windowId: window.id });
 
