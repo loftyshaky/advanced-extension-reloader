@@ -103,10 +103,21 @@ class Class {
         options?: i_options.Options;
     }): Promise<void> =>
         err_async(async () => {
-            if (n(options)) {
-                const popup_is_open: boolean = await we.runtime.sendMessage(options.extension_id, {
-                    msg: 'check_if_popup_is_open',
-                });
+            if (n(options) && n(options.listen_message_response_timeout)) {
+                let popup_is_open: boolean = false;
+
+                const check_if_popup_is_open = (): Promise<void> =>
+                    err(async () => {
+                        popup_is_open = await we.runtime.sendMessage(options.extension_id, {
+                            msg: 'check_if_popup_is_open',
+                        });
+                    }, 'aer_1088');
+
+                await Promise.race([
+                    check_if_popup_is_open(),
+                    x.delay(options.listen_message_response_timeout),
+                ]);
+
                 const popup_is_open_final: boolean = n(popup_is_open) ? popup_is_open : false;
 
                 data.popup_was_open_on_extension_reload = data.popup_was_open_on_extension_reload
