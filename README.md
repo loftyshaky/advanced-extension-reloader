@@ -95,6 +95,7 @@ Below is a detailed guide on how to use **Advanced Extension Reloader** and its 
 - [Popup reload](#popup-reload)
 - [Apply changes in manifest.json on reload](#apply-changes-in-manifestjson-on-reload)
 - [Pause automatic reload](#pause-automatic-reload)
+- [Disable tab reload](#disable-tab-reload)
 - [Sample extensions](#sample-extensions)
 - [Audio notifications](#audio-notifications)
 - [Firefox considerations](#firefox-considerations)
@@ -143,7 +144,8 @@ For extensions developed without a bundler, use **Advanced Extension Reloader Wa
         "port": 6222,
         "watch_dir": "D:/Cloud/Projects/Advanced Extension Reloader Examples/advanced-extension-reloader-examples/no_bundler/extensions/manifest_3_es",
         "extension_id": "pacanmlfjnfoolpglkcpbpoiapkgpaph",
-        "play_notifications": true
+        "play_notifications": true,
+        "validate_javascript": true
     }
     ```
 
@@ -268,6 +270,10 @@ To ensure that changes to the _manifest.json_ file are applied upon reloading yo
 
 To pause automatic reloading, right-click the extension's icon and select the _Pause Automatic Reload_ option. Alternatively, you can use the _Pause/Resume Automatic Reload_ hotkey, which can be configured at _chrome://extensions/shortcuts_.
 
+## Disable tab reload
+
+Similar to pausing automatic reload, you can disable the reloading of the current tab or all tabs after your extension is reloaded. You have the flexibility to disable tab reload either or both for manual and automatic reloads.
+
 ## Sample extensions
 
 Sample extensions can be found [here](https://github.com/loftyshaky/advanced-extension-reloader-examples).
@@ -296,7 +302,8 @@ For automatic reload, you'll also need to provide the **Advanced Extension Reloa
     "watch_dir": "D:/Cloud/Projects/Advanced Extension Reloader Examples/advanced-extension-reloader-examples/no_bundler/extensions/firefox_manifest_3_es",
     "firefox_advanced_extension_reloader_internal_uuids": ["b3bca27c-ef23-4759-bc14-fc88d04b9541"],
     "extension_id": "firefox-manifest-3-extension-example-es@loftyshaky",
-    "play_notifications": true
+    "play_notifications": true,
+    "validate_javascript": true
 }
 ```
 
@@ -334,6 +341,7 @@ Full configuration examples can be found [here](https://github.com/loftyshaky/ad
 | `watch_dir`                                          | `string`              | `src`         | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | A path to the directory to watch for file changes. Should be your extension's directory path.                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | `firefox_advanced_extension_reloader_internal_uuids` | `string[]`            | `[]`          | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Internal UUIDs of the **Advanced Extension Reloader** Firefox installation. These are required to enable automatic reload in Firefox.                                                                                                                                                                                                                                                                                                                                                                                                                |
 | `manifest_path`                                      | `boolean` \| `string` | `false`       | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Path to the extension's _manifest.json_ file: This can be specified as a boolean value or a path. If set to `true`, **Advanced Extension Reloader Watch 1/2** will automatically search for the _manifest.json_ file in the `watch_dir` directory.<br><br>This option is necessary for **Advanced Extension Reloader Watch 1/2** to validate the _manifest.json_ before reloading the extension. If the _manifest.json_ file is found to be invalid, the reload process will be canceled to prevent the extension from crashing.                     |
+| `validate_javascript`                                | `boolean`             | `false`       | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Determines whether to validate changed JavaScript files for syntax errors before reloading your extension. If a JavaScript file is found to be invalid, the reload process will be canceled and an error notification will play.<br><br>This option is particularly useful for non-bundler setups with **Advanced Extension Reloader Watch 1**, where JavaScript validation is not handled by a bundler.                                                                                                                                             |
 | `hard_paths`                                         | `string[]`            | `[]`          | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, the extension will be reloaded with `hard`: `true`, even if `hard`: `false` is specified in the configuration.                                                                                                                                                                                                                                                                                                            |
 | `soft_paths`                                         | `string[]`            | `[]`          | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, the extension will be reloaded with `hard`: `false`, even if `hard`: `true` is specified in the configuration.                                                                                                                                                                                                                                                                                                            |
 | `all_tabs_paths`                                     | `string[]`            | `[]`          | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | An array of paths or partial paths (such as file names). If a change occurs in any file or directory matching these paths, the extension will be reloaded with `all_tabs`: `true`, even if `all_tabs`: `false` is specified in the configuration.                                                                                                                                                                                                                                                                                                    |

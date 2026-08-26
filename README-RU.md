@@ -95,6 +95,7 @@ import 'advanced-extension-reloader-watch-2/listener';
 - [Перезагрузка popup](#перезагрузка-popup)
 - [Применение изменений в manifest.json при перезагрузке](#применение-изменений-в-manifestjson-при-перезагрузке)
 - [Приостановка автоматической перезагрузки](#приостановка-автоматической-перезагрузки)
+- [Отключение перезагрузки вкладок](#отключение-перезагрузки-вкладок)
 - [Примеры расширений](#примеры-расширений)
 - [Аудиоуведомления](#аудиоуведомления)
 - [Особенности работы в Firefox](#особенности-работы-в-firefox)
@@ -143,7 +144,8 @@ import 'advanced-extension-reloader-watch-2/listener';
         "port": 6222,
         "watch_dir": "D:/Cloud/Projects/Advanced Extension Reloader Examples/advanced-extension-reloader-examples/no_bundler/extensions/manifest_3_es",
         "extension_id": "pacanmlfjnfoolpglkcpbpoiapkgpaph",
-        "play_notifications": true
+        "play_notifications": true,
+        "validate_javascript": true
     }
     ```
 
@@ -268,6 +270,10 @@ import 'advanced-extension-reloader-watch-2/listener';
 
 Чтобы приостановить автоматическую перезагрузку, нажмите правой кнопкой мыши на иконку расширения и выберите опцию _Приостановить автоматическую перезагрузку_. Также можно использовать горячую клавишу _Приостановить/возобновить автоматическую перезагрузку_, которую можно задать по адресу _chrome://extensions/shortcuts_.
 
+## Отключение перезагрузки вкладок
+
+Аналогично приостановке автоматической перезагрузки, вы можете отключить перезагрузку текущей вкладки или всех вкладок после перезагрузки вашего расширения. У вас есть возможность отключить перезагрузку вкладок как для ручной, так и для автоматической перезагрузки, либо для обеих сразу.
+
 ## Примеры расширений
 
 Примеры расширений можно найти [здесь](https://github.com/loftyshaky/advanced-extension-reloader-examples).
@@ -296,7 +302,8 @@ import 'advanced-extension-reloader-watch-2/listener';
     "watch_dir": "D:/Cloud/Projects/Advanced Extension Reloader Examples/advanced-extension-reloader-examples/no_bundler/extensions/firefox_manifest_3_es",
     "firefox_advanced_extension_reloader_internal_uuids": ["b3bca27c-ef23-4759-bc14-fc88d04b9541"],
     "extension_id": "firefox-manifest-3-extension-example-es@loftyshaky",
-    "play_notifications": true
+    "play_notifications": true,
+    "validate_javascript": true
 }
 ```
 
@@ -334,6 +341,7 @@ reloader.watch();
 | `watch_dir`                                          | `string`              | `src`                 | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Путь к директории, в которой нужно следить за изменениями файлов. Это должен быть путь к директории с вашим расширением.                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | `firefox_advanced_extension_reloader_internal_uuids` | `string[]`            | `[]`                  | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Внутренние UUID установки **Advanced Extension Reloader** для Firefox. Необходимы для автоматической перезагрузки в Firefox.                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `manifest_path`                                      | `boolean` \| `string` | `false`               | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Путь к _manifest.json_ расширения: Может быть boolean значением или как путь к директории. Если установлено значение `true`, **Advanced Extension Reloader Watch 1/2** автоматически будет искать _manifest.json_ в директории `watch_dir`.<br><br>Эта опция необходима для того, чтобы **Advanced Extension Reloader Watch 1/2** мог проверить корректность _manifest.json_ перед перезагрузкой расширения. Если _manifest.json_ окажется недействительным, процесс перезагрузки будет отменен, чтобы предотвратить падение расширения.                                        |
+| `validate_javascript`                                | `boolean`             | `false`               | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Определяет, следует ли проверять изменённые JavaScript-файлы на наличие синтаксических ошибок перед перезагрузкой расширения. Если JavaScript-файл оказывается недействительным, процесс перезагрузки будет отменён и будет воспроизведено звуковое уведомление об ошибке.<br><br>Эта опция особенно полезна для проектов без бандлера с использованием **Advanced Extension Reloader Watch 1**, где проверка JavaScript не выполняется автоматически бандлером.                                                                                                                |
 | `hard_paths`                                         | `string[]`            | `[]`                  | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Массив путей или частичных путей (например, имен файлов). Если в каком-либо файле или директории, совпадающем с этими путями, произойдет изменение, расширение будет перезагружено с `hard`: `true`, даже если в конфигурации указано `hard`: `false`.                                                                                                                                                                                                                                                                                                                          |
 | `soft_paths`                                         | `string[]`            | `[]`                  | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Массив путей или частичных путей (например, имен файлов). Если в каком-либо файле или директории, совпадающем с этими путями, произойдет изменение, расширение будет перезагружено с `hard`: `false`, даже если в конфигурации указано `hard`: `true`.                                                                                                                                                                                                                                                                                                                          |
 | `all_tabs_paths`                                     | `string[]`            | `[]`                  | Advanced Extension Reloader Watch 1, Advanced Extension Reloader Watch 2                              | Массив путей или частичных путей (например, имен файлов). Если в каком-либо файле или директории, совпадающем с этими путями, произойдет изменение, расширение будет перезагружено с `all_tabs`: `true`, даже если в конфигурации указано `all_tabs`: `false`.                                                                                                                                                                                                                                                                                                                  |
