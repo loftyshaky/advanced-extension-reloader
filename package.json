@@ -44,9 +44,9 @@
         "pub": "powershell -File node_modules\\@loftyshaky\\shared\\build\\ps1\\extension_pub.ps1"
     },
     "dependencies": {
-        "@loftyshaky/shared": "2.7.0",
+        "@loftyshaky/shared": "2.7.1",
         "@simonwep/pickr": "^1.9.1",
-        "advanced-extension-reloader-watch-2": "^3.0.1",
+        "advanced-extension-reloader-watch-2": "^3.1.0",
         "lodash": "^4.18.1",
         "mobx": "^6.16.1",
         "mobx-react-lite": "^4.1.1",
