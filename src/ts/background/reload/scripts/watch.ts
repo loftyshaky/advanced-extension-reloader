@@ -21,7 +21,7 @@ class Class {
     public reloading_extensions: boolean = false;
     public delay_after_extension_reload_timer_canceled: boolean = false;
     public cancel_reload_f_execution: boolean = false;
-    public running_pause_or_resume_automatic_reload_f: boolean = false;
+    public running_pause_or_resume_reload_f: boolean = false;
     private attempted_to_reload_during_before_ext_reload_execution_phase: boolean = false;
     public attempted_to_reload_during_before_tab_recreate_execution_phase: boolean = false;
     private attempted_to_reload_during_after_tab_recreate_execution_phase: boolean = false;
@@ -329,7 +329,16 @@ class Class {
                     at_least_one_extension_reloaded || !options_final.hard;
 
                 if (at_least_one_extension_reloaded_or_soft) {
-                    if (n(options_final.hard) && n(options_final.all_tabs)) {
+                    if (
+                        n(options_final.hard) &&
+                        n(options_final.all_tabs) &&
+                        ((this.automatic_reload &&
+                            !data.settings.prefs.disable_automatic_tab_reload) ||
+                            (!this.automatic_reload &&
+                                (!options_final.hard ||
+                                    (options_final.hard &&
+                                        !data.settings.prefs.disable_manual_tab_reload))))
+                    ) {
                         await s_reload.Tabs.reload_tabs({
                             hard: options_final.hard,
                             all_tabs: options_final.all_tabs,
@@ -500,18 +509,19 @@ class Class {
             this.attempted_to_reload_during_after_tab_recreate_execution_phase = false;
         }, 'aer_1137');
 
-    public pause_or_resume_automatic_reload = (): Promise<void> =>
+    public pause_or_resume_reload = ({ settings_key }: { settings_key: string }): Promise<void> =>
         err_async(async () => {
-            this.running_pause_or_resume_automatic_reload_f = true;
+            this.running_pause_or_resume_reload_f = true;
 
-            data.settings.prefs.pause_automatic_reload =
-                !data.settings.prefs.pause_automatic_reload;
+            data.settings.prefs[settings_key] = !data.settings.prefs[settings_key];
 
             await s_data.Manipulation.update_settings({ settings: data.settings });
 
-            void s_badge.Badge.show_reload_paused();
+            if (settings_key === 'pause_automatic_reload') {
+                void s_badge.Badge.show_reload_paused();
+            }
 
-            this.running_pause_or_resume_automatic_reload_f = false;
+            this.running_pause_or_resume_reload_f = false;
 
             if (s_data.Manipulation.set_from_storage_run_prevented) {
                 await s_data.Manipulation.set_from_storage({ transform: true });

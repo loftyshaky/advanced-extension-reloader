@@ -30,6 +30,8 @@ class Class {
                     reload_notification_volume: '1',
                     allow_theme_reload: false,
                     pause_automatic_reload: false,
+                    disable_automatic_tab_reload: false,
+                    disable_manual_tab_reload: false,
                     click_action: {
                         all_tabs: false,
                         hard: true,

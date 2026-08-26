@@ -110,7 +110,7 @@ class Class {
         transform = false,
     }: { transform?: boolean } = {}): Promise<void> =>
         err_async(async () => {
-            if (s_reload.Watch.running_pause_or_resume_automatic_reload_f) {
+            if (s_reload.Watch.running_pause_or_resume_reload_f) {
                 this.set_from_storage_run_prevented = true;
             } else if (!x.prefs_are_filled() && !x.found_old_settings()) {
                 await this.update_settings({ transform });
@@ -228,6 +228,14 @@ class Class {
                 }),
                 new o_schema.TransformItem({
                     new_key: 'detect_infinite_loops',
+                    new_val: false,
+                }),
+                new o_schema.TransformItem({
+                    new_key: 'disable_automatic_tab_reload:',
+                    new_val: false,
+                }),
+                new o_schema.TransformItem({
+                    new_key: 'disable_manual_tab_reload',
                     new_val: false,
                 }),
             ];

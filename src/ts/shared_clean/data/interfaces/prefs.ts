@@ -15,6 +15,8 @@ export interface Prefs {
     reload_notification_volume: string;
     allow_theme_reload: boolean;
     pause_automatic_reload: boolean;
+    disable_automatic_tab_reload: boolean;
+    disable_manual_tab_reload: boolean;
     click_action: i_options.Options;
     context_menu_actions: i_options.Options[];
 }
