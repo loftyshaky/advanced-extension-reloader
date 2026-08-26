@@ -1,6 +1,6 @@
 {
     "name": "advanced-extension-reloader",
-    "version": "2.4.0",
+    "version": "2.5.0",
     "scripts": {
         "dev": "cross-env env=ext browser=chrome test=true vite build --mode development",
         "prod": "cross-env env=ext browser=chrome test=false vite build --mode production",
