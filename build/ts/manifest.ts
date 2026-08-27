@@ -107,6 +107,7 @@ export class Manifest {
                           gecko: {
                               id: 'advanced-extension-reloader@loftyshaky',
                           },
+                          ...(env.test === 'true' ? {} : { strict_min_version: '153.0.0' }),
                       },
                   }
                 : {}),
